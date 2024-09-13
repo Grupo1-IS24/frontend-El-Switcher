@@ -9,7 +9,9 @@ Este repositorio corresponde al frontend del juego "El Switcher", desarrollado p
 1. [Requisitos previos](#requisitos-previos)
 2. [Comandos para ejecutar el frontend](#comandos-para-ejecutar-el-frontend)
 3. [Formatear código](#formatear-código)
-4. [Estructura de directorios](#estructura-de-directorios)
+4. [Testear código](#testear-código)
+5. [Estructura de directorios](#estructura-de-directorios)
+6. [Dependencias necesarias](#dependencias-necesarias)
 
 ## Requisitos previos.
 
@@ -56,6 +58,16 @@ Se recomienda ejecutar este comando antes de subir el código que hagamos a GitH
 
 Notese que la definición de este comando podemos encontrarla en el `package.json`.
 
+## Testear código.
+
+Para ejecutar las pruebas en nuestro proyecto, utilizaremos `vitest`. Los tests se pueden correr con el siguiente comando definido en el `package.json`:
+
+```bash
+npm run test
+```
+
+Como convención, los archivos de prueba deben seguir el siguiente formato: `nombreArchivo.test.js` o `nombreArchivo.test.jsx`, según corresponda al tipo de archivo que estemos probando (JavaScript o JSX, respectivamente), es decir que deben contener `.test.`. Si no se respeta esta convención, entonces `vitest` no podrá reconocer los tests que hemos creado.
+
 ## Estructura de directorios.
 
 Para el proyecto hemos decidido tener la siguiente estructura de directorios:
@@ -100,6 +112,7 @@ Para el proyecto hemos decidido tener la siguiente estructura de directorios:
     │   │   │
     │   │   ...
     │   │
+    │   ├ 🗋 index.css
     │   │
     │   └ 🗋 main.jsx
     │
@@ -114,6 +127,10 @@ Para el proyecto hemos decidido tener la siguiente estructura de directorios:
     ├ 🗋 .prettierrc
     │
     ├ 🗋 package-lock.json
+    │
+    ├ 🗋 postcss.config.js
+    │
+    ├ 🗋 tailwind.config.js
     │
     ├ 🗋 package.json
     │
@@ -136,7 +153,18 @@ Como se puede observar en este árbol de directorios, hemos generalizado la estr
 
 - `services`: Allí se guardarán todas funciones que estarán relacionadas a nuestra `lógica de negocio` y también que se encarguen de hacer `llamadas a la API`.
 
-
 - `pages`: Como utilizamos rutas, cada ruta deberá tener un componente raíz al cuál le llamaremos `page`. Por lo tanto, en `pages` irán los componentes raíz correspondientes a cada ruta.
 
 - `main.jsx`: Es el código inicial de React.
+
+## Dependencias necesarias.
+
+A continuación se nombrarán las dependencias que vamos a utilizar y para qué sirve cada una:
+
+- [Tailwind CSS](https://tailwindcss.com/): Nos permitirá estilizar nuestros componentes utilizando estilos atómicos de CSS.
+
+- [Axios](https://axios-http.com/): Nos permitirá realizar solicitudes HTTP de manera sencilla y eficiente. En nuestro proyecto usaremos `Axios` como un reemplazo más cómodo de `fetch`.
+
+- [React Router DOM](https://reactrouter.com/en/main): Nos servirá para poder crear rutas en nuestro proyecto de una manera fácil y cómoda.
+
+- [Vitest](https://vitest.dev/): Nos permitirá crear el código de los tests y ejecutarlos mediante hot reload. Tiene una excelente integración con `vite`.
