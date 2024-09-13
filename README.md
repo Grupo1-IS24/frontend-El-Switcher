@@ -151,3 +151,5 @@ Como se puede observar en este árbol de directorios, hemos generalizado la estr
 A continuación se nombrarán las dependencias que vamos a utilizar y para qué sirve cada una:
 
 - `Tailwind CSS`: Nos permitirá estilizar nuestros componentes utilizando estilos atómicos de CSS.
+
+- `Axios`: Nos permitirá realizar solicitudes HTTP de manera sencilla y eficiente. En nuestro proyecto usaremos `Axios` como un reemplazo más cómodo de `fetch`.
