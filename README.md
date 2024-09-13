@@ -57,6 +57,16 @@ Se recomienda ejecutar este comando antes de subir el código que hagamos a GitH
 
 Notese que la definición de este comando podemos encontrarla en el `package.json`.
 
+## Testear código.
+
+Para ejecutar las pruebas en nuestro proyecto, utilizaremos `vitest`. Los tests se pueden correr con el siguiente comando definido en el `package.json`:
+
+```bash
+npm run test
+```
+
+Como convención, los archivos de prueba deben seguir el siguiente formato: `nombreArchivo.test.js` o `nombreArchivo.test.jsx`, según corresponda al tipo de archivo que estemos probando (JavaScript o JSX, respectivamente), es decir que deben contener `.test.`. Si no se respeta esta convención, entonces `vitest` no podrá reconocer los tests que hemos creado.
+
 ## Estructura de directorios.
 
 Para el proyecto hemos decidido tener la siguiente estructura de directorios:
@@ -155,3 +165,5 @@ A continuación se nombrarán las dependencias que vamos a utilizar y para qué 
 - `Axios`: Nos permitirá realizar solicitudes HTTP de manera sencilla y eficiente. En nuestro proyecto usaremos `Axios` como un reemplazo más cómodo de `fetch`.
 
 - `React Router Dom`: Nos servirá para poder crear rutas en nuestro proyecto de una manera fácil y cómoda.
+
+- `Vitest`: Nos permitirá crear el código de los tests y ejecutarlos mediante hot reload. Tiene una excelente integración con `vite`.
