@@ -9,8 +9,9 @@ Este repositorio corresponde al frontend del juego "El Switcher", desarrollado p
 1. [Requisitos previos](#requisitos-previos)
 2. [Comandos para ejecutar el frontend](#comandos-para-ejecutar-el-frontend)
 3. [Formatear código](#formatear-código)
-4. [Estructura de directorios](#estructura-de-directorios)
-5. [Dependencias necesarias](#dependencias-necesarias)
+4. [Testear código](#testear-código)
+5. [Estructura de directorios](#estructura-de-directorios)
+6. [Dependencias necesarias](#dependencias-necesarias)
 
 ## Requisitos previos.
 
@@ -160,10 +161,10 @@ Como se puede observar en este árbol de directorios, hemos generalizado la estr
 
 A continuación se nombrarán las dependencias que vamos a utilizar y para qué sirve cada una:
 
-- `Tailwind CSS`: Nos permitirá estilizar nuestros componentes utilizando estilos atómicos de CSS.
+- [Tailwind CSS](https://tailwindcss.com/): Nos permitirá estilizar nuestros componentes utilizando estilos atómicos de CSS.
 
-- `Axios`: Nos permitirá realizar solicitudes HTTP de manera sencilla y eficiente. En nuestro proyecto usaremos `Axios` como un reemplazo más cómodo de `fetch`.
+- [Axios](https://axios-http.com/): Nos permitirá realizar solicitudes HTTP de manera sencilla y eficiente. En nuestro proyecto usaremos `Axios` como un reemplazo más cómodo de `fetch`.
 
-- `React Router Dom`: Nos servirá para poder crear rutas en nuestro proyecto de una manera fácil y cómoda.
+- [React Router DOM](https://reactrouter.com/en/main): Nos servirá para poder crear rutas en nuestro proyecto de una manera fácil y cómoda.
 
-- `Vitest`: Nos permitirá crear el código de los tests y ejecutarlos mediante hot reload. Tiene una excelente integración con `vite`.
+- [Vitest](https://vitest.dev/): Nos permitirá crear el código de los tests y ejecutarlos mediante hot reload. Tiene una excelente integración con `vite`.
