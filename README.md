@@ -10,6 +10,7 @@ Este repositorio corresponde al frontend del juego "El Switcher", desarrollado p
 2. [Comandos para ejecutar el frontend](#comandos-para-ejecutar-el-frontend)
 3. [Formatear código](#formatear-código)
 4. [Estructura de directorios](#estructura-de-directorios)
+5. [Dependencias necesarias](#dependencias-necesarias)
 
 ## Requisitos previos.
 
@@ -100,6 +101,7 @@ Para el proyecto hemos decidido tener la siguiente estructura de directorios:
     │   │   │
     │   │   ...
     │   │
+    │   ├ 🗋 index.css
     │   │
     │   └ 🗋 main.jsx
     │
@@ -114,6 +116,10 @@ Para el proyecto hemos decidido tener la siguiente estructura de directorios:
     ├ 🗋 .prettierrc
     │
     ├ 🗋 package-lock.json
+    │
+    ├ 🗋 postcss.config.js
+    │
+    ├ 🗋 tailwind.config.js
     │
     ├ 🗋 package.json
     │
@@ -136,7 +142,12 @@ Como se puede observar en este árbol de directorios, hemos generalizado la estr
 
 - `services`: Allí se guardarán todas funciones que estarán relacionadas a nuestra `lógica de negocio` y también que se encarguen de hacer `llamadas a la API`.
 
-
 - `pages`: Como utilizamos rutas, cada ruta deberá tener un componente raíz al cuál le llamaremos `page`. Por lo tanto, en `pages` irán los componentes raíz correspondientes a cada ruta.
 
 - `main.jsx`: Es el código inicial de React.
+
+## Dependencias necesarias.
+
+A continuación se nombrarán las dependencias que vamos a utilizar y para qué sirve cada una:
+
+- `Tailwind CSS`: Nos permitirá estilizar nuestros componentes utilizando estilos atómicos de CSS.
