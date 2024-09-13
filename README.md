@@ -153,3 +153,5 @@ A continuación se nombrarán las dependencias que vamos a utilizar y para qué 
 - `Tailwind CSS`: Nos permitirá estilizar nuestros componentes utilizando estilos atómicos de CSS.
 
 - `Axios`: Nos permitirá realizar solicitudes HTTP de manera sencilla y eficiente. En nuestro proyecto usaremos `Axios` como un reemplazo más cómodo de `fetch`.
+
+- `React Router Dom`: Nos servirá para poder crear rutas en nuestro proyecto de una manera fácil y cómoda.
