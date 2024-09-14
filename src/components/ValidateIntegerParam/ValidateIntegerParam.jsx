@@ -8,7 +8,7 @@ const ValidateIntegerParam = ({ children, paramName }) => {
 
   if (!isValidParam) return <Navigate to="/*" />;
 
-  return <>{children}</>;
+  return children;
 };
 
 export default ValidateIntegerParam;
