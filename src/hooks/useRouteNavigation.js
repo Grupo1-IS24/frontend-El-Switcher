@@ -7,12 +7,14 @@ const useRouteNavigation = () => {
   const redirectToGamesListPage = () => navigate("/games-list");
   const redirectToLobbyPage = (gameId) => navigate(`/lobby/${gameId}`);
   const redirectToGamePage = (gameId) => navigate(`/game/${gameId}`);
+  const redirectToNotFoundPage = () => navigate("*");
 
   return {
     redirectToHomePage,
     redirectToGamesListPage,
     redirectToLobbyPage,
     redirectToGamePage,
+    redirectToNotFoundPage,
   };
 };
 
