@@ -48,7 +48,7 @@ const createGame = async (gameName: string = '', ownerName: string = '', minPlay
 
   try {
     const response = await axios.post('/game_create', data);
-    window.location.href = `/game/${response.data.gameId}`;
+    window.location.href = `/lobby/${response.data.gameId}`;
   } catch (error) {
     alert('Error al crear la partida');
   }
