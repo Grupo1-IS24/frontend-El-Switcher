@@ -1,22 +1,22 @@
-import { createBrowserRouter } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import GameListPage from "./pages/GameListPage";
-import LobbyPage from "./pages/LobbyPage";
-import GamePage from "./pages/GamePage";
-import NotFoundPage from "./pages/NotFoundPage";
-import ValidateIntegerParam from "./components/ValidateIntegerParam/ValidateIntegerParam";
+import { createBrowserRouter } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import GameListPage from './pages/GameListPage';
+import LobbyPage from './pages/LobbyPage';
+import GamePage from './pages/GamePage';
+import NotFoundPage from './pages/NotFoundPage';
+import ValidateIntegerParam from './components/ValidateIntegerParam/ValidateIntegerParam';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <HomePage />,
   },
   {
-    path: "game-list",
+    path: 'game-list',
     element: <GameListPage />,
   },
   {
-    path: "lobby/:gameId",
+    path: 'lobby/:gameId',
     element: (
       <ValidateIntegerParam paramName="gameId">
         <LobbyPage />
@@ -24,7 +24,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "game/:gameId",
+    path: 'game/:gameId',
     element: (
       <ValidateIntegerParam paramName="gameId">
         <GamePage />
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "*",
+    path: '*',
     element: <NotFoundPage />,
   },
 ]);

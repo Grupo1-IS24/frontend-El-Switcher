@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 
 const GamePage = () => {
   const { gameId } = useParams();

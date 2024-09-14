@@ -1,4 +1,4 @@
-import useRouteNavigation from "../hooks/useRouteNavigation";
+import useRouteNavigation from '../hooks/useRouteNavigation';
 
 const NotFoundPage = () => {
   const { redirectToHomePage } = useRouteNavigation();
