@@ -4,7 +4,7 @@ import GameListPage from './pages/GameListPage';
 import LobbyPage from './pages/LobbyPage';
 import GamePage from './pages/GamePage';
 import NotFoundPage from './pages/NotFoundPage';
-import ValidateIntegerParam from './components/ValidateIntegerParam/ValidateIntegerParam';
+import ValidatePositiveIntegerParam from './components/ValidatePositiveIntegerParam/ValidatePositiveIntegerParam';
 
 const router = createBrowserRouter([
   {
@@ -18,17 +18,17 @@ const router = createBrowserRouter([
   {
     path: 'lobby/:gameId',
     element: (
-      <ValidateIntegerParam paramName="gameId">
+      <ValidatePositiveIntegerParam paramName="gameId">
         <LobbyPage />
-      </ValidateIntegerParam>
+      </ValidatePositiveIntegerParam>
     ),
   },
   {
     path: 'game/:gameId',
     element: (
-      <ValidateIntegerParam paramName="gameId">
+      <ValidatePositiveIntegerParam paramName="gameId">
         <GamePage />
-      </ValidateIntegerParam>
+      </ValidatePositiveIntegerParam>
     ),
   },
   {
