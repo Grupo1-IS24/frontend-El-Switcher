@@ -20,7 +20,7 @@ const ValidatePositiveIntegerParam = ({ children, paramName }) => {
   const parsedInteger = parseInt(paramString, 10);
   const isValidInteger = !isNaN(parsedInteger) && parsedInteger >= 0;
 
-  if (!isValidInteger) return <Navigate to="/*" />;
+  if (!isValidInteger) return <Navigate to='/*' />;
 
   return children;
 };
