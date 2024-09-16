@@ -21,12 +21,7 @@ const CreateGameForm = ({ setshowForm }) => {
 
     /* Manage createGame service */
     try {
-      const createdGame = await createGame(
-        gameInfo.gameName,
-        gameInfo.ownerName,
-        gameInfo.minPlayers,
-        gameInfo.maxPlayers
-      );
+      const createdGame = await createGame(gameInfo);
 
       // if the game was succefully created, the response get an gameId to redirect to /lobby/gameId
       if (createdGame && createdGame.gameId)
