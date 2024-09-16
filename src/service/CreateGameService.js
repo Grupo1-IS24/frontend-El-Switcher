@@ -29,7 +29,7 @@ const isEmpty = (value) => {
  * @param {number} maxPlayers - Máximo de jugadores.
  * @throws {Error} - Lanza un error si la validación falla.
  **/
-const validateGameData = (gameName, ownerName, minPlayers, maxPlayers) => {
+const validateGameData = ({ gameName, ownerName, minPlayers, maxPlayers }) => {
   if (
     isEmpty(gameName) ||
     isEmpty(ownerName) ||
@@ -54,23 +54,18 @@ const validateGameData = (gameName, ownerName, minPlayers, maxPlayers) => {
 
 /**
  * Crea un nuevo juego.
- * @param {string} gameName - Nombre del juego.
- * @param {string} ownerName - Nombre del host de la partida.
- * @param {number} minPlayers - Mínimo de jugadores.
- * @param {number} maxPlayers - Máximo de jugadores.
+ * @param {Object} gameData - Datos del juego.
+ * @param {string} gameData.gameName - Nombre del juego.
+ * @param {string} gameData.ownerName - Nombre del host de la partida.
+ * @param {number} gameData.minPlayers - Mínimo de jugadores.
+ * @param {number} gameData.maxPlayers - Máximo de jugadores.
  * @returns {Promise<{ownerId: number, gameId: number} | null>} - Retorna un objeto con ownerId y gameId si la creación es exitosa, de lo contrario retorna null.
  **/
-const createGame = async (
-  gameName = '',
-  ownerName = '',
-  minPlayers = 0,
-  maxPlayers = 0
-) => {
+const createGame = async (gameData) => {
   try {
-    validateGameData(gameName, ownerName, minPlayers, maxPlayers);
+    validateGameData(gameData);
 
-    const data = { gameName, ownerName, minPlayers, maxPlayers };
-    const response = await axios.post('/game_create', data);
+    const response = await axios.post('/game_create', gameData);
     const { ownerId, gameId } = response.data;
 
     if (
