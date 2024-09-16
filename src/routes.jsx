@@ -18,7 +18,7 @@ const router = createBrowserRouter([
   {
     path: 'lobby/:gameId',
     element: (
-      <ValidatePositiveIntegerParam paramName="gameId">
+      <ValidatePositiveIntegerParam paramName='gameId'>
         <LobbyPage />
       </ValidatePositiveIntegerParam>
     ),
@@ -26,7 +26,7 @@ const router = createBrowserRouter([
   {
     path: 'game/:gameId',
     element: (
-      <ValidatePositiveIntegerParam paramName="gameId">
+      <ValidatePositiveIntegerParam paramName='gameId'>
         <GamePage />
       </ValidatePositiveIntegerParam>
     ),

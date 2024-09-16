@@ -168,3 +168,5 @@ A continuación se nombrarán las dependencias que vamos a utilizar y para qué 
 - [React Router DOM](https://reactrouter.com/en/main): Nos servirá para poder crear rutas en nuestro proyecto de una manera fácil y cómoda.
 
 - [Vitest](https://vitest.dev/): Nos permitirá crear el código de los tests y ejecutarlos mediante hot reload. Tiene una excelente integración con `vite`.
+
+- [Zod](https://zod.dev/): Nos ayudará a validar y transformar datos de manera estructurada y declarativa. `Zod` proporciona un enfoque claro para definir esquemas de validación y manejar errores, garantizando que los datos cumplen con las expectativas definidas en el esquema.

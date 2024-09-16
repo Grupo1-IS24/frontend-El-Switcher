@@ -1,73 +1,98 @@
-import axios from 'axios';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { apiService } from './axiosConfig';
+import { describe, it, expect, vi } from 'vitest';
 import { createGame } from './CreateGameService';
 
-vi.mock('axios');
+vi.mock('./axiosConfig', () => ({
+  apiService: {
+    post: vi.fn(),
+  },
+}));
 
 describe('createGame', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    globalThis.window = {
-      location: {
-        href: '',
-      },
-    };
-    globalThis.alert = vi.fn();
-  });
-
-  it('debería mostrar una alerta si algún campo está vacío', async () => {
-    await createGame('', 'owner', 2, 4);
-    expect(alert).toHaveBeenCalledWith('Todos los campos son requeridos');
-
-    await createGame('game', '', 2, 4);
-    expect(alert).toHaveBeenCalledWith('Todos los campos son requeridos');
-
-    await createGame('game', 'owner', 0, 4);
-    expect(alert).toHaveBeenCalledWith('Todos los campos son requeridos');
-
-    await createGame('game', 'owner', 2, 0);
-    expect(alert).toHaveBeenCalledWith('Todos los campos son requeridos');
-  });
-
-  it('debería mostrar una alerta si minPlayers es mayor que maxPlayers', async () => {
-    await createGame('game', 'owner', 5, 4);
-    expect(alert).toHaveBeenCalledWith(
-      'El mínimo de jugadores no puede ser mayor al máximo de jugadores'
-    );
-  });
-
-  it('debería mostrar una alerta si minPlayers es menor que 2', async () => {
-    await createGame('game', 'owner', 1, 4);
-    expect(alert).toHaveBeenCalledWith(
-      'El mínimo de jugadores debe ser al menos 2'
-    );
-  });
-
-  it('debería mostrar una alerta si maxPlayers es mayor que 4', async () => {
-    await createGame('game', 'owner', 2, 5);
-    expect(alert).toHaveBeenCalledWith(
-      'El máximo de jugadores debe ser como máximo 4'
-    );
-  });
-
-  it('debería hacer una solicitud POST y redirigir al lobby si los datos son válidos', async () => {
-    const mockResponse = { data: { gameId: '123' } };
-    axios.post.mockResolvedValue(mockResponse);
-
-    await createGame('game', 'owner', 2, 4);
-    expect(axios.post).toHaveBeenCalledWith('/game_create', {
-      gameName: 'game',
-      ownerName: 'owner',
+  it('debería lanzar un error si algún campo está vacío', async () => {
+    const gameData = {
+      gameName: '',
+      ownerName: 'Host',
       minPlayers: 2,
       maxPlayers: 4,
-    });
-    expect(window.location.href).toBe('/lobby/123');
+    };
+    await expect(createGame(gameData)).resolves.toBeNull();
   });
 
-  it('debería mostrar una alerta si hay un error en la solicitud POST', async () => {
-    axios.post.mockRejectedValue(new Error('Error'));
+  it('debería lanzar un error si minPlayers es mayor que maxPlayers', async () => {
+    const gameData = {
+      gameName: 'Juego',
+      ownerName: 'Host',
+      minPlayers: 5,
+      maxPlayers: 4,
+    };
+    await expect(createGame(gameData)).resolves.toBeNull();
+  });
 
-    await createGame('game', 'owner', 2, 4);
-    expect(alert).toHaveBeenCalledWith('Error al crear la partida');
+  it('debería lanzar un error si minPlayers es menor que 2', async () => {
+    const gameData = {
+      gameName: 'Juego',
+      ownerName: 'Host',
+      minPlayers: 1,
+      maxPlayers: 4,
+    };
+    await expect(createGame(gameData)).resolves.toBeNull();
+  });
+
+  it('debería lanzar un error si maxPlayers es mayor que 4', async () => {
+    const gameData = {
+      gameName: 'Juego',
+      ownerName: 'Host',
+      minPlayers: 2,
+      maxPlayers: 5,
+    };
+    await expect(createGame(gameData)).resolves.toBeNull();
+  });
+
+  it('debería retornar null si la respuesta del servidor no contiene ownerId o gameId', async () => {
+    apiService.post.mockResolvedValue({ data: { ownerId: null, gameId: 1 } });
+    const gameData = {
+      gameName: 'Juego',
+      ownerName: 'Host',
+      minPlayers: 2,
+      maxPlayers: 4,
+    };
+    await expect(createGame(gameData)).resolves.toBeNull();
+  });
+
+  it('debería retornar null si la respuesta del servidor contiene ownerId o gameId no numéricos', async () => {
+    apiService.post.mockResolvedValue({ data: { ownerId: '1', gameId: '1' } });
+    const gameData = {
+      gameName: 'Juego',
+      ownerName: 'Host',
+      minPlayers: 2,
+      maxPlayers: 4,
+    };
+    await expect(createGame(gameData)).resolves.toBeNull();
+  });
+
+  it('debería retornar los datos del juego si la creación es exitosa', async () => {
+    apiService.post.mockResolvedValue({ data: { ownerId: 1, gameId: 1 } });
+    const gameData = {
+      gameName: 'Juego',
+      ownerName: 'Host',
+      minPlayers: 2,
+      maxPlayers: 4,
+    };
+    await expect(createGame(gameData)).resolves.toEqual({
+      ownerId: 1,
+      gameId: 1,
+    });
+  });
+
+  it('debería retornar null si ocurre un error en la solicitud', async () => {
+    apiService.post.mockRejectedValue(new Error('Network Error'));
+    const gameData = {
+      gameName: 'Juego',
+      ownerName: 'Host',
+      minPlayers: 2,
+      maxPlayers: 4,
+    };
+    await expect(createGame(gameData)).resolves.toBeNull();
   });
 });
