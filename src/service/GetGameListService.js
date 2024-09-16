@@ -1,45 +1,36 @@
+import { z } from 'zod';
 import { apiService } from './axiosConfig';
 
-const ERRORS = {
-  NO_DATA: 'La lista de juegos no fue proporcionada',
-  IS_NOT_ARRAY: 'La lista de juegos no es un arreglo',
-  INSUFICIENT_FIELDS: 'Faltan campos del juego',
-  INVALID_FIELD_TYPE: 'Tipo de campo inválido',
-};
+// Define the schema for the game object.
+const gameSchema = z.object({
+  gameId: z.number().int(), // must be an integer.
+  gameName: z.string(), // must be a string.
+  connectedPlayers: z.number().int(), // must be an integer.
+  maxPlayers: z.number().int(), // must be an integer.
+});
 
-const validateGameList = (gameList) => {
-  if (!gameList) throw new Error(ERRORS.NO_DATA);
+// Define the schema for the game list.
+const gameListSchema = z.array(gameSchema);
 
-  if (!Array.isArray(gameList)) throw new Error(ERRORS.IS_NOT_ARRAY);
-
-  for (const { gameId, gameName, connectedPlayers, maxPlayers } of gameList) {
-    if (!gameId || !gameName || !connectedPlayers || !maxPlayers) {
-      throw new Error(ERRORS.INSUFICIENT_FIELDS);
-    }
-
-    if (
-      !Number.isInteger(gameId) ||
-      typeof gameName !== 'string' ||
-      !Number.isInteger(connectedPlayers) ||
-      !Number.isInteger(maxPlayers)
-    ) {
-      throw new Error(ERRORS.INVALID_FIELD_TYPE);
-    }
-  }
-};
-
+/**
+ * Fetches and validates the list of games from the backend API.
+ *
+ * @returns {Promise<Array<Object>>} - A promise that resolves to the validated list of games.
+ * @throws {Error} - Throws an error if the API request fails or if the game list validation fails.
+ */
 export const getGameList = async () => {
   try {
     const response = await apiService.get('/game_list');
 
     const gameList = response.data;
 
-    validateGameList(gameList);
+    // Validate the game list. If it's invalid, throw an error.
+    gameListSchema.parse(gameList);
 
     return gameList;
   } catch (error) {
-    console.error(`Error al obtener la lista de juegos: ${error.message}`); // Log the error
+    console.error(`Errores al obtener la lista de partidas:\n ${error}`); // Log the error.
 
-    throw error; // Propagate the error to the caller
+    throw error; // Propagate the error to the caller.
   }
 };
