@@ -1,8 +1,12 @@
-import axios from 'axios';
+import { apiService } from './axiosConfig';
 import { describe, it, expect, vi } from 'vitest';
 import { createGame } from './CreateGameService';
 
-vi.mock('axios');
+vi.mock('./axiosConfig', () => ({
+  apiService: {
+    post: vi.fn(),
+  },
+}));
 
 describe('createGame', () => {
   it('debería lanzar un error si algún campo está vacío', async () => {
@@ -46,7 +50,7 @@ describe('createGame', () => {
   });
 
   it('debería retornar null si la respuesta del servidor no contiene ownerId o gameId', async () => {
-    axios.post.mockResolvedValue({ data: { ownerId: null, gameId: 1 } });
+    apiService.post.mockResolvedValue({ data: { ownerId: null, gameId: 1 } });
     const gameData = {
       gameName: 'Juego',
       ownerName: 'Host',
@@ -57,7 +61,7 @@ describe('createGame', () => {
   });
 
   it('debería retornar null si la respuesta del servidor contiene ownerId o gameId no numéricos', async () => {
-    axios.post.mockResolvedValue({ data: { ownerId: '1', gameId: '1' } });
+    apiService.post.mockResolvedValue({ data: { ownerId: '1', gameId: '1' } });
     const gameData = {
       gameName: 'Juego',
       ownerName: 'Host',
@@ -68,7 +72,7 @@ describe('createGame', () => {
   });
 
   it('debería retornar los datos del juego si la creación es exitosa', async () => {
-    axios.post.mockResolvedValue({ data: { ownerId: 1, gameId: 1 } });
+    apiService.post.mockResolvedValue({ data: { ownerId: 1, gameId: 1 } });
     const gameData = {
       gameName: 'Juego',
       ownerName: 'Host',
@@ -82,7 +86,7 @@ describe('createGame', () => {
   });
 
   it('debería retornar null si ocurre un error en la solicitud', async () => {
-    axios.post.mockRejectedValue(new Error('Network Error'));
+    apiService.post.mockRejectedValue(new Error('Network Error'));
     const gameData = {
       gameName: 'Juego',
       ownerName: 'Host',

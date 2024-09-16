@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { apiService } from './axiosConfig';
 
 // Mensajes de error
 const ERROR_MESSAGES = {
@@ -65,7 +65,7 @@ const createGame = async (gameData) => {
   try {
     validateGameData(gameData);
 
-    const response = await axios.post('/game_create', gameData);
+    const response = await apiService.post('/game_create', gameData);
     const { ownerId, gameId } = response.data;
 
     if (
