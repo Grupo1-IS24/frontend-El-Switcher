@@ -1,10 +1,13 @@
 import Button from '../Button/Button';
-import TextInput from '../TextInput/TextInput';
 import NumberInput from '../NumberInput/NumberInput';
+import TextInput from '../TextInput/TextInput';
+import useRouteNavigation from '../../hooks/useRouteNavigation';
 import { createGame } from '../../service/CreateGameService';
 
 const CreateGameForm = ({ setshowForm }) => {
-  const handleSubmit = (e) => {
+  const { redirectToLobbyPage } = useRouteNavigation(); // hook for redirect
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const elements = e.target.elements;
@@ -17,12 +20,23 @@ const CreateGameForm = ({ setshowForm }) => {
     };
 
     /* Manage createGame service */
-    createGame(
-      gameInfo.gameName,
-      gameInfo.ownerName,
-      gameInfo.minPlayers,
-      gameInfo.maxPlayers
-    );
+    try {
+      const createdGame = await createGame(
+        gameInfo.gameName,
+        gameInfo.ownerName,
+        gameInfo.minPlayers,
+        gameInfo.maxPlayers
+      );
+
+      // if the game was succefully created, the response get an gameId to redirect to /lobby/gameId
+      if (createdGame && createdGame.gameId)
+        redirectToLobbyPage(createdGame.gameId);
+      // if dont recive the gameId, show an error message
+      else alert('Error al crear la partida');
+    } catch (error) {
+      console.error('Error al crear la partida', error);
+      alert('Hubo un problema al crear el juego');
+    }
   };
 
   return (
