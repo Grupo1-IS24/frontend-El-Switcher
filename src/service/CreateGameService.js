@@ -31,22 +31,22 @@ const createGame = async (
     isEmpty(maxPlayers)
   ) {
     alert('Todos los campos son requeridos');
-    return;
+    return null;
   }
 
   if (minPlayers > maxPlayers) {
     alert('El mínimo de jugadores no puede ser mayor al máximo de jugadores');
-    return;
+    return null;
   }
 
   if (minPlayers < 2) {
     alert('El mínimo de jugadores debe ser al menos 2');
-    return;
+    return null;
   }
 
   if (maxPlayers > 4) {
     alert('El máximo de jugadores debe ser como máximo 4');
-    return;
+    return null;
   }
 
   const data = {
@@ -58,10 +58,11 @@ const createGame = async (
 
   try {
     const response = await axios.post('/game_create', data);
-    window.location.href = `/lobby/${response.data.gameId}`;
+    return response.data;
   } catch (error) {
     alert('Error al crear la partida');
     console.error(error.message);
+    return null;
   }
 };
 
