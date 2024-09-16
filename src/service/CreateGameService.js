@@ -1,22 +1,33 @@
 import axios from 'axios';
 
 /**
- * @param {string | number} value - Valor a evaluar
- * @returns {boolean} - Retorna true si el valor es vacío, de lo contrario retorna false
+ * Verifica si un valor es vacío.
+ * @param {string | number | null | undefined} value - Valor a evaluar.
+ * @returns {boolean} - Retorna true si el valor es vacío, de lo contrario retorna false.
  **/
 const isEmpty = (value) => {
   if (typeof value === 'string') return value.trim() === '';
   if (typeof value === 'number') return value === 0;
-
   return value === null || value === undefined;
 };
 
+// Mensajes de error
+const ERROR_MESSAGES = {
+  REQUIRED_FIELDS: 'Todos los campos son requeridos',
+  MIN_GREATER_THAN_MAX:
+    'El mínimo de jugadores no puede ser mayor al máximo de jugadores',
+  MIN_PLAYERS: 'El mínimo de jugadores debe ser al menos 2',
+  MAX_PLAYERS: 'El máximo de jugadores debe ser como máximo 4',
+  GAME_CREATION: 'Error al crear la partida',
+};
+
 /**
- * @param {string} gameName - Nombre del juego
- * @param {string} ownerName - Nombre del host de la partida
- * @param {number} minPlayers - Mínimo de jugadores
- * @param {number} maxPlayers - Máximo de jugadores
- * @returns {Promise<void>}
+ * Crea un nuevo juego.
+ * @param {string} gameName - Nombre del juego.
+ * @param {string} ownerName - Nombre del host de la partida.
+ * @param {number} minPlayers - Mínimo de jugadores.
+ * @param {number} maxPlayers - Máximo de jugadores.
+ * @returns {Promise<{ownerId: number, gameId: number} | null>} - Retorna un objeto con ownerId y gameId si la creación es exitosa, de lo contrario retorna null.
  **/
 const createGame = async (
   gameName = '',
@@ -30,22 +41,22 @@ const createGame = async (
     isEmpty(minPlayers) ||
     isEmpty(maxPlayers)
   ) {
-    alert('Todos los campos son requeridos');
+    alert(ERROR_MESSAGES.REQUIRED_FIELDS);
     return null;
   }
 
   if (minPlayers > maxPlayers) {
-    alert('El mínimo de jugadores no puede ser mayor al máximo de jugadores');
+    alert(ERROR_MESSAGES.MIN_GREATER_THAN_MAX);
     return null;
   }
 
   if (minPlayers < 2) {
-    alert('El mínimo de jugadores debe ser al menos 2');
+    alert(ERROR_MESSAGES.MIN_PLAYERS);
     return null;
   }
 
   if (maxPlayers > 4) {
-    alert('El máximo de jugadores debe ser como máximo 4');
+    alert(ERROR_MESSAGES.MAX_PLAYERS);
     return null;
   }
 
@@ -59,17 +70,20 @@ const createGame = async (
   try {
     const response = await axios.post('/game_create', data);
     const { ownerId, gameId } = response.data;
-    if (!ownerId || !gameId) {
-      alert('Error al crear la partida');
+
+    if (
+      !ownerId ||
+      !gameId ||
+      typeof ownerId !== 'number' ||
+      typeof gameId !== 'number'
+    ) {
+      alert(ERROR_MESSAGES.GAME_CREATION);
       return null;
     }
-    if (typeof ownerId !== 'number' || typeof gameId !== 'number') {
-      alert('Error al crear la partida');
-      return null;
-    }
+
     return response.data;
   } catch (error) {
-    alert('Error al crear la partida');
+    alert(ERROR_MESSAGES.GAME_CREATION);
     console.error(error.message);
     return null;
   }
