@@ -1,5 +1,15 @@
 import axios from 'axios';
 
+// Mensajes de error
+const ERROR_MESSAGES = {
+  REQUIRED_FIELDS: 'Todos los campos son requeridos',
+  MIN_GREATER_THAN_MAX:
+    'El mínimo de jugadores no puede ser mayor al máximo de jugadores',
+  MIN_PLAYERS: 'El mínimo de jugadores debe ser al menos 2',
+  MAX_PLAYERS: 'El máximo de jugadores debe ser como máximo 4',
+  GAME_CREATION: 'Error al crear la partida',
+};
+
 /**
  * Verifica si un valor es vacío.
  * @param {string | number | null | undefined} value - Valor a evaluar.
@@ -11,14 +21,35 @@ const isEmpty = (value) => {
   return value === null || value === undefined;
 };
 
-// Mensajes de error
-const ERROR_MESSAGES = {
-  REQUIRED_FIELDS: 'Todos los campos son requeridos',
-  MIN_GREATER_THAN_MAX:
-    'El mínimo de jugadores no puede ser mayor al máximo de jugadores',
-  MIN_PLAYERS: 'El mínimo de jugadores debe ser al menos 2',
-  MAX_PLAYERS: 'El máximo de jugadores debe ser como máximo 4',
-  GAME_CREATION: 'Error al crear la partida',
+/**
+ * Valida los datos de entrada para la creación de un juego.
+ * @param {string} gameName - Nombre del juego.
+ * @param {string} ownerName - Nombre del host de la partida.
+ * @param {number} minPlayers - Mínimo de jugadores.
+ * @param {number} maxPlayers - Máximo de jugadores.
+ * @throws {Error} - Lanza un error si la validación falla.
+ **/
+const validateGameData = (gameName, ownerName, minPlayers, maxPlayers) => {
+  if (
+    isEmpty(gameName) ||
+    isEmpty(ownerName) ||
+    isEmpty(minPlayers) ||
+    isEmpty(maxPlayers)
+  ) {
+    throw new Error(ERROR_MESSAGES.REQUIRED_FIELDS);
+  }
+
+  if (minPlayers > maxPlayers) {
+    throw new Error(ERROR_MESSAGES.MIN_GREATER_THAN_MAX);
+  }
+
+  if (minPlayers < 2) {
+    throw new Error(ERROR_MESSAGES.MIN_PLAYERS);
+  }
+
+  if (maxPlayers > 4) {
+    throw new Error(ERROR_MESSAGES.MAX_PLAYERS);
+  }
 };
 
 /**
@@ -35,39 +66,10 @@ const createGame = async (
   minPlayers = 0,
   maxPlayers = 0
 ) => {
-  if (
-    isEmpty(gameName) ||
-    isEmpty(ownerName) ||
-    isEmpty(minPlayers) ||
-    isEmpty(maxPlayers)
-  ) {
-    alert(ERROR_MESSAGES.REQUIRED_FIELDS);
-    return null;
-  }
-
-  if (minPlayers > maxPlayers) {
-    alert(ERROR_MESSAGES.MIN_GREATER_THAN_MAX);
-    return null;
-  }
-
-  if (minPlayers < 2) {
-    alert(ERROR_MESSAGES.MIN_PLAYERS);
-    return null;
-  }
-
-  if (maxPlayers > 4) {
-    alert(ERROR_MESSAGES.MAX_PLAYERS);
-    return null;
-  }
-
-  const data = {
-    gameName,
-    ownerName,
-    minPlayers,
-    maxPlayers,
-  };
-
   try {
+    validateGameData(gameName, ownerName, minPlayers, maxPlayers);
+
+    const data = { gameName, ownerName, minPlayers, maxPlayers };
     const response = await axios.post('/game_create', data);
     const { ownerId, gameId } = response.data;
 
@@ -77,13 +79,11 @@ const createGame = async (
       typeof ownerId !== 'number' ||
       typeof gameId !== 'number'
     ) {
-      alert(ERROR_MESSAGES.GAME_CREATION);
-      return null;
+      throw new Error(ERROR_MESSAGES.GAME_CREATION);
     }
 
     return response.data;
   } catch (error) {
-    alert(ERROR_MESSAGES.GAME_CREATION);
     console.error(error.message);
     return null;
   }
