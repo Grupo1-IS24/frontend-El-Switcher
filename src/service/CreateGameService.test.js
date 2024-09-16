@@ -50,22 +50,30 @@ describe('createGame', () => {
     );
   });
 
-  it('debería hacer una solicitud POST y redirigir al lobby si los datos son válidos', async () => {
-    const mockResponse = { data: { gameId: '123' } };
-    axios.post.mockResolvedValue(mockResponse);
-
-    await createGame('game', 'owner', 2, 4);
-    expect(axios.post).toHaveBeenCalledWith('/game_create', {
-      gameName: 'game',
-      ownerName: 'owner',
-      minPlayers: 2,
-      maxPlayers: 4,
-    });
-    expect(window.location.href).toBe('/lobby/123');
-  });
-
   it('debería mostrar una alerta si hay un error en la solicitud POST', async () => {
     axios.post.mockRejectedValue(new Error('Error'));
+
+    await createGame('game', 'owner', 2, 4);
+    expect(alert).toHaveBeenCalledWith('Error al crear la partida');
+  });
+
+  it('debería retornar los datos correctos si la solicitud POST es exitosa', async () => {
+    const responseData = { ownerId: 1, gameId: 1 };
+    axios.post.mockResolvedValue({ data: responseData });
+
+    const result = await createGame('game', 'owner', 2, 4);
+    expect(result).toEqual(responseData);
+  });
+
+  it('debería mostrar una alerta si ownerId o gameId no están en la respuesta', async () => {
+    axios.post.mockResolvedValue({ data: {} });
+
+    await createGame('game', 'owner', 2, 4);
+    expect(alert).toHaveBeenCalledWith('Error al crear la partida');
+  });
+
+  it('debería mostrar una alerta si ownerId o gameId no son números', async () => {
+    axios.post.mockResolvedValue({ data: { ownerId: '1', gameId: '1' } });
 
     await createGame('game', 'owner', 2, 4);
     expect(alert).toHaveBeenCalledWith('Error al crear la partida');
