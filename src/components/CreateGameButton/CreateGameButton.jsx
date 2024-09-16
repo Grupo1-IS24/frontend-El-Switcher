@@ -7,9 +7,7 @@ const CreateGameButton = () => {
 
   return (
     <>
-      <div>
-        <Button text="Crear partida" onPress={() => setshowForm(true)} />
-      </div>
+      <Button text='Crear partida' onPress={() => setshowForm(true)} />
       {showForm && <CreateGameForm setshowForm={setshowForm} />}
     </>
   );
