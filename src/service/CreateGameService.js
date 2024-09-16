@@ -59,11 +59,11 @@ const createGame = async (
   try {
     const response = await axios.post('/game_create', data);
     const { ownerId, gameId } = response.data;
-    if (typeof ownerId !== 'number' || typeof gameId !== 'number') {
+    if (!ownerId || !gameId) {
       alert('Error al crear la partida');
       return null;
     }
-    if (!ownerId || !gameId) {
+    if (typeof ownerId !== 'number' || typeof gameId !== 'number') {
       alert('Error al crear la partida');
       return null;
     }
