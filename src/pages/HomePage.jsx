@@ -1,5 +1,5 @@
 import CreateGameButton from '../components/CreateGameButton/CreateGameButton';
-import Button from '../components/Button/Button';
+import JoinGameButton from '../components/JoinGameButton/JoinGameButton';
 
 const HomePage = () => {
   return (
@@ -7,7 +7,7 @@ const HomePage = () => {
       <h1 className='text-white text-9xl text-center mt-10'>El switcher</h1>
       <div className='flex flex-row align-center justify-center gap-10'>
         <CreateGameButton />
-        <Button text={'Unirse a partida'} />
+        <JoinGameButton />
       </div>
     </div>
   );
