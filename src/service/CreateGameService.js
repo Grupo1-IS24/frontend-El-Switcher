@@ -1,19 +1,19 @@
 import { apiService } from './axiosConfig';
 
-// Mensajes de error
+// Error messages
 const ERROR_MESSAGES = {
-  REQUIRED_FIELDS: 'Todos los campos son requeridos',
+  REQUIRED_FIELDS: 'All fields are required',
   MIN_GREATER_THAN_MAX:
-    'El mínimo de jugadores no puede ser mayor al máximo de jugadores',
-  MIN_PLAYERS: 'El mínimo de jugadores debe ser al menos 2',
-  MAX_PLAYERS: 'El máximo de jugadores debe ser como máximo 4',
-  GAME_CREATION: 'Error al crear la partida',
+    'Minimum players cannot be greater than maximum players',
+  MIN_PLAYERS: 'Minimum players must be at least 2',
+  MAX_PLAYERS: 'Maximum players must be at most 4',
+  GAME_CREATION: 'Error creating the game',
 };
 
 /**
- * Verifica si un valor es vacío.
- * @param {string | number | null | undefined} value - Valor a evaluar.
- * @returns {boolean} - Retorna true si el valor es vacío, de lo contrario retorna false.
+ * Checks if a value is empty.
+ * @param {string | number | null | undefined} value - Value to evaluate.
+ * @returns {boolean} - Returns true if the value is empty, otherwise false.
  **/
 const isEmpty = (value) => {
   if (typeof value === 'string') return value.trim() === '';
@@ -22,21 +22,21 @@ const isEmpty = (value) => {
 };
 
 /**
- * Verifica si alguno de los valores en el array es vacío.
- * @param {Array<string | number | null | undefined>} values - Array de valores a evaluar.
- * @returns {boolean} - Retorna true si alguno de los valores es vacío, de lo contrario retorna false.
+ * Checks if any of the values in the array are empty.
+ * @param {Array<string | number | null | undefined>} values - Array of values to evaluate.
+ * @returns {boolean} - Returns true if any of the values are empty, otherwise false.
  **/
 const areAnyEmpty = (values) => {
   return values.some(isEmpty);
 };
 
 /**
- * Valida los datos de entrada para la creación de un juego.
- * @param {string} gameName - Nombre del juego.
- * @param {string} ownerName - Nombre del host de la partida.
- * @param {number} minPlayers - Mínimo de jugadores.
- * @param {number} maxPlayers - Máximo de jugadores.
- * @throws {Error} - Lanza un error si la validación falla.
+ * Validates the input data for creating a game.
+ * @param {string} gameName - Name of the game.
+ * @param {string} ownerName - Name of the game host.
+ * @param {number} minPlayers - Minimum number of players.
+ * @param {number} maxPlayers - Maximum number of players.
+ * @throws {Error} - Throws an error if validation fails.
  **/
 const validateGameData = ({
   gameName = '',
@@ -62,22 +62,22 @@ const validateGameData = ({
 };
 
 /**
- * Verifica si un ID es válido.
- * @param {number} id - ID a evaluar.
- * @returns {boolean} - Retorna true si el ID es válido, de lo contrario retorna false.
+ * Checks if an ID is valid.
+ * @param {number} id - ID to evaluate.
+ * @returns {boolean} - Returns true if the ID is valid, otherwise false.
  **/
 const isValidId = (id) => {
   return typeof id === 'number' && id >= 0;
 };
 
 /**
- * Crea un nuevo juego.
- * @param {Object} gameData - Datos del juego.
- * @param {string} gameData.gameName - Nombre del juego.
- * @param {string} gameData.ownerName - Nombre del host de la partida.
- * @param {number} gameData.minPlayers - Mínimo de jugadores.
- * @param {number} gameData.maxPlayers - Máximo de jugadores.
- * @returns {Promise<{ownerId: number, gameId: number} | null>} - Retorna un objeto con ownerId y gameId si la creación es exitosa, de lo contrario retorna null.
+ * Creates a new game.
+ * @param {Object} gameData - Game data.
+ * @param {string} gameData.gameName - Name of the game.
+ * @param {string} gameData.ownerName - Name of the game host.
+ * @param {number} gameData.minPlayers - Minimum number of players.
+ * @param {number} gameData.maxPlayers - Maximum number of players.
+ * @returns {Promise<{ownerId: number, gameId: number} | null>} - Returns an object with ownerId and gameId if creation is successful, otherwise null.
  **/
 const createGame = async (gameData) => {
   try {
