@@ -29,7 +29,12 @@ const isEmpty = (value) => {
  * @param {number} maxPlayers - Máximo de jugadores.
  * @throws {Error} - Lanza un error si la validación falla.
  **/
-const validateGameData = ({ gameName, ownerName, minPlayers, maxPlayers }) => {
+const validateGameData = ({
+  gameName = '',
+  ownerName = '',
+  minPlayers = 0,
+  maxPlayers = 0,
+}) => {
   if (
     isEmpty(gameName) ||
     isEmpty(ownerName) ||
@@ -53,6 +58,15 @@ const validateGameData = ({ gameName, ownerName, minPlayers, maxPlayers }) => {
 };
 
 /**
+ * Verifica si un ID es válido.
+ * @param {number} id - ID a evaluar.
+ * @returns {boolean} - Retorna true si el ID es válido, de lo contrario retorna false.
+ **/
+const isValidId = (id) => {
+  return typeof id === 'number' && id >= 0;
+};
+
+/**
  * Crea un nuevo juego.
  * @param {Object} gameData - Datos del juego.
  * @param {string} gameData.gameName - Nombre del juego.
@@ -68,12 +82,7 @@ const createGame = async (gameData) => {
     const response = await apiService.post('/game_create', gameData);
     const { ownerId, gameId } = response.data;
 
-    if (
-      !ownerId ||
-      !gameId ||
-      typeof ownerId !== 'number' ||
-      typeof gameId !== 'number'
-    ) {
+    if (!isValidId(ownerId) || !isValidId(gameId)) {
       throw new Error(ERROR_MESSAGES.GAME_CREATION);
     }
 
