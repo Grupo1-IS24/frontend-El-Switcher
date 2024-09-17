@@ -22,6 +22,15 @@ const isEmpty = (value) => {
 };
 
 /**
+ * Verifica si alguno de los valores en el array es vacío.
+ * @param {Array<string | number | null | undefined>} values - Array de valores a evaluar.
+ * @returns {boolean} - Retorna true si alguno de los valores es vacío, de lo contrario retorna false.
+ **/
+const areAnyEmpty = (values) => {
+  return values.some(isEmpty);
+};
+
+/**
  * Valida los datos de entrada para la creación de un juego.
  * @param {string} gameName - Nombre del juego.
  * @param {string} ownerName - Nombre del host de la partida.
@@ -35,12 +44,7 @@ const validateGameData = ({
   minPlayers = 0,
   maxPlayers = 0,
 }) => {
-  if (
-    isEmpty(gameName) ||
-    isEmpty(ownerName) ||
-    isEmpty(minPlayers) ||
-    isEmpty(maxPlayers)
-  ) {
+  if (areAnyEmpty([gameName, ownerName, minPlayers, maxPlayers])) {
     throw new Error(ERROR_MESSAGES.REQUIRED_FIELDS);
   }
 
