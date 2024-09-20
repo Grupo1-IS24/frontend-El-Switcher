@@ -8,7 +8,7 @@ import { PlayerContext } from '../../contexts/PlayerProvider';
 
 const CreateGameForm = ({ setshowForm }) => {
   const { redirectToLobbyPage } = useRouteNavigation(); // hook for redirect
-  const { setPlayerID, setIsOwner } = useContext(PlayerContext);
+  const { createPlayer } = useContext(PlayerContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,9 +29,8 @@ const CreateGameForm = ({ setshowForm }) => {
       // if the game was succefully created, the response get an gameId to redirect to /lobby/gameId
       if (createdGame && createdGame.gameId) {
         
-        // set the playerID and isOwner.
-        setPlayerID(createdGame.ownerId);
-        setIsOwner(true);
+        // create the player and set the owner flag to true.
+        createPlayer(createdGame.ownerId, true); 
 
         // redirect to the lobby page.
         redirectToLobbyPage(createdGame.gameId);

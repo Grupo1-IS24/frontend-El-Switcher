@@ -18,6 +18,11 @@ const PlayerProvider = ({ children }) => {
     getSessionStorageValue('isOwner', false)
   );
 
+  const createPlayer = useCallback((createdPlayerID, isPlayerOwner = false) => {
+    setPlayerID(createdPlayerID);
+    setIsOwner(isPlayerOwner);
+  }, []);
+
   const resetPlayerState = useCallback(() => {
     removeSessionStorageValue('playerID');
     removeSessionStorageValue('isOwner');
@@ -35,9 +40,8 @@ const PlayerProvider = ({ children }) => {
   // The provided state for the context.
   const providedState = {
     playerID,
-    setPlayerID,
     isOwner,
-    setIsOwner,
+    createPlayer,
     resetPlayerState,
   };
 
