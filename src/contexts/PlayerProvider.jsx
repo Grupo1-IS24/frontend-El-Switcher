@@ -5,9 +5,9 @@ import {
   setSessionStorageValue,
 } from '../utils/sessionStorageUtils';
 
-export const PlayerAndGameContext = createContext();
+export const PlayerContext = createContext();
 
-const PlayerAndGameProvider = ({ children }) => {
+const PlayerProvider = ({ children }) => {
   // playerID must be a number. By default, playerID is -1.
   const [playerID, setPlayerID] = useState(() =>
     getSessionStorageValue('playerID', -1)
@@ -18,27 +18,19 @@ const PlayerAndGameProvider = ({ children }) => {
     getSessionStorageValue('isOwner', false)
   );
 
-  // gameID must be a number. By default, gameID is -1.
-  const [gameID, setGameID] = useState(() =>
-    getSessionStorageValue('gameID', -1)
-  );
-
-  const resetPlayerAndGameState = useCallback(() => {
+  const resetPlayerState = useCallback(() => {
     removeSessionStorageValue('playerID');
     removeSessionStorageValue('isOwner');
-    removeSessionStorageValue('gameID');
 
     setPlayerID(-1);
     setIsOwner(false);
-    setGameID(-1);
   }, []);
 
-  // When the playerID, isOwner, or gameID changes, update the sessionStorage.
+  // When the playerID or isOwner changes, update the sessionStorage.
   useEffect(() => {
     setSessionStorageValue('playerID', playerID);
     setSessionStorageValue('isOwner', isOwner);
-    setSessionStorageValue('gameID', gameID);
-  }, [playerID, isOwner, gameID]);
+  }, [playerID, isOwner]);
 
   // The provided state for the context.
   const providedState = {
@@ -46,16 +38,14 @@ const PlayerAndGameProvider = ({ children }) => {
     setPlayerID,
     isOwner,
     setIsOwner,
-    gameID,
-    setGameID,
-    resetPlayerAndGameState,
+    resetPlayerState,
   };
 
   return (
-    <PlayerAndGameContext.Provider value={providedState}>
+    <PlayerContext.Provider value={providedState}>
       {children}
-    </PlayerAndGameContext.Provider>
+    </PlayerContext.Provider>
   );
 };
 
-export default PlayerAndGameProvider;
+export default PlayerProvider;

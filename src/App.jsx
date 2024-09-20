@@ -1,12 +1,12 @@
 import { RouterProvider } from 'react-router-dom';
 import router from './routes';
-import PlayerAndGameProvider from './contexts/PlayerAndGameProvider';
+import PlayerProvider from './contexts/PlayerProvider';
 
 const App = () => {
   return (
-    <PlayerAndGameProvider>
+    <PlayerProvider>
       <RouterProvider router={router} />
-    </PlayerAndGameProvider>
+    </PlayerProvider>
   );
 };
 

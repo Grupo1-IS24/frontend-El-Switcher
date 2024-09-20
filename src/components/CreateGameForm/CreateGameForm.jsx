@@ -4,11 +4,11 @@ import NumberInput from '../NumberInput/NumberInput';
 import TextInput from '../TextInput/TextInput';
 import useRouteNavigation from '../../hooks/useRouteNavigation';
 import { createGame } from '../../service/CreateGameService';
-import { PlayerAndGameContext } from '../../contexts/PlayerAndGameProvider';
+import { PlayerContext } from '../../contexts/PlayerProvider';
 
 const CreateGameForm = ({ setshowForm }) => {
   const { redirectToLobbyPage } = useRouteNavigation(); // hook for redirect
-  const { setPlayerID, setIsOwner, setGameID } = useContext(PlayerAndGameContext);
+  const { setPlayerID, setIsOwner } = useContext(PlayerContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,10 +29,9 @@ const CreateGameForm = ({ setshowForm }) => {
       // if the game was succefully created, the response get an gameId to redirect to /lobby/gameId
       if (createdGame && createdGame.gameId) {
         
-        // set the playerID, isOwner and gameID.
+        // set the playerID and isOwner.
         setPlayerID(createdGame.ownerId);
         setIsOwner(true);
-        setGameID(createdGame.gameId);
 
         // redirect to the lobby page.
         redirectToLobbyPage(createdGame.gameId);
