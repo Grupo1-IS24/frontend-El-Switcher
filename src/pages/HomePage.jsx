@@ -1,13 +1,18 @@
+import BackgroundOverlay from '../components/BgOverlay/BgOverlay';
 import CreateGameButton from '../components/CreateGameButton/CreateGameButton';
 import JoinGameButton from '../components/JoinGameButton/JoinGameButton';
+import TitleText from '../components/TitleText/TitleText';
 
 const HomePage = () => {
   return (
-    <div className='bg-gray-950 w-screen h-screen flex flex-col gap-10'>
-      <h1 className='text-white text-9xl text-center mt-10'>El switcher</h1>
-      <div className='flex flex-row align-center justify-center gap-10'>
-        <CreateGameButton />
-        <JoinGameButton />
+    <div className='w-screen h-screen'>
+      <BackgroundOverlay />
+      <div className='absolute w-screen flex flex-col gap-10 h-full'>
+        <TitleText />
+        <div className='flex flex-row items-center justify-center gap-10'>
+          <CreateGameButton />
+          <JoinGameButton />
+        </div>
       </div>
     </div>
   );

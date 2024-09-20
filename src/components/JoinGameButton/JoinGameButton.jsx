@@ -8,6 +8,7 @@ const JoinGameButton = () => {
     <Button
       text={'Unirse a partida'}
       onPress={() => redirectToGameListPage()}
+      style={'homeButton'}
     />
   );
 };
