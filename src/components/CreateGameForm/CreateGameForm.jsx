@@ -1,11 +1,14 @@
+import { useContext } from 'react';
 import Button from '../Button/Button';
 import NumberInput from '../NumberInput/NumberInput';
 import TextInput from '../TextInput/TextInput';
 import useRouteNavigation from '../../hooks/useRouteNavigation';
 import { createGame } from '../../service/CreateGameService';
+import { PlayerContext } from '../../contexts/PlayerProvider';
 
 const CreateGameForm = ({ setshowForm }) => {
   const { redirectToLobbyPage } = useRouteNavigation(); // hook for redirect
+  const { createPlayer } = useContext(PlayerContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,10 +27,16 @@ const CreateGameForm = ({ setshowForm }) => {
       const createdGame = await createGame(gameInfo);
 
       // if the game was succefully created, the response get an gameId to redirect to /lobby/gameId
-      if (createdGame && createdGame.gameId)
+      if (createdGame && createdGame.gameId) {
+        
+        // create the player and set the owner flag to true.
+        createPlayer(createdGame.ownerId, true); 
+
+        // redirect to the lobby page.
         redirectToLobbyPage(createdGame.gameId);
-      // if dont recive the gameId, show an error message
-      else alert('Error al crear la partida');
+      } else {
+        alert('Error al crear la partida');
+      };
     } catch (error) {
       console.error('Error al crear la partida', error);
       alert('Hubo un problema al crear el juego');
