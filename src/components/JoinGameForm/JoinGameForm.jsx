@@ -1,15 +1,39 @@
+import { useContext } from 'react';
+import { joinGame } from '../../service/JoinGameService';
 import Button from '../Button/Button';
 import TextInput from '../TextInput/TextInput';
+import { PlayerContext } from '../../contexts/PlayerProvider';
+import useRouteNavigation from '../../hooks/useRouteNavigation';
 
 const JoinGameForm = ({ selectedGame, onClose }) => {
-  const handleSubmit = (event) => {
+  const { createPlayer } = useContext(PlayerContext);
+  const { redirectToLobbyPage } = useRouteNavigation();
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Aquí puedes manejar el envío del formulario.
+
+    const elements = event.target.elements;
+
+    const playerJoinData = {
+      playerName: elements.playerName.value,
+    };
+
+    try {
+      const playerResponseData = await joinGame(
+        playerJoinData,
+        selectedGame.gameId
+      );
+
+      createPlayer(playerResponseData.playerId);
+
+      redirectToLobbyPage(selectedGame.gameId);
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
-  if (!selectedGame) {
-    return null;
-  }
+  // If there is no selected game, return null and don't render the component.
+  if (!selectedGame) return null;
 
   return (
     <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50'>
