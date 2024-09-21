@@ -17,7 +17,7 @@ const GameCard = ({
       <p className='lekton-regular text-lg my-1'>
         Max. jugadores: {maxPlayers}
       </p>
-      <Button text='Unirme' style={'gameCardButton'} onPress={onPressButton} />
+      <Button text='Unirme' style={'borderButton'} onPress={onPressButton} />
     </div>
   );
 };

@@ -22,8 +22,8 @@ const JoinGameForm = ({ selectedGame, onClose }) => {
           <TextInput name='playerName' placeholder='Ingresa tu nombre' />
 
           <div className='flex justify-center space-x-20'>
-            <Button text='Unirse' style='gameCardButton' type='submit' />
-            <Button text='Cerrar' style='gameCardButton' onPress={onClose} />
+            <Button text='Unirse' style='borderButton' type='submit' />
+            <Button text='Cerrar' style='borderButton' onPress={onClose} />
           </div>
         </form>
       </div>
