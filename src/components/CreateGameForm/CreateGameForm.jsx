@@ -44,7 +44,7 @@ const CreateGameForm = ({ setshowForm }) => {
   };
 
   return (
-    <div className='absolute bg-gray-800 p-8 rounded-lg shadow-md mx-auto max-w-lg'>
+    <div className='absolute bg-gray-800 p-8 rounded-lg shadow-md mx-auto mt-60 max-w-lg'>
       <h2 className='text-2xl font-bold text-white mb-6 text-center'>
         Crear Partida
       </h2>
@@ -72,8 +72,12 @@ const CreateGameForm = ({ setshowForm }) => {
         </div>
 
         <div className='flex flex-row justify-between'>
-          <Button type='submit' text='Crear partida' />
-          <Button text={'x'} onPress={() => setshowForm(false)} />
+          <Button type='submit' text='Crear partida' style={'formButton'} />
+          <Button
+            text={'x'}
+            onPress={() => setshowForm(false)}
+            style={'formButton'}
+          />
         </div>
       </form>
     </div>
