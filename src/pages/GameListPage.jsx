@@ -5,9 +5,12 @@ import useGetGameList from '../hooks/useGetGameList';
 import TitleText from '../components/TitleText/TitleText';
 import BackgroundOverlay from '../components/BgOverlay/BgOverlay';
 import RefeshButton from '../components/RefeshButton/RefeshButton';
+import JoinGameForm from '../components/JoinGameForm/JoinGameForm';
+import useSelectedGame from '../hooks/useSelectedGame';
 
 const GameListPage = () => {
   const { gameList, isLoading, error, refreshGameList } = useGetGameList();
+  const { selectedGame, selectGame, clearSelectedGame } = useSelectedGame();
 
   return (
     <div>
@@ -19,9 +22,15 @@ const GameListPage = () => {
         {isLoading ? (
           <LoadingSpinner />
         ) : error ? (
-          <ErrorMessage error={error} onRetry={refreshGameList} />
+          <ErrorMessage error={error} />
         ) : (
-          <GameGrid gameList={gameList} />
+          <>
+            <GameGrid gameList={gameList} selectGame={selectGame} />
+            <JoinGameForm
+              selectedGame={selectedGame}
+              onClose={clearSelectedGame}
+            />
+          </>
         )}
       </div>
     </div>
