@@ -7,9 +7,9 @@ const HomePage = () => {
   return (
     <div className='w-screen h-screen'>
       <BackgroundOverlay />
-      <div className='absolute w-screen flex flex-col gap-10 h-full'>
+      <div className='absolute inset-0 flex flex-col items-center justify-center gap-10'>
         <TitleText />
-        <div className='flex flex-row items-center justify-center gap-10'>
+        <div className='flex flex-row items-center justify-center gap-10 mb-20'>
           <CreateGameButton />
           <JoinGameButton />
         </div>
