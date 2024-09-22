@@ -2,30 +2,35 @@ import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner';
 import ErrorMessage from '../components/ErrorMessage/ErrorMessage';
 import GameGrid from '../components/GameGrid/GameGrid';
 import useGetGameList from '../hooks/useGetGameList';
-import Button from '../components/Button/Button';
 import TitleText from '../components/TitleText/TitleText';
 import BackgroundOverlay from '../components/BgOverlay/BgOverlay';
+import RefeshButton from '../components/RefeshButton/RefeshButton';
+import JoinGameForm from '../components/JoinGameForm/JoinGameForm';
+import useSelectedGame from '../hooks/useSelectedGame';
 
 const GameListPage = () => {
   const { gameList, isLoading, error, refreshGameList } = useGetGameList();
+  const { selectedGame, selectGame, clearSelectedGame } = useSelectedGame();
 
   return (
     <div>
       <BackgroundOverlay />
       <div className='relative'>
         <TitleText />
-        {!isLoading && (
-          <div className='absolute top-4 left-4'>
-            <Button text='🗘' onPress={refreshGameList} style={'formButton'} />
-          </div>
-        )}
+        <RefeshButton isVisible={!isLoading} onPress={refreshGameList} />
 
         {isLoading ? (
           <LoadingSpinner />
         ) : error ? (
-          <ErrorMessage error={error} onRetry={refreshGameList} />
+          <ErrorMessage error={error} />
         ) : (
-          <GameGrid gameList={gameList} />
+          <>
+            <GameGrid gameList={gameList} selectGame={selectGame} />
+            <JoinGameForm
+              selectedGame={selectedGame}
+              onClose={clearSelectedGame}
+            />
+          </>
         )}
       </div>
     </div>
