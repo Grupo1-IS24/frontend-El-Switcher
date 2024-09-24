@@ -1,4 +1,4 @@
-import Button from "../Button/Button";
+import Button from '../Button/Button';
 
 const RefeshButton = ({ isVisible, onPress }) => {
   if (!isVisible) {
@@ -7,7 +7,13 @@ const RefeshButton = ({ isVisible, onPress }) => {
 
   return (
     <div className='absolute top-4 left-4'>
-      <Button text='🗘' onPress={onPress} style={'formButton'} />
+      <Button
+        text='
+      ⟳
+     '
+        onPress={onPress}
+        style={'formButton'}
+      />
     </div>
   );
 };
