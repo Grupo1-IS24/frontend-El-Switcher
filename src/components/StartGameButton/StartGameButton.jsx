@@ -1,9 +1,8 @@
 import Button from '../Button/Button';
 
-const StartGameButton = ({
-  isDisabled = true,
-  style = 'disabled',
-}) => {
+const StartGameButton = ({ isDisabled = true }) => {
+  const style = isDisabled ? 'disabled' : 'init';
+
   return (
     <Button
       text={'Iniciar partida'}
