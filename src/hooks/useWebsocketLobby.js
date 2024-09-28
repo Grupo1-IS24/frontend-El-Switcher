@@ -20,10 +20,10 @@ const useWebsocketLobby = () => {
       setCanStartGame(canStart);
     });
 
-    socket.on('game_started', ({ gameStarted }) => {
-      if (gameStarted) {
-        redirectToGamePage(gameId);
-      }
+    socket.on('game_started', ({ gameStarted = false }) => {      
+      if (!gameStarted) return;
+
+      redirectToGamePage(gameId);
     });
   }, []);
 
