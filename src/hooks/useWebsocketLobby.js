@@ -3,6 +3,13 @@ import { useParams } from 'react-router-dom';
 import useRouteNavigation from './useRouteNavigation';
 import useWebsocket from './useWebsocket';
 
+/**
+ * Custom hook to handle websocket events for the lobby.
+ * 
+ * @returns {Object} An object containing the following properties:
+ * - listOfPlayers: An array of players in the game.
+ * - canStartGame: A boolean indicating whether the game can be started.
+ */
 const useWebsocketLobby = () => {
   const { gameId } = useParams();
   const { redirectToGamePage } = useRouteNavigation();

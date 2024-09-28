@@ -1,6 +1,17 @@
 import { useCallback, useState } from 'react';
 import useWebsocket from './useWebsocket';
 
+/**
+ * Custom hook to handle websocket events for the game.
+ * 
+ * @returns {Object} An object containing the following properties:
+ * - listOfPlayers: An array of players in the game.
+ * - board: The current state of the game board.
+ * - playerTurnId: The ID of the player whose turn it is.
+ * - figureCards: An array of figure cards.
+ * - movementCards: An array of movement cards.
+ * - winnerInfo: Information about the winner of the game.
+ */
 const useWebsocketGame = () => {
   const [listOfPlayers, setListOfPlayers] = useState([]);
   const [board, setBoard] = useState([]);
