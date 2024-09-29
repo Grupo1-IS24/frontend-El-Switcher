@@ -3,18 +3,20 @@ import useRouteNavigation from '../../hooks/useRouteNavigation';
 import { leaveGame } from '../../service/LeaveGame';
 import { useContext } from 'react';
 import { PlayerContext } from '../../contexts/PlayerProvider';
+import { useParams } from 'react-router-dom';
 
-const LeaveButton = ({ gameID, type }) => {
+const LeaveButton = ({ type }) => {
   const { redirectToHomePage } = useRouteNavigation();
   const { playerID } = useContext(PlayerContext);
+  const { gameId } = useParams();
 
-  const manageLeaveLobby = async () => {
-    if (gameID == null || playerID == null) {
-      console.error('gameID o playerID no están definidos.');
+  const manageLeave = async () => {
+    if (gameId == null || playerID == null) {
+      console.error('gameId o playerID no están definidos.');
       return;
     }
 
-    await leaveGame(gameID, playerID);
+    await leaveGame(gameId, playerID);  // service for leave lobby and a started game
     redirectToHomePage();
   };
 
@@ -22,13 +24,13 @@ const LeaveButton = ({ gameID, type }) => {
     type === 'lobby' ?
       (<Button
         text={'Abandonar lobby'}
-        onPress={() => manageLeaveLobby(gameID, playerID)}
+        onPress={() => manageLeave()}
         style={'lobbyButton_leave'}
       />)
       :
       (<Button
         text={'Abandonar'}
-        onPress={() => manageLeaveLobby(gameID, playerID)}
+        onPress={() => manageLeave()}
         style={'gameButton_leave'}
       />)
   );

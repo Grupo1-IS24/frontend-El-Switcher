@@ -2,12 +2,10 @@ import useWebsocketLobby from '../../hooks/useWebsocketLobby';
 import LeaveButton from '../LeaveButton/LeaveButton';
 import StartGameButton from '../StartGameButton/StartGameButton';
 import { PlayerContext } from '../../contexts/PlayerProvider';
-import { useParams } from 'react-router-dom';
 import { useContext } from 'react';
 
 const LobbyCard = () => {
   const { listOfPlayers } = useWebsocketLobby();
-  const { gameId } = useParams();
   const { isOwner } = useContext(PlayerContext);
 
   return (
@@ -21,7 +19,7 @@ const LobbyCard = () => {
       {isOwner ? (
         <div className='flex flex-row gap-5 justify-center'>
           <StartGameButton />
-          <LeaveButton gameID={gameId} type={'lobby'} />
+          <LeaveButton type={'lobby'} />
         </div>
       ) : (
         <div className='flex flex-col gap-3'>
@@ -29,7 +27,7 @@ const LobbyCard = () => {
             Esperando que el owner comience la partida...
           </p>
           <div className='flex justify-center'>
-            <LeaveButton gameID={gameId} type={'lobby'} />
+            <LeaveButton type={'lobby'} />
           </div>
         </div>
       )}
