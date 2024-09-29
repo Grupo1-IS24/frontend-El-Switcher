@@ -1,9 +1,10 @@
-import { useParams } from 'react-router-dom';
+import DisplayPlayers from '../components/DisplayPlayers/DisplayPlayers';
+import useWebsocketGame from '../hooks/useWebsocketGame';
 
 const GamePage = () => {
-  const { gameId } = useParams();
+  const { listOfPlayers } = useWebsocketGame();
 
-  return <h1>Game {gameId}</h1>;
+  return <DisplayPlayers listOfPlayers={listOfPlayers} />;
 };
 
 export default GamePage;
