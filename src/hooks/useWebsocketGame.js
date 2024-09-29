@@ -2,6 +2,7 @@ import { useCallback, useContext, useState } from 'react';
 import useWebsocket from './useWebsocket';
 import { sortListOfPlayers } from '../utils/sortListOfPlayers';
 import { PlayerContext } from '../contexts/PlayerProvider';
+import { sortBoardColorCards } from '../utils/sortBoardColorCards';
 
 /**
  * Custom hook to handle websocket events for the game.
@@ -35,7 +36,8 @@ const useWebsocketGame = () => {
     });
 
     socket.on('board', (board) => {
-      setBoard(board);
+      const sortedBoard = sortBoardColorCards(board);
+      setBoard(sortedBoard);
     });
 
     socket.on('figure_cards', (figureCards) => {
