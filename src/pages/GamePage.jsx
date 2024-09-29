@@ -1,12 +1,10 @@
-import Board from "../components/Board/Board";
-import useWebsocketGame from "../hooks/useWebsocketGame";
+import Board from '../components/Board/Board';
+import useWebsocketGame from '../hooks/useWebsocketGame';
 
 const GamePage = () => {
   const { board } = useWebsocketGame();
 
-  return (
-    <Board board={board} />
-  );
+  return <Board board={board} />;
 };
 
 export default GamePage;
