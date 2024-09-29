@@ -1,9 +1,10 @@
 import { useCallback, useState } from 'react';
 import useWebsocket from './useWebsocket';
+import { sortBoardColorCards } from '../utils/sortBoardColorCards';
 
 /**
  * Custom hook to handle websocket events for the game.
- * 
+ *
  * @returns {Object} An object containing the following properties:
  * - listOfPlayers: An array of players in the game.
  * - board: The current state of the game board.
@@ -30,7 +31,8 @@ const useWebsocketGame = () => {
     });
 
     socket.on('board', (board) => {
-      setBoard(board);
+      const sortedBoard = sortBoardColorCards(board);
+      setBoard(sortedBoard);
     });
 
     socket.on('figure_cards', (figureCards) => {
