@@ -1,9 +1,12 @@
-import { useParams } from 'react-router-dom';
+import Board from "../components/Board/Board";
+import useWebsocketGame from "../hooks/useWebsocketGame";
 
 const GamePage = () => {
-  const { gameId } = useParams();
+  const { board } = useWebsocketGame();
 
-  return <h1>Game {gameId}</h1>;
+  return (
+    <Board board={board} />
+  );
 };
 
 export default GamePage;
