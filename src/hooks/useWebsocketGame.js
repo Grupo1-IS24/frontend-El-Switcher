@@ -1,9 +1,11 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import useWebsocket from './useWebsocket';
+import { sortListOfPlayers } from '../utils/sortListOfPlayers';
+import { PlayerContext } from '../contexts/PlayerProvider';
 
 /**
  * Custom hook to handle websocket events for the game.
- * 
+ *
  * @returns {Object} An object containing the following properties:
  * - listOfPlayers: An array of players in the game.
  * - board: The current state of the game board.
@@ -13,6 +15,8 @@ import useWebsocket from './useWebsocket';
  * - winnerInfo: Information about the winner of the game.
  */
 const useWebsocketGame = () => {
+  const { playerID } = useContext(PlayerContext);
+
   const [listOfPlayers, setListOfPlayers] = useState([]);
   const [board, setBoard] = useState([]);
   const [playerTurnId, setPlayerTurnId] = useState(-1);
@@ -22,7 +26,8 @@ const useWebsocketGame = () => {
 
   const handleSocketEvents = useCallback((socket) => {
     socket.on('player_list', (listOfPlayers) => {
-      setListOfPlayers(listOfPlayers);
+      const sortedListOfPlayers = sortListOfPlayers(listOfPlayers, playerID);
+      setListOfPlayers(sortedListOfPlayers);
     });
 
     socket.on('turn', ({ playerTurnId }) => {
