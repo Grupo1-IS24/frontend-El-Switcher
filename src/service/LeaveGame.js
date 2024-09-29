@@ -1,6 +1,6 @@
-import { apiService } from "./axiosConfig";
+import { apiService } from './axiosConfig';
 
-export const leaveLobby = async (gameID, playerID) => {
+export const leaveGame = async (gameID, playerID) => {
   try {
     const response = await apiService.delete(
       `/game/${gameID}/leave/${playerID}`
