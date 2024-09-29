@@ -1,5 +1,7 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import useWebsocket from './useWebsocket';
+import { sortListOfPlayers } from '../utils/sortListOfPlayers';
+import { PlayerContext } from '../contexts/PlayerProvider';
 import { sortBoardColorCards } from '../utils/sortBoardColorCards';
 
 /**
@@ -14,6 +16,8 @@ import { sortBoardColorCards } from '../utils/sortBoardColorCards';
  * - winnerInfo: Information about the winner of the game.
  */
 const useWebsocketGame = () => {
+  const { playerID } = useContext(PlayerContext);
+
   const [listOfPlayers, setListOfPlayers] = useState([]);
   const [board, setBoard] = useState([]);
   const [playerTurnId, setPlayerTurnId] = useState(-1);
@@ -23,7 +27,8 @@ const useWebsocketGame = () => {
 
   const handleSocketEvents = useCallback((socket) => {
     socket.on('player_list', (listOfPlayers) => {
-      setListOfPlayers(listOfPlayers);
+      const sortedListOfPlayers = sortListOfPlayers(listOfPlayers, playerID);
+      setListOfPlayers(sortedListOfPlayers);
     });
 
     socket.on('turn', ({ playerTurnId }) => {
