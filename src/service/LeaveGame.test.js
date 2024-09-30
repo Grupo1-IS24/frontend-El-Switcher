@@ -21,22 +21,15 @@ describe('leaveGame', () => {
     await leaveGame(gameID, playerID);
 
     // verify apiService.delete was called with the correct parameters
-    expect(apiService.delete).toHaveBeenCalledWith(`/game/${gameID}/leave/${playerID}`);
+    expect(apiService.delete).toHaveBeenCalledWith(
+      `/game/${gameID}/leave/${playerID}`
+    );
     expect(apiService.delete).toHaveBeenCalledTimes(1);
   });
 
-  it('debería manejar errores', async () => {
-    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  it('debería propagar errores', async () => {
+    apiService.delete.mockRejectedValue(new Error('Network Error'));
 
-    // mocking an error response
-    apiService.delete.mockRejectedValueOnce(new Error('Error de API'));
-
-    // excecute the function
-    await leaveGame(gameID, playerID);
-
-    // verify that the error was caught
-    expect(consoleErrorSpy).toHaveBeenCalledWith('error abandonando el lobby: Error: Error de API');
-
-    consoleErrorSpy.mockRestore(); // restore the original console.error state
+    await expect(leaveGame(gameID, playerID)).rejects.toThrow('Network Error');
   });
 });
