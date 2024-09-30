@@ -1,9 +1,17 @@
-import { useParams } from 'react-router-dom';
+import BgOverlay from '../components/BgOverlay/BgOverlay';
+import LobbyCard from '../components/LobbyCard/LobbyCard';
+import TitleText from '../components/TitleText/TitleText';
 
 const LobbyPage = () => {
-  const { gameId } = useParams();
-
-  return <h1>Lobby {gameId}</h1>;
+  return (
+    <>
+      <BgOverlay />
+      <div className='relative flex flex-col gap-6'>
+        <TitleText />
+        <LobbyCard />
+      </div>
+    </>
+  );
 };
 
 export default LobbyPage;
