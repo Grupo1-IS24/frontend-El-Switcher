@@ -16,8 +16,12 @@ const LeaveButton = ({ type }) => {
       return;
     }
 
-    await leaveGame(gameId, playerID);  // service for leave lobby and a started game
-    redirectToHomePage();
+    try {
+      await leaveGame(gameId, playerID);  // service for leave lobby and a started game
+      redirectToHomePage();
+    } catch (error) {
+      window.alert('Error al abandonar el juego. Intente nuevamente.');
+    }
   };
 
   return (

@@ -8,5 +8,6 @@ export const leaveGame = async (gameID, playerID) => {
     return response;
   } catch (error) {
     console.error(`error abandonando el lobby: ${error}`);
+    throw error;
   }
 };
