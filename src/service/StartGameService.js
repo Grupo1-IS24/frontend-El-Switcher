@@ -2,11 +2,12 @@ import { apiService } from "./axiosConfig";
 
 const startGame = async (gameID) => {
   try {
-    const response = await apiService.post(`/game/${gameID}/start`);
+    const gameIDNumber = parseInt(gameID);
+    const response = await apiService.post(`/game/${gameIDNumber}/start`);
     const { gameId, status } = response.data;
     const isTypeCorrect = typeof gameId === 'number' && typeof status === 'string';
 
-    if (gameId !== gameID || status !== 'Ingame' || !isTypeCorrect) {
+    if (gameId !== gameIDNumber || status !== 'Ingame' || !isTypeCorrect) {
       throw new Error('Error al iniciar el juego');
     }
 
