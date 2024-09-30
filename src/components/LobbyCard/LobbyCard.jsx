@@ -5,7 +5,7 @@ import { PlayerContext } from '../../contexts/PlayerProvider';
 import { useContext } from 'react';
 
 const LobbyCard = () => {
-  const { listOfPlayers } = useWebsocketLobby();
+  const { listOfPlayers, canStartGame } = useWebsocketLobby();
   const { isOwner } = useContext(PlayerContext);
 
   return (
@@ -18,7 +18,7 @@ const LobbyCard = () => {
 
       {isOwner ? (
         <div className='flex flex-row gap-5 justify-center'>
-          <StartGameButton />
+          <StartGameButton isDisabled={!canStartGame} />
           <LeaveButton type={'lobby'} />
         </div>
       ) : (
