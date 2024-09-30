@@ -1,9 +1,9 @@
 const ColorCard = ({ color }) => {
   const colorStyle = {
-    red: 'bg-red-500',
-    blue: 'bg-blue-500',
-    green: 'bg-green-500',
-    yellow: 'bg-yellow-500',
+    RED: 'bg-red-500',
+    BLUE: 'bg-blue-500',
+    GREEN: 'bg-green-500',
+    YELLOW: 'bg-yellow-500',
   };
 
   return (
