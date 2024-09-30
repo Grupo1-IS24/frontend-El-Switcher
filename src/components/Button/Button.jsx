@@ -3,7 +3,7 @@ const Button = ({
   onPress,
   style,
   type = 'button',
-  isDisabled = false
+  isDisabled = false,
 }) => {
   // define the classes for each button style
   const baseClasses = 'lekton-bold rounded-xl transition-all';
@@ -20,15 +20,22 @@ const Button = ({
       'w-[18rem] h-[4.375rem] text-3xl border-2 border-[#f1f1f1] bg-[#f1f1f1] text-[#0c0c0c] hover:bg-transparent hover:text-[#f1f1f1]',
     lobbyButton_leave:
       'w-[18rem] h-[4.375rem] text-3xl border-2 border-[#ee6055] bg-[#ee6055] text-[#0c0c0c] hover:bg-transparent hover:text-[#ee6055]',
-    gameButton_pass: '',
-    gameButton_leave: 'w-[16rem] h-[4.375rem] text-2xl border-2 border-[#ee6055] bg-[#ee6055] text-[#0c0c0c] hover:bg-transparent hover:text-[#ee6055]',
+    gameButton_endTurn:
+      'w-[16rem] h-[4.375rem] text-2xl border-2 border-[#f1f1f1] bg-[#f1f1f1] text-[#0c0c0c] hover:bg-transparent hover:text-[#f1f1f1]',
+    gameButton_leave:
+      'w-[16rem] h-[4.375rem] text-2xl border-2 border-[#ee6055] bg-[#ee6055] text-[#0c0c0c] hover:bg-transparent hover:text-[#ee6055]',
   };
 
   // get classes based on style
   const buttonClasses = `${baseClasses} ${typeClasses[style]}`;
 
   return (
-    <button type={type} onClick={onPress} className={buttonClasses} disabled={isDisabled}>
+    <button
+      type={type}
+      onClick={onPress}
+      className={buttonClasses}
+      disabled={isDisabled}
+    >
       {text}
     </button>
   );

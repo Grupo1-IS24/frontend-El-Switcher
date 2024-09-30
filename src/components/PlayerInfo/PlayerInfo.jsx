@@ -1,3 +1,6 @@
+import LeaveButton from '../LeaveButton/LeaveButton';
+import EndTurnButton from '../EndTurnButton/EndTurnButton';
+
 const PlayerInfo = ({ playerName, index, isTurn }) => {
   const positionStyles = [
     'bottom-10 left-16', // corner bottom left
@@ -12,6 +15,10 @@ const PlayerInfo = ({ playerName, index, isTurn }) => {
         {playerName}{' '}
         <span className='text-gray-500'>{isTurn && '(En turno)'}</span>
       </p>
+      <div className='flex flex-col gap-2'>
+        <LeaveButton />
+        if (isTurn) <EndTurnButton />
+      </div>
     </div>
   );
 };

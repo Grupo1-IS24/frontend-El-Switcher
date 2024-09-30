@@ -13,7 +13,9 @@ const GamePage = () => {
         playerTurnId={playerTurnId}
       />
       <Board board={board} />
-      {winnerInfo !== null && <WinnerMessage winnerName={winnerInfo.nameWinner} />}
+      {winnerInfo !== null && (
+        <WinnerMessage winnerName={winnerInfo.nameWinner} />
+      )}
     </>
   );
 };
