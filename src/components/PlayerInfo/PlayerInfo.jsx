@@ -17,7 +17,6 @@ const PlayerInfo = ({ playerName, index, isTurn }) => {
       </p>
       <div className='flex flex-col gap-2'>
         <LeaveButton />
-        {isTurn && <EndTurnButton />}
       </div>
     </div>
   );
