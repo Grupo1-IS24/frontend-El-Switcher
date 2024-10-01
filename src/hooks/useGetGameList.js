@@ -11,7 +11,8 @@ const useGetGameList = () => {
     setError(null);
 
     try {
-      const data = await getGameList();
+      let data = await getGameList();
+      data = data.filter((game) => game.connectedPlayers !== game.maxPlayers);
       setGameList(data);
     } catch (error) {
       setError(error);
