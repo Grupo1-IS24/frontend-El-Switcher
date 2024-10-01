@@ -28,12 +28,10 @@ const useWebsocketGame = () => {
   const handleSocketEvents = useCallback((socket) => {
     socket.on('player_list', (listOfPlayers) => {
       const sortedListOfPlayers = sortListOfPlayers(listOfPlayers, playerID);
-      console.log(sortedListOfPlayers);
       setListOfPlayers(sortedListOfPlayers);
     });
 
     socket.on('turn', ({ playerTurnId }) => {
-      console.log(playerTurnId);
       setPlayerTurnId(playerTurnId);
     });
 
