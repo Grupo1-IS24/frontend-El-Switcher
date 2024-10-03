@@ -18,11 +18,18 @@ const GameListPage = () => {
     }
 
     if (error) {
-      return <MessageCard type={'error'} message={`Error en el servidor: ${error}`} />;
+      return (
+        <MessageCard
+          type={'error'}
+          message={`Error en el servidor: ${error}`}
+        />
+      );
     }
 
     if (gameList.length === 0) {
-      return <MessageCard type={'info'} message='No hay partidas disponibles.' />;
+      return (
+        <MessageCard type={'info'} message='No hay partidas disponibles.' />
+      );
     }
 
     return (
