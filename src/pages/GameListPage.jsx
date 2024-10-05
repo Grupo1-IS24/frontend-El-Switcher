@@ -8,12 +8,16 @@ import useWebsocketGameList from '../hooks/useWebsocketGameList';
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner';
 
 const GameListPage = () => {
-  const { gameList, isLoading } = useWebsocketGameList();
+  const { gameList, isLoading, error } = useWebsocketGameList();
   const { selectedGame, selectGame, clearSelectedGame } = useSelectedGame();
 
   const renderContent = () => {
     if (isLoading) {
       return <LoadingSpinner />;
+    }
+
+    if (error) {
+      return <MessageCard type={'error'} message={error} />
     }
 
     if (gameList.length === 0) {
