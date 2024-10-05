@@ -5,12 +5,17 @@ import BackgroundOverlay from '../components/BgOverlay/BgOverlay';
 import JoinGameForm from '../components/JoinGameForm/JoinGameForm';
 import useSelectedGame from '../hooks/useSelectedGame';
 import useWebsocketGameList from '../hooks/useWebsocketGameList';
+import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner';
 
 const GameListPage = () => {
   const { gameList } = useWebsocketGameList();
   const { selectedGame, selectGame, clearSelectedGame } = useSelectedGame();
 
   const renderContent = () => {
+    if (gameList === null) {
+      return <LoadingSpinner />;
+    }
+
     if (gameList.length === 0) {
       return (
         <MessageCard type={'info'} message='No hay partidas disponibles.' />
