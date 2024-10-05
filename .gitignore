@@ -248,4 +248,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Archivo .md para PR
+pr.md
+
 # End of https://www.toptal.com/developers/gitignore/api/react,node,linux,windows,macos,visualstudiocode
