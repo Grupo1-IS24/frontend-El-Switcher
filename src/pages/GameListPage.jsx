@@ -8,11 +8,11 @@ import useWebsocketGameList from '../hooks/useWebsocketGameList';
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner';
 
 const GameListPage = () => {
-  const { gameList } = useWebsocketGameList();
+  const { gameList, isLoading } = useWebsocketGameList();
   const { selectedGame, selectGame, clearSelectedGame } = useSelectedGame();
 
   const renderContent = () => {
-    if (gameList === null) {
+    if (isLoading) {
       return <LoadingSpinner />;
     }
 
