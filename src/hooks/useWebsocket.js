@@ -6,6 +6,7 @@ import { io } from 'socket.io-client';
  *
  * @param {string} path The path to connect to the websocket.
  * @param {function} handleSocketEvents The function to handle the socket events.
+ * @param {Object} query The query parameters to pass to the websocket.
  * @returns {void}
  */
 const useWebsocket = (path, handleSocketEvents, query = {}) => {

@@ -1,6 +1,14 @@
 import { useCallback, useState } from 'react';
 import useWebsocket from './useWebsocket';
 
+/**
+ * Custom hook to handle websocket events for the game list.
+ * 
+ * @returns {Object} An object containing the following properties:
+ * - gameList: An array of games.
+ * - isLoading: A boolean indicating whether the game list is loading.
+ * - error: An error message if there was an error connecting to the server.
+ */
 const useWebsocketGameList = () => {
   const [gameList, setGameList] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
