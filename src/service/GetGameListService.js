@@ -17,6 +17,7 @@ const gameListSchema = z.array(gameSchema);
  *
  * @returns {Promise<Array<Object>>} - A promise that resolves to the validated list of games.
  * @throws {Error} - Throws an error if the API request fails or if the game list validation fails.
+ * @deprecated This function is deprecated in favor of websockets.
  */
 export const getGameList = async () => {
   try {
