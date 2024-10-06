@@ -5,6 +5,9 @@ import TextInput from '../TextInput/TextInput';
 import { PlayerContext } from '../../contexts/PlayerProvider';
 import useRouteNavigation from '../../hooks/useRouteNavigation';
 
+/** 
+ * @deprecated This component is deprecated and should not be used. 
+ */
 const JoinGameForm = ({ selectedGame, onClose }) => {
   const { createPlayer } = useContext(PlayerContext);
   const { redirectToLobbyPage } = useRouteNavigation();

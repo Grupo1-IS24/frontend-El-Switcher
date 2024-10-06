@@ -6,6 +6,9 @@ import useRouteNavigation from '../../hooks/useRouteNavigation';
 import { createGame } from '../../service/CreateGameService';
 import { PlayerContext } from '../../contexts/PlayerProvider';
 
+/** 
+ * @deprecated This component is deprecated and should not be used. 
+ */
 const CreateGameForm = ({ setshowForm }) => {
   const { redirectToLobbyPage } = useRouteNavigation(); // hook for redirect
   const { createPlayer } = useContext(PlayerContext);
