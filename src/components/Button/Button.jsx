@@ -30,7 +30,10 @@ const Button = ({
   const buttonClasses = `${baseClasses} ${typeClasses[style]}`;
 
   return (
-    <button type={type} onClick={onPress} className={buttonClasses}
+    <button
+      type={type}
+      onClick={onPress}
+      className={buttonClasses}
       disabled={isDisabled}
     >
       {text}
