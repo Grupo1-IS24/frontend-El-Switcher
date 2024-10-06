@@ -11,7 +11,9 @@ vi.mock('./axiosConfig', () => ({
 
 describe('startGame', () => {
   it('should be called with the correct endpoint', async () => {
-    apiService.post.mockResolvedValue({ data: { gameId: 1, status: 'Ingame' } });
+    apiService.post.mockResolvedValue({
+      data: { gameId: 1, status: 'Ingame' },
+    });
 
     await startGame(1);
 
@@ -20,7 +22,9 @@ describe('startGame', () => {
 
   it('should return the correct game ID on success', async () => {
     const gameID = 1;
-    apiService.post.mockResolvedValue({ data: { gameId: gameID, status: 'Ingame' } });
+    apiService.post.mockResolvedValue({
+      data: { gameId: gameID, status: 'Ingame' },
+    });
 
     const result = await startGame(gameID);
 
@@ -28,7 +32,9 @@ describe('startGame', () => {
   });
 
   it('should throw an error if the API response is invalid', async () => {
-    apiService.post.mockResolvedValue({ data: { gameId: '1', status: 'Ingame' } });
+    apiService.post.mockResolvedValue({
+      data: { gameId: '1', status: 'Ingame' },
+    });
 
     await expect(startGame(1)).rejects.toThrow('Error starting the game');
   });
