@@ -30,15 +30,6 @@ jobs:
       with:
         node-version: '20'
 
-    # Cachear dependencias de npm
-    - name: Cache npm dependencies
-      uses: actions/cache@v3
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-
     # Instalar dependencias
     - name: Install dependencies
       run: npm install
@@ -74,14 +65,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    # Restaurar caché de dependencias de npm
-    - name: Restore npm cache
-      uses: actions/cache@v3
+    # Configurar Node.js
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
       with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
+        node-version: '20'
 
     # Instalar dependencias
     - name: Install dependencies
