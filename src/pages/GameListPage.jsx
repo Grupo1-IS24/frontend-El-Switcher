@@ -5,7 +5,7 @@ import useGetGameList from '../hooks/useGetGameList';
 import TitleText from '../components/TitleText/TitleText';
 import BackgroundOverlay from '../components/BgOverlay/BgOverlay';
 import RefeshButton from '../components/RefeshButton/RefeshButton';
-import JoinGameForm from '../components/JoinGameForm/JoinGameForm';
+import GameForm from '../components/GameForm/GameForm';
 import useSelectedGame from '../hooks/useSelectedGame';
 
 const GameListPage = () => {
@@ -35,7 +35,11 @@ const GameListPage = () => {
     return (
       <>
         <GameGrid gameList={gameList} selectGame={selectGame} />
-        <JoinGameForm selectedGame={selectedGame} onClose={clearSelectedGame} />
+        <GameForm
+          type='join'
+          selectedGame={selectedGame}
+          onClose={clearSelectedGame}
+        />
       </>
     );
   };
