@@ -39,10 +39,12 @@ jobs:
           git add .
           git commit -m "Aplicar formato automáticamente tras merge a develop" || echo "No hay cambios que commitear"
 
-      # 6. Hacer push de los cambios a la rama original
+      # 6. Autenticación usando el token de GitHub para hacer push
       - name: Hacer push de los cambios
-        if: github.event_name == 'push' || github.event_name == 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}
           if [ "$(git rev-parse --abbrev-ref HEAD)" = "HEAD" ]; then
             BRANCH_NAME=$(echo $GITHUB_REF | sed 's/refs\/heads\///')
             git push origin HEAD:$BRANCH_NAME
