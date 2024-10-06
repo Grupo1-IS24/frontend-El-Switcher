@@ -13,6 +13,7 @@ const EndTurnButton = () => {
       await endTurn(gameId, playerID);
     } catch (error) {
       window.alert('Error al terminar el turno. Intente nuevamente.');
+      console.error('Error al terminar el turno', error);
     }
   };
 

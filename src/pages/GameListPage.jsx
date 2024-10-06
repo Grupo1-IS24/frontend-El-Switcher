@@ -17,7 +17,7 @@ const GameListPage = () => {
     }
 
     if (error) {
-      return <MessageCard type={'error'} message={error} />
+      return <MessageCard type={'error'} message={error} />;
     }
 
     if (gameList.length === 0) {
