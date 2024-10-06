@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { getGameList } from '../service/GetGameListService';
 
+/**
+ * Custom hook to fetch the list of games.
+ *
+ * @deprecated This hook is deprecated in favor of websockets. Use useWebsocketGameList instead.
+ */
 const useGetGameList = () => {
   const [gameList, setGameList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);

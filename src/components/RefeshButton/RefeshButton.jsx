@@ -1,5 +1,8 @@
 import Button from "../Button/Button";
 
+/**
+ * @deprecated This component is deprecated and should not be used.
+ */
 const RefeshButton = ({ isVisible, onPress }) => {
   if (!isVisible) {
     return null;
