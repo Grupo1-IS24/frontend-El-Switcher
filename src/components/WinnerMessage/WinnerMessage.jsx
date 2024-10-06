@@ -1,7 +1,7 @@
 import useRouteNavigation from '../../hooks/useRouteNavigation';
 import Button from '../Button/Button';
 
-const WinnerMessage = ({winnerName}) => {
+const WinnerMessage = ({ winnerName }) => {
   const { redirectToHomePage } = useRouteNavigation();
 
   return (
