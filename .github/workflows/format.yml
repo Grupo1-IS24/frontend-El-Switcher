@@ -1,8 +1,5 @@
 name: Formatear código al hacer merge en develop
 
-# Ejecutar el action cuando:
-# 1. Haya un push a la rama develop.
-# 2. Se acepte una PR (merge) hacia la rama develop.
 on:
   push:
     branches:
@@ -13,10 +10,7 @@ on:
 
 jobs:
   format:
-    # Usar la última versión de Ubuntu para ejecutar el job
     runs-on: ubuntu-latest
-    permissions:
-      contents: write  # Asegurar permisos de escritura
 
     steps:
       # 1. Clonar el código del repositorio
@@ -37,13 +31,18 @@ jobs:
       - name: Ejecutar formato
         run: npm run format
 
-      # 5. Si hubo cambios después del formateo, hacer commit y push
+      # 5. Hacer commit de cambios si es necesario
       - name: Hacer commit de cambios si es necesario
         run: |
           git config --local user.email "github-actions@github.com"
           git config --local user.name "GitHub Actions"
           git add .
           git commit -m "Aplicar formato automáticamente tras merge a develop" || echo "No hay cambios que commitear"
+
+      # 6. Hacer push a la rama original
+      - name: Hacer push de los cambios
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
+        run: |
           if [ "$(git rev-parse --abbrev-ref HEAD)" = "HEAD" ]; then
             BRANCH_NAME=$(echo $GITHUB_REF | sed 's/refs\/heads\///')
             git push origin HEAD:$BRANCH_NAME
