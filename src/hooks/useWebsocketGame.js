@@ -53,6 +53,7 @@ const useWebsocketGame = () => {
     socket.on('winner', (winnerInfo) => {
       setWinnerInfo(winnerInfo);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useWebsocket('/game/ws', handleSocketEvents, {

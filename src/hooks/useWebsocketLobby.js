@@ -34,6 +34,7 @@ const useWebsocketLobby = () => {
 
       redirectToGamePage(gameId);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useWebsocket('/game/lobby/ws', handleSocketEvents, {
