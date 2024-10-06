@@ -3,7 +3,7 @@ import useWebsocket from './useWebsocket';
 
 /**
  * Custom hook to handle websocket events for the game list.
- * 
+ *
  * @returns {Object} An object containing the following properties:
  * - gameList: An array of games.
  * - isLoading: A boolean indicating whether the game list is loading.
