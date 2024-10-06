@@ -39,7 +39,7 @@ jobs:
           git add .
           git commit -m "Aplicar formato automáticamente tras merge a develop" || echo "No hay cambios que commitear"
 
-      # 6. Hacer push a la rama original
+      # 6. Hacer push de los cambios a la rama original
       - name: Hacer push de los cambios
         if: github.event_name == 'push' || github.event_name == 'pull_request'
         run: |
@@ -48,3 +48,4 @@ jobs:
             git push origin HEAD:$BRANCH_NAME
           else
             git push origin HEAD
+          fi
