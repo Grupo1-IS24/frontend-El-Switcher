@@ -34,12 +34,20 @@ describe('GameForm', () => {
 
   describe('Funcionalidad común', () => {
     it('debería renderizar el botón de cerrar correctamente', () => {
-      setup({ type: 'join', selectedGame: { gameId: '123', gameName: 'Juego de Prueba' }, onClose: mockOnClose });
+      setup({
+        type: 'join',
+        selectedGame: { gameId: '123', gameName: 'Juego de Prueba' },
+        onClose: mockOnClose,
+      });
       expect(screen.getByText('x')).toBeInTheDocument();
     });
 
     it('debería llamar a onClose cuando se hace clic en el botón de cerrar', () => {
-      setup({ type: 'join', selectedGame: { gameId: '123', gameName: 'Juego de Prueba' }, onClose: mockOnClose });
+      setup({
+        type: 'join',
+        selectedGame: { gameId: '123', gameName: 'Juego de Prueba' },
+        onClose: mockOnClose,
+      });
       fireEvent.click(screen.getByText('x'));
       expect(mockOnClose).toHaveBeenCalledTimes(1);
     });
@@ -47,14 +55,26 @@ describe('GameForm', () => {
 
   describe('Formulario de unirse', () => {
     it('debería renderizar el formulario de unirse correctamente', () => {
-      setup({ type: 'join', selectedGame: { gameId: '123', gameName: 'Juego de Prueba' }, onClose: mockOnClose });
-      expect(screen.getByText(`Unirse a "Juego de Prueba"`)).toBeInTheDocument();
-      expect(screen.getByPlaceholderText('Ingresa tu nombre')).toBeInTheDocument();
+      setup({
+        type: 'join',
+        selectedGame: { gameId: '123', gameName: 'Juego de Prueba' },
+        onClose: mockOnClose,
+      });
+      expect(
+        screen.getByText(`Unirse a "Juego de Prueba"`)
+      ).toBeInTheDocument();
+      expect(
+        screen.getByPlaceholderText('Ingresa tu nombre')
+      ).toBeInTheDocument();
       expect(screen.getByText('Unirse')).toBeInTheDocument();
     });
 
     it('debería tener el número y tipos correctos de inputs y botones', () => {
-      setup({ type: 'join', selectedGame: { gameId: '123', gameName: 'Juego de Prueba' }, onClose: mockOnClose });
+      setup({
+        type: 'join',
+        selectedGame: { gameId: '123', gameName: 'Juego de Prueba' },
+        onClose: mockOnClose,
+      });
       const inputs = screen.getAllByRole('textbox');
       expect(inputs).toHaveLength(1);
       expect(inputs[0]).toHaveAttribute('name', 'playerName');
@@ -68,17 +88,33 @@ describe('GameForm', () => {
 
   describe('Formulario de crear', () => {
     it('debería renderizar el formulario de crear correctamente', () => {
-      setup({ type: 'create', onClose: mockOnClose, setshowForm: mockSetShowForm });
+      setup({
+        type: 'create',
+        onClose: mockOnClose,
+        setshowForm: mockSetShowForm,
+      });
       expect(screen.getByText('Crear Partida')).toBeInTheDocument();
-      expect(screen.getByPlaceholderText('Ingresa tu nombre')).toBeInTheDocument();
-      expect(screen.getByPlaceholderText('Ingresa el nombre de la partida')).toBeInTheDocument();
-      expect(screen.getByPlaceholderText('Cant. min. jugadores')).toBeInTheDocument();
-      expect(screen.getByPlaceholderText('Cant. max. jugadores')).toBeInTheDocument();
+      expect(
+        screen.getByPlaceholderText('Ingresa tu nombre')
+      ).toBeInTheDocument();
+      expect(
+        screen.getByPlaceholderText('Ingresa el nombre de la partida')
+      ).toBeInTheDocument();
+      expect(
+        screen.getByPlaceholderText('Cant. min. jugadores')
+      ).toBeInTheDocument();
+      expect(
+        screen.getByPlaceholderText('Cant. max. jugadores')
+      ).toBeInTheDocument();
       expect(screen.getByText('Crear partida')).toBeInTheDocument();
     });
 
     it('debería tener el número y tipos correctos de inputs y botones', () => {
-      setup({ type: 'create', onClose: mockOnClose, setshowForm: mockSetShowForm });
+      setup({
+        type: 'create',
+        onClose: mockOnClose,
+        setshowForm: mockSetShowForm,
+      });
       const textInputs = screen.getAllByRole('textbox');
       expect(textInputs).toHaveLength(2);
       expect(textInputs[0]).toHaveAttribute('name', 'ownerName');
