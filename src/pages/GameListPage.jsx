@@ -2,7 +2,7 @@ import MessageCard from '../components/MessageCard/MessageCard';
 import GameGrid from '../components/GameGrid/GameGrid';
 import TitleText from '../components/TitleText/TitleText';
 import BackgroundOverlay from '../components/BgOverlay/BgOverlay';
-import JoinGameForm from '../components/JoinGameForm/JoinGameForm';
+import GameForm from '../components/GameForm/GameForm';
 import useSelectedGame from '../hooks/useSelectedGame';
 import useWebsocketGameList from '../hooks/useWebsocketGameList';
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner';
@@ -29,7 +29,11 @@ const GameListPage = () => {
     return (
       <>
         <GameGrid gameList={gameList} selectGame={selectGame} />
-        <JoinGameForm selectedGame={selectedGame} onClose={clearSelectedGame} />
+        <GameForm
+          type='join'
+          selectedGame={selectedGame}
+          onClose={clearSelectedGame}
+        />
       </>
     );
   };
