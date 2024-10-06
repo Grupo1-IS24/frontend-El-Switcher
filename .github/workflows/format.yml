@@ -42,5 +42,9 @@ jobs:
           git config --local user.name "GitHub Actions"
           git add .
           git commit -m "Aplicar formato automáticamente tras merge a develop" || echo "No hay cambios que commitear"
-          BRANCH_NAME=$(echo $GITHUB_REF | sed 's/refs\/heads\///')
-          git push origin HEAD:$BRANCH_NAME
+          if [ "$(git rev-parse --abbrev-ref HEAD)" = "HEAD" ]; then
+            BRANCH_NAME=$(echo $GITHUB_REF | sed 's/refs\/heads\///')
+            git push origin HEAD:$BRANCH_NAME
+          else
+            git push origin HEAD
+          fi
