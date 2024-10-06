@@ -1,12 +1,14 @@
-name: Ejecutar Pruebas en Develop
+name: Ejecutar Pruebas en Develop y Main
 
 on:
   push:
     branches:
       - develop
+      - main
   pull_request:
     branches:
       - develop
+      - main
 
 jobs:
   test:
