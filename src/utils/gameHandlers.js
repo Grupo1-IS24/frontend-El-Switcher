@@ -1,7 +1,11 @@
 import { createGame } from '../service/CreateGameService';
 import { joinGame } from '../service/JoinGameService';
 
-export const handleCreateGame = async (elements, createPlayer, redirectToLobbyPage) => {
+export const handleCreateGame = async (
+  elements,
+  createPlayer,
+  redirectToLobbyPage
+) => {
   const gameInfo = {
     ownerName: elements.ownerName.value,
     gameName: elements.gameName.value,
@@ -23,13 +27,21 @@ export const handleCreateGame = async (elements, createPlayer, redirectToLobbyPa
   }
 };
 
-export const handleJoinGame = async (elements, selectedGame, createPlayer, redirectToLobbyPage) => {
+export const handleJoinGame = async (
+  elements,
+  selectedGame,
+  createPlayer,
+  redirectToLobbyPage
+) => {
   const playerJoinData = {
     playerName: elements.playerName.value,
   };
 
   try {
-    const playerResponseData = await joinGame(playerJoinData, selectedGame.gameId);
+    const playerResponseData = await joinGame(
+      playerJoinData,
+      selectedGame.gameId
+    );
     createPlayer(playerResponseData.playerId);
     redirectToLobbyPage(selectedGame.gameId);
   } catch (error) {

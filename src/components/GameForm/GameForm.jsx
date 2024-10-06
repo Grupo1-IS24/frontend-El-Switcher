@@ -24,7 +24,8 @@ const GameForm = ({ type, selectedGame, onClose, setshowForm }) => {
   if (type === 'join' && !selectedGame) return null;
 
   const styles = {
-    create: 'absolute bg-gray-800 p-8 rounded-lg shadow-md mx-auto mt-60 max-w-lg',
+    create:
+      'absolute bg-gray-800 p-8 rounded-lg shadow-md mx-auto mt-60 max-w-lg',
     join: 'fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 flex-col',
     joinSub: 'bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md relative',
   };
@@ -33,13 +34,23 @@ const GameForm = ({ type, selectedGame, onClose, setshowForm }) => {
     <div className={`${styles[type]}`}>
       <div className={type === 'join' ? styles['joinSub'] : undefined}>
         <h2 className='text-2xl font-bold text-white mb-6 text-center'>
-          {type === 'create' ? 'Crear Partida' : `Unirse a "${selectedGame.gameName}"`}
+          {type === 'create'
+            ? 'Crear Partida'
+            : `Unirse a "${selectedGame.gameName}"`}
         </h2>
         <form onSubmit={handleSubmit} className='space-y-4'>
           {type === 'create' ? <CreateGameForm /> : <JoinGameForm />}
           <div className='flex flex-row justify-between'>
-            <Button type='submit' text={type === 'create' ? 'Crear partida' : 'Unirse'} style={'formButton'} />
-            <Button text={'x'} onPress={type === 'create' ? () => setshowForm(false) : onClose} style={'formButton'} />
+            <Button
+              type='submit'
+              text={type === 'create' ? 'Crear partida' : 'Unirse'}
+              style={'formButton'}
+            />
+            <Button
+              text={'x'}
+              onPress={type === 'create' ? () => setshowForm(false) : onClose}
+              style={'formButton'}
+            />
           </div>
         </form>
       </div>
