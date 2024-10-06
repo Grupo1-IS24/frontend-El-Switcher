@@ -1,0 +1,45 @@
+name: Formatear código al hacer merge en develop
+
+# Ejecutar el action cuando:
+# 1. Haya un push a la rama develop.
+# 2. Se acepte una PR (merge) hacia la rama develop.
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  format:
+    # Usar la última versión de Ubuntu para ejecutar el job
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Clonar el código del repositorio
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Configurar Node.js (versión 20 en este caso)
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      # 3. Instalar las dependencias del proyecto
+      - name: Instalar dependencias
+        run: npm install
+
+      # 4. Ejecutar el comando de formateo
+      - name: Ejecutar formato
+        run: npm run format
+
+      # 5. Si hubo cambios después del formateo, hacer commit y push
+      - name: Hacer commit de cambios si es necesario
+        run: |
+          git config --local user.email "github-actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add .
+          git commit -m "Aplicar formato automáticamente tras merge a develop" || echo "No hay cambios que commitear"
+          git push
