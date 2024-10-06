@@ -3,6 +3,7 @@ import useWebsocket from './useWebsocket';
 import { sortListOfPlayers } from '../utils/sortListOfPlayers';
 import { PlayerContext } from '../contexts/PlayerProvider';
 import { sortBoardColorCards } from '../utils/sortBoardColorCards';
+import { useParams } from 'react-router-dom';
 
 /**
  * Custom hook to handle websocket events for the game.
@@ -16,6 +17,7 @@ import { sortBoardColorCards } from '../utils/sortBoardColorCards';
  * - winnerInfo: Information about the winner of the game.
  */
 const useWebsocketGame = () => {
+  const { gameId } = useParams();
   const { playerID } = useContext(PlayerContext);
 
   const [listOfPlayers, setListOfPlayers] = useState([]);
@@ -53,7 +55,10 @@ const useWebsocketGame = () => {
     });
   }, []);
 
-  useWebsocket('/game/ws', handleSocketEvents);
+  useWebsocket('/game/ws', handleSocketEvents, {
+    playerId: playerID,
+    gameId: gameId,
+  });
 
   return {
     listOfPlayers,
