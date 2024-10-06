@@ -1,0 +1,52 @@
+name: Formatear Código y Hacer Commit
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+  pull_request:
+    branches:
+      - develop
+      - main
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Verificar el repositorio
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Configurar Node.js
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    # Instalar dependencias
+    - name: Install dependencies
+      run: npm install
+
+    # Ejecutar el comando de formato
+    - name: Format code
+      run: npm run format
+
+    # Configurar usuario de Git
+    - name: Set up Git user
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+    # Hacer commit de los cambios si los hay
+    - name: Commit changes
+      run: |
+        git add .
+        git commit -m "Formato de código aplicado por GitHub Action" || echo "No changes to commit"
+
+    # Hacer push de los cambios
+    - name: Push changes
+      run: git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
