@@ -22,7 +22,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
       with:
-        ref: ${{ github.head_ref }}
+        ref: ${{ github.head_ref || github.ref }}
 
     # Configurar Node.js
     - name: Set up Node.js
@@ -52,7 +52,7 @@ jobs:
 
     # Hacer push de los cambios
     - name: Push changes
-      run: git push origin HEAD:${{ github.head_ref }}
+      run: git push origin HEAD:${{ github.head_ref || github.ref }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
