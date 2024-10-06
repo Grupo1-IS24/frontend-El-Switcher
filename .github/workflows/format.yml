@@ -15,6 +15,8 @@ jobs:
   format:
     # Usar la última versión de Ubuntu para ejecutar el job
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Asegurar permisos de escritura
 
     steps:
       # 1. Clonar el código del repositorio
@@ -47,4 +49,3 @@ jobs:
             git push origin HEAD:$BRANCH_NAME
           else
             git push origin HEAD
-          fi
