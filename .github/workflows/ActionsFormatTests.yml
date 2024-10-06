@@ -1,4 +1,4 @@
-name: Formatear Código y Hacer Commit
+name: Formatear y Ejecutar Pruebas
 
 on:
   push:
@@ -55,3 +55,26 @@ jobs:
       run: git push origin HEAD:${{ github.head_ref }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  test:
+    runs-on: ubuntu-latest
+    needs: format
+
+    steps:
+    # Verificar el repositorio
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Configurar Node.js
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    # Instalar dependencias
+    - name: Install dependencies
+      run: npm install
+
+    # Ejecutar pruebas
+    - name: Run tests
+      run: npm run test
