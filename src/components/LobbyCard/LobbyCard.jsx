@@ -5,6 +5,7 @@ import { PlayerContext } from '../../contexts/PlayerProvider';
 import { useContext } from 'react';
 import useGetGame from '../../hooks/useGetGame';
 import { useParams } from 'react-router-dom';
+import LoadingLobby from '../LoadingLobby/LoadingLobby';
 
 const LobbyCard = () => {
   const { gameId } = useParams();
@@ -12,22 +13,22 @@ const LobbyCard = () => {
   const { isOwner } = useContext(PlayerContext);
   const { game } = useGetGame(gameId);
 
+  if (!game) {
+    return <LoadingLobby />;
+  }
+
   return (
     <div className='bg-[#0c0c0c] rounded-xl text-[#f1f1f1] text-center flex flex-col gap-16 px-8 py-12 max-w-3xl m-auto'>
-      <h2 className='lekton-bold text-6xl underline'>
-        {game ? game.gameName : 'Nombre del juego'}
-      </h2>
+      <h2 className='lekton-bold text-6xl underline'>{game.gameName}</h2>
       <div className='flex flex-col gap-0'>
         <p className='lekton-bold text-4xl'>
           Jugadores conectados: {listOfPlayers.length}
         </p>
         <p className='lekton-bold text-4xl'>
-          Mín. jugadores:{' '}
-          {game ? game.minPlayers : 'Número mínimo de jugadores'}
+          Mín. jugadores: {game.minPlayers}
         </p>
         <p className='lekton-bold text-4xl'>
-          Max. jugadores:{' '}
-          {game ? game.maxPlayers : 'Número máximo de jugadores'}
+          Max. jugadores: {game.maxPlayers}
         </p>
       </div>
 
