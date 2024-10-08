@@ -16,10 +16,15 @@ vi.mock('../../hooks/useRouteNavigation', () => ({
 
 describe('LobbyCard', () => {
   const mockGameInfo = { gameName: 'Test Game', minPlayers: 2, maxPlayers: 4 };
+  const mockListOfPlayers = [
+    { playerName: 'Player 1' },
+    { playerName: 'Player 2' },
+    { playerName: 'Player 3' },
+  ];
 
   const renderLobbyCard = (isOwner = false) => {
     return render(
-      <PlayerContext.Provider value={{ isOwner: isOwner }}>
+      <PlayerContext.Provider value={{ isOwner }}>
         <LobbyCard />
       </PlayerContext.Provider>
     );
@@ -84,11 +89,7 @@ describe('LobbyCard', () => {
   describe('Render the connected players info correctly', () => {
     beforeEach(() => {
       useWebsocketLobby.mockReturnValue({
-        listOfPlayers: [
-          { playerName: 'Player 1' },
-          { playerName: 'Player 2' },
-          { playerName: 'Player 3' },
-        ],
+        listOfPlayers: mockListOfPlayers,
         canStartGame: false,
       });
 
@@ -107,6 +108,82 @@ describe('LobbyCard', () => {
       expect(screen.getByText('Player 1')).toBeInTheDocument();
       expect(screen.getByText('Player 2')).toBeInTheDocument();
       expect(screen.getByText('Player 3')).toBeInTheDocument();
+    });
+  });
+
+  describe('Render the non owner actions correctly', () => {
+    beforeEach(() => {
+      useWebsocketLobby.mockReturnValue({
+        listOfPlayers: mockListOfPlayers,
+        canStartGame: false,
+      });
+
+      useGetGame.mockReturnValue({
+        game: mockGameInfo,
+      });
+
+      renderLobbyCard();
+    });
+
+    it('should render non owner actions', () => {
+      expect(
+        screen.getByText('Esperando que el owner comience la partida...')
+      ).toBeInTheDocument();
+
+      const leaveButton = screen.getByText('Abandonar lobby');
+
+      expect(leaveButton).toBeInTheDocument();
+      expect(leaveButton).toBeEnabled();
+    });
+  });
+
+  describe('Render the owner actions when can not start a game', () => {
+    beforeEach(() => {
+      useWebsocketLobby.mockReturnValue({
+        listOfPlayers: [{ playerName: 'Player 1' }],
+        canStartGame: false,
+      });
+
+      useGetGame.mockReturnValue({
+        game: mockGameInfo,
+      });
+
+      renderLobbyCard(true);
+    });
+
+    it('Should render owner actions, but can not start game', () => {
+      const startGameButton = screen.getByText('Iniciar partida');
+      expect(startGameButton).toBeInTheDocument();
+      expect(startGameButton).toBeDisabled();
+
+      const leaveButton = screen.getByText('Abandonar lobby');
+      expect(leaveButton).toBeInTheDocument();
+      expect(leaveButton).toBeEnabled();
+    });
+  });
+
+  describe('Render the owner actions when can start a game', () => {
+    beforeEach(() => {
+      useWebsocketLobby.mockReturnValue({
+        listOfPlayers: mockListOfPlayers,
+        canStartGame: true,
+      });
+
+      useGetGame.mockReturnValue({
+        game: mockGameInfo,
+      });
+
+      renderLobbyCard(true);
+    });
+
+    it('Should render owner actions, but can start game', () => {
+      const startGameButton = screen.getByText('Iniciar partida');
+      expect(startGameButton).toBeInTheDocument();
+      expect(startGameButton).toBeEnabled();
+
+      const leaveButton = screen.getByText('Abandonar lobby');
+      expect(leaveButton).toBeInTheDocument();
+      expect(leaveButton).toBeEnabled();
     });
   });
 });
