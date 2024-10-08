@@ -1,3 +1,5 @@
+import FigureCardHand from '../FigureCardHand/FigureCardHand';
+
 const PlayerInfo = ({ playerName, index, isTurn }) => {
   const positionStyles = [
     'bottom-10 left-16', // corner bottom left
@@ -8,6 +10,7 @@ const PlayerInfo = ({ playerName, index, isTurn }) => {
 
   return (
     <div className={`absolute ${positionStyles[index]} p-2`}>
+      <FigureCardHand player={playerName} />
       <p className='lekton-bold text-white text-lg'>
         {playerName}{' '}
         <span className='text-gray-500'>{isTurn && '(En turno)'}</span>
