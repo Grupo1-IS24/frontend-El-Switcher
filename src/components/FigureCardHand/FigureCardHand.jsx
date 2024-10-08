@@ -7,7 +7,7 @@ const FigureCardHand = ({ playerId }) => {
   const playerFigureCards = figureCards.find(
     (figurecardSet) => figurecardSet.ownerId === playerId
   );
-  
+
 
   return (
     <>
