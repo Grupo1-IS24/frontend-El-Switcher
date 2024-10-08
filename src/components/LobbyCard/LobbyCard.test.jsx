@@ -17,9 +17,41 @@ vi.mock('../../hooks/useRouteNavigation', () => ({
 describe('LobbyCard', () => {
   const mockGameInfo = { gameName: 'Test Game', minPlayers: 2, maxPlayers: 4 };
 
+  const renderLobbyCard = (isOwner = false) => {
+    return render(
+      <PlayerContext.Provider value={{ isOwner: isOwner }}>
+        <LobbyCard />
+      </PlayerContext.Provider>
+    );
+  };
+
   afterEach(() => {
     cleanup();
     vi.clearAllMocks();
+  });
+
+  describe('Render the loading state correctly', () => {
+    beforeEach(() => {
+      useWebsocketLobby.mockReturnValue({
+        listOfPlayers: [],
+        canStartGame: false,
+      });
+
+      useGetGame.mockReturnValue({
+        game: null,
+      });
+
+      // Mock the loading component to make it easy to test.
+      vi.mock('../LoadingLobby/LoadingLobby', () => ({
+        default: () => <h1>Loading...</h1>,
+      }));
+
+      renderLobbyCard();
+    });
+
+    it('should render the loading component', () => {
+      expect(screen.getByText('Loading...')).toBeInTheDocument();
+    });
   });
 
   describe('Render the game info correctly', () => {
@@ -33,11 +65,7 @@ describe('LobbyCard', () => {
         game: mockGameInfo,
       });
 
-      render(
-        <PlayerContext.Provider value={{ isOwner: false }}>
-          <LobbyCard />
-        </PlayerContext.Provider>
-      );
+      renderLobbyCard();
     });
 
     it('should render the game name', () => {
@@ -68,11 +96,7 @@ describe('LobbyCard', () => {
         game: mockGameInfo,
       });
 
-      render(
-        <PlayerContext.Provider value={{ isOwner: false }}>
-          <LobbyCard />
-        </PlayerContext.Provider>
-      );
+      renderLobbyCard();
     });
 
     it('should render the number of connected players', () => {
