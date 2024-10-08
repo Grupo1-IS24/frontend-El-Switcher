@@ -9,8 +9,8 @@ const FigureCard = ({ figure = 0, difficulty = 0 }) => {
   const isString = typeof difficulty === 'string';
 
   const isValidFigure =
-    (isEasy && figure >= 1 && figure <= 18) ||
-    (isHard && figure >= 1 && figure <= 7);
+    (isEasy && figure >= 1 && figure <= 7) ||
+    (isHard && figure >= 1 && figure <= 18);
 
   const areInputsValid =
     isNumber && isString && (isEasy || isHard) && isValidFigure;
