@@ -1,5 +1,5 @@
-import { createContext } from "react";
-import useWebsocketGame from "../hooks/useWebsocketGame";
+import { createContext } from 'react';
+import useWebsocketGame from '../hooks/useWebsocketGame';
 
 export const GameContext = createContext();
 
@@ -11,6 +11,6 @@ const WebSocketGameProvider = ({ children }) => {
       {children}
     </GameContext.Provider>
   );
-}
+};
 
 export default WebSocketGameProvider;

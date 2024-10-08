@@ -9,7 +9,8 @@ import { PlayerContext } from '../contexts/PlayerProvider';
 import { GameContext } from '../contexts/GameProvider';
 
 const GamePage = () => {
-  const { listOfPlayers, board, playerTurnId, winnerInfo } = useContext(GameContext);
+  const { listOfPlayers, board, playerTurnId, winnerInfo } =
+    useContext(GameContext);
   const { playerID } = useContext(PlayerContext);
 
   return (
