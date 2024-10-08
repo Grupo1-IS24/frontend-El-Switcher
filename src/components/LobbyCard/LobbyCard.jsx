@@ -7,13 +7,23 @@ import useGetGame from '../../hooks/useGetGame';
 import { useParams } from 'react-router-dom';
 import LoadingLobby from '../LoadingLobby/LoadingLobby';
 
-const PlayerInfo = ({ listOfPlayers, minPlayers, maxPlayers }) => (
-  <div className='flex flex-col gap-0'>
-    <p className='lekton-bold text-4xl'>
+const ConnectedPlayersInfo = ({ listOfPlayers }) => (
+  <div className='flex flex-col gap-4'>
+    <p className='lekton-bold text-3xl'>
       Jugadores conectados: {listOfPlayers.length}
     </p>
-    <p className='lekton-bold text-4xl'>Mín. jugadores: {minPlayers}</p>
-    <p className='lekton-bold text-4xl'>Max. jugadores: {maxPlayers}</p>
+    <div className='border-2 border-gray-600 rounded-lg p-4'>
+      <div className='grid grid-cols-2 gap-4 justify-items-center'>
+        {listOfPlayers.map((player, index) => (
+          <span
+            key={index}
+            className='bg-gray-700 text-white px-3 py-1 text-xl lekton-bold w-full text-center'
+          >
+            {player.playerName}
+          </span>
+        ))}
+      </div>
+    </div>
   </div>
 );
 
@@ -46,13 +56,13 @@ const LobbyCard = () => {
   }
 
   return (
-    <div className='bg-[#0c0c0c] rounded-xl text-[#f1f1f1] text-center flex flex-col gap-16 px-8 py-12 max-w-3xl m-auto'>
+    <div className='bg-[#0c0c0c] rounded-xl text-[#f1f1f1] text-center flex flex-col gap-10 px-8 py-12 max-w-3xl m-auto'>
       <h2 className='lekton-bold text-6xl underline'>{game.gameName}</h2>
-      <PlayerInfo
-        listOfPlayers={listOfPlayers}
-        minPlayers={game.minPlayers}
-        maxPlayers={game.maxPlayers}
-      />
+      <ConnectedPlayersInfo listOfPlayers={listOfPlayers} />
+      <div className='flex justify-between mx-10 text-2xl lekton-bold'>
+        <p>Mín. jugadores: {game.minPlayers}</p>
+        <p>Max. jugadores: {game.maxPlayers}</p>
+      </div>
       {isOwner ? (
         <OwnerActions canStartGame={canStartGame} />
       ) : (
