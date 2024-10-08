@@ -9,11 +9,10 @@ const FigureCardHand = ({ playerId }) => {
     (figurecardSet) => figurecardSet.ownerId === playerId
   );
 
-
   return (
     <>
       {playerFigureCards ? (
-        <div className="flex flex-row gap-2">
+        <div className='flex flex-row gap-2'>
           {playerFigureCards.cards.map((figurecard, index) => (
             <FigureCard
               key={index}
