@@ -22,6 +22,15 @@ describe('LobbyCard', () => {
     { playerName: 'Player 3' },
   ];
 
+  const setupMocks = ({
+    game = null,
+    listOfPlayers = [],
+    canStartGame = false,
+  } = {}) => {
+    useWebsocketLobby.mockReturnValue({ listOfPlayers, canStartGame });
+    useGetGame.mockReturnValue({ game });
+  };
+
   const renderLobbyCard = (isOwner = false) => {
     return render(
       <PlayerContext.Provider value={{ isOwner }}>
@@ -30,13 +39,8 @@ describe('LobbyCard', () => {
     );
   };
 
-  const mockWebsocketLobby = (listOfPlayers = [], canStartGame = false) => {
-    useWebsocketLobby.mockReturnValue({ listOfPlayers, canStartGame });
-  };
-
-  const mockGetGame = (game = null) => {
-    useGetGame.mockReturnValue({ game });
-  };
+  const getLeaveButton = () => screen.getByText('Abandonar lobby');
+  const getStartGameButton = () => screen.getByText('Iniciar partida');
 
   afterEach(() => {
     cleanup();
@@ -45,8 +49,7 @@ describe('LobbyCard', () => {
 
   describe('Render the loading state correctly', () => {
     beforeEach(() => {
-      mockWebsocketLobby();
-      mockGetGame();
+      setupMocks();
 
       // Mock the loading component to make it easy to test.
       vi.mock('../LoadingLobby/LoadingLobby', () => ({
@@ -63,103 +66,99 @@ describe('LobbyCard', () => {
 
   describe('Render the game info correctly', () => {
     beforeEach(() => {
-      mockWebsocketLobby();
-      mockGetGame(mockGameInfo);
-
+      setupMocks({ game: mockGameInfo });
       renderLobbyCard();
     });
 
-    it('should render the game name', () => {
+    it('should display the game name', () => {
       expect(screen.getByText(mockGameInfo.gameName)).toBeInTheDocument();
     });
 
-    it('should render the minimum number of players', () => {
+    it('should display the minimum number of players', () => {
       expect(
         screen.getByText(`Mín. jugadores: ${mockGameInfo.minPlayers}`)
       ).toBeInTheDocument();
     });
 
-    it('should render the maximum number of players', () => {
+    it('should display the maximum number of players', () => {
       expect(
         screen.getByText(`Máx. jugadores: ${mockGameInfo.maxPlayers}`)
       ).toBeInTheDocument();
     });
   });
 
-  describe('Render the connected players info correctly', () => {
+  describe('Render connected players info correctly', () => {
     beforeEach(() => {
-      mockWebsocketLobby(mockListOfPlayers);
-      mockGetGame(mockGameInfo);
-
+      setupMocks({ game: mockGameInfo, listOfPlayers: mockListOfPlayers });
       renderLobbyCard();
     });
 
-    it('should render the number of connected players', () => {
+    it('should display the number of connected players', () => {
       expect(
         screen.getByText(`Jugadores conectados: ${mockListOfPlayers.length}`)
       ).toBeInTheDocument();
     });
 
-    it('should render the connected players', () => {
+    it('should display the connected players', () => {
       for (const player of mockListOfPlayers) {
         expect(screen.getByText(player.playerName)).toBeInTheDocument();
       }
     });
   });
 
-  describe('Render the non owner actions correctly', () => {
+  describe('Render non-owner actions correctly', () => {
     beforeEach(() => {
-      mockWebsocketLobby(mockListOfPlayers);
-      mockGetGame(mockGameInfo);
-
+      setupMocks({ game: mockGameInfo, listOfPlayers: mockListOfPlayers });
       renderLobbyCard();
     });
 
-    it('should render non owner actions', () => {
+    it('should display non-owner actions', () => {
       expect(
         screen.getByText('Esperando que el owner comience la partida...')
       ).toBeInTheDocument();
 
-      const leaveButton = screen.getByText('Abandonar lobby');
-
+      const leaveButton = getLeaveButton();
       expect(leaveButton).toBeInTheDocument();
       expect(leaveButton).toBeEnabled();
     });
   });
 
-  describe('Render the owner actions when can not start a game', () => {
+  describe('Render owner actions when the game cannot be started', () => {
     beforeEach(() => {
-      mockWebsocketLobby([{ playerName: 'Player 1' }]);
-      mockGetGame(mockGameInfo);
-
+      setupMocks({
+        game: [{ playerName: 'player 1' }],
+        listOfPlayers: mockListOfPlayers,
+      });
       renderLobbyCard(true);
     });
 
-    it('Should render owner actions, but can not start game', () => {
-      const startGameButton = screen.getByText('Iniciar partida');
+    it('should display owner actions with the start game button disabled', () => {
+      const startGameButton = getStartGameButton();
       expect(startGameButton).toBeInTheDocument();
-      expect(startGameButton).toBeDisabled();
+      expect(startGameButton).toBeDisabled(); // should be disabled.
 
-      const leaveButton = screen.getByText('Abandonar lobby');
+      const leaveButton = getLeaveButton();
       expect(leaveButton).toBeInTheDocument();
       expect(leaveButton).toBeEnabled();
     });
   });
 
-  describe('Render the owner actions when can start a game', () => {
+  describe('Render owner actions when the game can be started', () => {
     beforeEach(() => {
-      mockWebsocketLobby(mockListOfPlayers, true);
-      mockGetGame(mockGameInfo);
-
+      setupMocks({
+        game: mockGameInfo,
+        listOfPlayers: mockListOfPlayers,
+        canStartGame: true,
+      });
       renderLobbyCard(true);
     });
 
-    it('Should render owner actions, but can start game', () => {
-      const startGameButton = screen.getByText('Iniciar partida');
+    it('should display owner actions with the start game button enabled', () => {
+      const startGameButton = getStartGameButton();
       expect(startGameButton).toBeInTheDocument();
-      expect(startGameButton).toBeEnabled();
+      expect(startGameButton).toBeEnabled(); // should be enabled.
 
-      const leaveButton = screen.getByText('Abandonar lobby');
+      const leaveButton = getLeaveButton();
       expect(leaveButton).toBeInTheDocument();
       expect(leaveButton).toBeEnabled();
     });
