@@ -10,7 +10,7 @@ const PlayerInfo = ({ playerName, index, isTurn }) => {
 
   return (
     <div className={`absolute ${positionStyles[index]} p-2`}>
-      <FigureCardHand player={playerName} />
+      <FigureCardHand />
       <p className='lekton-bold text-white text-lg'>
         {playerName}{' '}
         <span className='text-gray-500'>{isTurn && '(En turno)'}</span>
