@@ -30,6 +30,14 @@ describe('LobbyCard', () => {
     );
   };
 
+  const mockWebsocketLobby = (listOfPlayers = [], canStartGame = false) => {
+    useWebsocketLobby.mockReturnValue({ listOfPlayers, canStartGame });
+  };
+
+  const mockGetGame = (game = null) => {
+    useGetGame.mockReturnValue({ game });
+  };
+
   afterEach(() => {
     cleanup();
     vi.clearAllMocks();
@@ -37,14 +45,8 @@ describe('LobbyCard', () => {
 
   describe('Render the loading state correctly', () => {
     beforeEach(() => {
-      useWebsocketLobby.mockReturnValue({
-        listOfPlayers: [],
-        canStartGame: false,
-      });
-
-      useGetGame.mockReturnValue({
-        game: null,
-      });
+      mockWebsocketLobby();
+      mockGetGame();
 
       // Mock the loading component to make it easy to test.
       vi.mock('../LoadingLobby/LoadingLobby', () => ({
@@ -61,66 +63,54 @@ describe('LobbyCard', () => {
 
   describe('Render the game info correctly', () => {
     beforeEach(() => {
-      useWebsocketLobby.mockReturnValue({
-        listOfPlayers: [],
-        canStartGame: false,
-      });
-
-      useGetGame.mockReturnValue({
-        game: mockGameInfo,
-      });
+      mockWebsocketLobby();
+      mockGetGame(mockGameInfo);
 
       renderLobbyCard();
     });
 
     it('should render the game name', () => {
-      expect(screen.getByText('Test Game')).toBeInTheDocument();
+      expect(screen.getByText(mockGameInfo.gameName)).toBeInTheDocument();
     });
 
     it('should render the minimum number of players', () => {
-      expect(screen.getByText('Mín. jugadores: 2')).toBeInTheDocument();
+      expect(
+        screen.getByText(`Mín. jugadores: ${mockGameInfo.minPlayers}`)
+      ).toBeInTheDocument();
     });
 
     it('should render the maximum number of players', () => {
-      expect(screen.getByText('Máx. jugadores: 4')).toBeInTheDocument();
+      expect(
+        screen.getByText(`Máx. jugadores: ${mockGameInfo.maxPlayers}`)
+      ).toBeInTheDocument();
     });
   });
 
   describe('Render the connected players info correctly', () => {
     beforeEach(() => {
-      useWebsocketLobby.mockReturnValue({
-        listOfPlayers: mockListOfPlayers,
-        canStartGame: false,
-      });
-
-      useGetGame.mockReturnValue({
-        game: mockGameInfo,
-      });
+      mockWebsocketLobby(mockListOfPlayers);
+      mockGetGame(mockGameInfo);
 
       renderLobbyCard();
     });
 
     it('should render the number of connected players', () => {
-      expect(screen.getByText('Jugadores conectados: 3')).toBeInTheDocument();
+      expect(
+        screen.getByText(`Jugadores conectados: ${mockListOfPlayers.length}`)
+      ).toBeInTheDocument();
     });
 
     it('should render the connected players', () => {
-      expect(screen.getByText('Player 1')).toBeInTheDocument();
-      expect(screen.getByText('Player 2')).toBeInTheDocument();
-      expect(screen.getByText('Player 3')).toBeInTheDocument();
+      for (const player of mockListOfPlayers) {
+        expect(screen.getByText(player.playerName)).toBeInTheDocument();
+      }
     });
   });
 
   describe('Render the non owner actions correctly', () => {
     beforeEach(() => {
-      useWebsocketLobby.mockReturnValue({
-        listOfPlayers: mockListOfPlayers,
-        canStartGame: false,
-      });
-
-      useGetGame.mockReturnValue({
-        game: mockGameInfo,
-      });
+      mockWebsocketLobby(mockListOfPlayers);
+      mockGetGame(mockGameInfo);
 
       renderLobbyCard();
     });
@@ -139,14 +129,8 @@ describe('LobbyCard', () => {
 
   describe('Render the owner actions when can not start a game', () => {
     beforeEach(() => {
-      useWebsocketLobby.mockReturnValue({
-        listOfPlayers: [{ playerName: 'Player 1' }],
-        canStartGame: false,
-      });
-
-      useGetGame.mockReturnValue({
-        game: mockGameInfo,
-      });
+      mockWebsocketLobby([{ playerName: 'Player 1' }]);
+      mockGetGame(mockGameInfo);
 
       renderLobbyCard(true);
     });
@@ -164,14 +148,8 @@ describe('LobbyCard', () => {
 
   describe('Render the owner actions when can start a game', () => {
     beforeEach(() => {
-      useWebsocketLobby.mockReturnValue({
-        listOfPlayers: mockListOfPlayers,
-        canStartGame: true,
-      });
-
-      useGetGame.mockReturnValue({
-        game: mockGameInfo,
-      });
+      mockWebsocketLobby(mockListOfPlayers, true);
+      mockGetGame(mockGameInfo);
 
       renderLobbyCard(true);
     });
