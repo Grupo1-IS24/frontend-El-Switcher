@@ -61,7 +61,7 @@ const LobbyCard = () => {
       <ConnectedPlayersInfo listOfPlayers={listOfPlayers} />
       <div className='flex justify-between mx-10 text-2xl lekton-bold'>
         <p>Mín. jugadores: {game.minPlayers}</p>
-        <p>Max. jugadores: {game.maxPlayers}</p>
+        <p>Máx. jugadores: {game.maxPlayers}</p>
       </div>
       {isOwner ? (
         <OwnerActions canStartGame={canStartGame} />
