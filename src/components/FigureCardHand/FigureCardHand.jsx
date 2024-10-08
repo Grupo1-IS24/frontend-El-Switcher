@@ -1,15 +1,11 @@
-import React, { useContext } from 'react';
-import { PlayerContext } from '../../contexts/PlayerProvider';
 import useWebSocketGame from '../../hooks/useWebsocketGame';
 import FigureCard from '../FigureCard/FigureCard';
 
-const FigureCardHand = () => {
-  const { playerID } = useContext(PlayerContext);
+const FigureCardHand = ({ playerId }) => {
   const { figureCards } = useWebSocketGame();
-  console.log(figureCards);
 
   const playerFigureCards = figureCards.find(
-    (figurecardSet) => figurecardSet.ownerId === playerID
+    (figurecardSet) => figurecardSet.ownerId === playerId
   );
   
 
