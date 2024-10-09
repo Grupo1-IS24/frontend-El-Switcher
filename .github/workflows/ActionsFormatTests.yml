@@ -89,10 +89,6 @@ jobs:
           exit 1
         fi
 
-    # Detener el servicio de desarrollo
-    - name: Stop dev service
-      run: kill $(jobs -p)
-
     # Ejecutar pruebas
     - name: Run tests
       run: npm run test
