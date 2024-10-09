@@ -43,10 +43,6 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    # Instalar wait-on
-    - name: Install wait-on
-      run: npm install wait-on
-
     # Guardar caché de dependencias
     - name: Save npm cache
       uses: actions/cache@v3
@@ -92,6 +88,10 @@ jobs:
           echo "Error found in dev service logs"
           exit 1
         fi
+
+    # Detener el servicio de desarrollo
+    - name: Stop dev service
+      run: kill $(jobs -p)
 
     # Ejecutar pruebas
     - name: Run tests
