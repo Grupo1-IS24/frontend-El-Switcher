@@ -24,6 +24,15 @@ jobs:
       with:
         ref: ${{ github.head_ref || github.ref }}
 
+    # Restaurar caché de dependencias
+    - name: Restore npm cache
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-npm-cache-
+
     # Configurar Node.js
     - name: Set up Node.js
       uses: actions/setup-node@v3
@@ -33,6 +42,13 @@ jobs:
     # Instalar dependencias
     - name: Install dependencies
       run: npm install
+
+    # Guardar caché de dependencias
+    - name: Save npm cache
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
 
     # Ejecutar el comando de formato
     - name: Format code
@@ -65,6 +81,15 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    # Restaurar caché de dependencias
+    - name: Restore npm cache
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-npm-cache-
+
     # Configurar Node.js
     - name: Set up Node.js
       uses: actions/setup-node@v3
@@ -74,6 +99,13 @@ jobs:
     # Instalar dependencias
     - name: Install dependencies
       run: npm install
+
+    # Guardar caché de dependencias
+    - name: Save npm cache
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
 
     # Ejecutar pruebas
     - name: Run tests
