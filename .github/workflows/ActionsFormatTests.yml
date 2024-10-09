@@ -43,6 +43,10 @@ jobs:
     - name: Install dependencies
       run: npm install
 
+    # Instalar wait-on
+    - name: Install wait-on
+      run: npm install wait-on
+
     # Guardar caché de dependencias
     - name: Save npm cache
       uses: actions/cache@v3
@@ -72,17 +76,15 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    # Ejecutar el servicio de desarrollo
+    # Ejecutar el servicio de desarrollo en segundo plano
     - name: Run dev service
-      run: npm run dev
+      run: npm run dev &
       continue-on-error: true
 
-    # Verificar si el servicio se ejecutó correctamente
-    - name: Check dev service status
-      if: ${{ success() }}
-      run: echo "Dev service running successfully."
+    # Esperar a que el servicio de desarrollo esté listo
+    - name: Wait for dev service
+      run: npx wait-on http://localhost:5173
 
     # Ejecutar pruebas
     - name: Run tests
-      if: ${{ success() }}
       run: npm run test
