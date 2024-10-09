@@ -47,6 +47,9 @@ const useWebsocketGame = () => {
     });
 
     socket.on('movement_cards', (movementCards) => {
+      movementCards = movementCards.sort(
+        (a, b) => a.movementcardId - b.movementcardId
+      );
       setMovementCards(movementCards);
     });
 
