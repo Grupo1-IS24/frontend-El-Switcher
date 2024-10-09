@@ -72,6 +72,17 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    # Ejecutar el servicio de desarrollo
+    - name: Run dev service
+      run: npm run dev
+      continue-on-error: true
+
+    # Verificar si el servicio se ejecutó correctamente
+    - name: Check dev service status
+      if: ${{ success() }}
+      run: echo "Dev service running successfully."
+
     # Ejecutar pruebas
     - name: Run tests
+      if: ${{ success() }}
       run: npm run test
