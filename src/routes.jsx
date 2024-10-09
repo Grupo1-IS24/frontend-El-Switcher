@@ -5,6 +5,7 @@ import LobbyPage from './pages/LobbyPage';
 import GamePage from './pages/GamePage';
 import NotFoundPage from './pages/NotFoundPage';
 import ValidatePositiveIntegerParam from './components/ValidatePositiveIntegerParam/ValidatePositiveIntegerParam';
+import WebSocketGameProvider from './contexts/GameProvider';
 
 const router = createBrowserRouter([
   {
@@ -27,7 +28,9 @@ const router = createBrowserRouter([
     path: 'game/:gameId',
     element: (
       <ValidatePositiveIntegerParam paramName='gameId'>
-        <GamePage />
+        <WebSocketGameProvider>
+          <GamePage />
+        </WebSocketGameProvider>
       </ValidatePositiveIntegerParam>
     ),
   },

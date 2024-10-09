@@ -6,6 +6,7 @@ const DisplayPlayers = ({ listOfPlayers, playerTurnId }) => {
       {listOfPlayers.map((player, index) => (
         <PlayerInfo
           playerName={player.playerName}
+          playerId={player.playerId}
           index={index}
           isTurn={player.playerId === playerTurnId}
           key={player.playerId}
