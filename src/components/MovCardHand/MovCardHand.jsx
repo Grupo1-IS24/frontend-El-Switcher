@@ -12,10 +12,16 @@ const MovCardHand = ({ playerId }) => {
         {/* player with index 0 is always the player in the window */}
         {listOfPlayers[0].playerId === playerId
           ? movementCards.map((movementCard) => (
-              <MovementCard key={movementCard.movementcardId} movement={movementCard.moveType} />
+              <MovementCard
+                key={movementCard.movementcardId}
+                movement={movementCard.moveType}
+              />
             ))
           : movementCards.map(() => (
-              <MovementCard key={`invalid-${invalidCardsCount++}`} movement={'invalid'} />
+              <MovementCard
+                key={`invalid-${invalidCardsCount++}`}
+                movement={'invalid'}
+              />
             ))}
       </div>
     </>
