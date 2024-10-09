@@ -1,4 +1,5 @@
 import FigureCardHand from '../FigureCardHand/FigureCardHand';
+import MovCardHand from '../MovCardHand/MovCardHand';
 
 const PlayerInfo = ({ playerName, playerId, index, isTurn }) => {
   const positionStyles = [
@@ -10,6 +11,7 @@ const PlayerInfo = ({ playerName, playerId, index, isTurn }) => {
 
   return (
     <div className={`absolute ${positionStyles[index]} p-2`}>
+      <MovCardHand playerId={playerId} />
       <FigureCardHand playerId={playerId} />
       <p className='lekton-bold text-white text-lg'>
         {playerName}{' '}
