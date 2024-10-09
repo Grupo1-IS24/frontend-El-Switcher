@@ -76,14 +76,22 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    # Ejecutar el servicio de desarrollo en segundo plano
+    # Ejecutar el servicio de desarrollo en segundo plano y redirigir los logs a un archivo
     - name: Run dev service
-      run: npm run dev &
+      run: npm run dev > dev.log 2>&1 &
       continue-on-error: true
 
     # Esperar a que el servicio de desarrollo esté listo
     - name: Wait for dev service
       run: npx wait-on http://localhost:5173
+
+    # Verificar los logs del servicio para asegurarse de que no haya errores
+    - name: Check dev service logs
+      run: |
+        if grep -i "error" dev.log; then
+          echo "Error found in dev service logs"
+          exit 1
+        fi
 
     # Ejecutar pruebas
     - name: Run tests
