@@ -13,7 +13,12 @@ vi.mock('./axiosConfig', () => ({
 describe('getGame', () => {
   it('should be called with the correct endpoint', async () => {
     const gameId = 1;
-    const validData = { gameId: 1, gameName: 'Game 1', maxPlayers: 4, minPlayers: 2 };
+    const validData = {
+      gameId: 1,
+      gameName: 'Game 1',
+      maxPlayers: 4,
+      minPlayers: 2,
+    };
     apiService.get.mockResolvedValue({ data: validData });
 
     await getGame(gameId);
@@ -23,7 +28,12 @@ describe('getGame', () => {
 
   it('should fetch and return the game successfully', async () => {
     const gameId = 1;
-    const validData = { gameId: 1, gameName: 'Game 1', maxPlayers: 4, minPlayers: 2 };
+    const validData = {
+      gameId: 1,
+      gameName: 'Game 1',
+      maxPlayers: 4,
+      minPlayers: 2,
+    };
 
     apiService.get.mockResolvedValue({ data: validData });
 
@@ -48,7 +58,12 @@ describe('getGame', () => {
 
   it('should throw an error if the game data is invalid', async () => {
     const gameId = 1;
-    const invalidData = { gameId: '1', gameName: 'Game 1',  maxPlayers: 4, minPlayers: 2 }; 
+    const invalidData = {
+      gameId: '1',
+      gameName: 'Game 1',
+      maxPlayers: 4,
+      minPlayers: 2,
+    };
 
     apiService.get.mockResolvedValue({ data: invalidData });
 
