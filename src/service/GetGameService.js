@@ -20,7 +20,6 @@ export const getGame = async (gameId) => {
   try {
     const response = await apiService.get(`/game/${gameId}`);
     const game = response.data;
-
     // Validate the game data. If it's invalid, throw an error.
     gameSchema.parse(game);
 
