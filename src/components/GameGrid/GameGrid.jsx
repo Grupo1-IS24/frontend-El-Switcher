@@ -1,7 +1,9 @@
 import GameCard from '../GameCard/GameCard';
 
 const GameGrid = ({ gameList, selectGame }) => {
-  const filteredGameList = gameList.filter(game => game.connectedPlayers < game.maxPlayers);
+  const filteredGameList = gameList.filter(
+    (game) => game.connectedPlayers < game.maxPlayers
+  );
 
   return (
     <div className='grid gap-10 p-5 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
