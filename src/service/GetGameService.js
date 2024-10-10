@@ -10,7 +10,6 @@ import { apiService } from './axiosConfig';
 export const getGame = async (gameId) => {
   try {
     const response = await apiService.get(`/game/${gameId}`);
-    console.log(response.data);
     const game = response.data;
 
     return game;
