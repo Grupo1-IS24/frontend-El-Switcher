@@ -45,6 +45,10 @@ export const handleJoinGame = async (
     createPlayer(playerResponseData.playerId);
     redirectToLobbyPage(selectedGame.gameId);
   } catch (error) {
-    alert(error.message);
+    if (error.message.includes('is full')) {
+      alert(`La partida '${selectedGame.gameName}' está llena`);
+    } else {
+      alert(error.message);
+    }
   }
 };
