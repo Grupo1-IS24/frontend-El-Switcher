@@ -1,4 +1,13 @@
+import { z } from 'zod';
 import { apiService } from './axiosConfig';
+
+// Define the schema for the game object.
+const gameSchema = z.object({
+  gameId: z.number().int(), // must be an integer.
+  gameName: z.string(), // must be a string.
+  maxPlayers: z.number().int(), // must be an integer.
+  minPlayers: z.number().int(), // must be an integer.
+});
 
 /**
  * Fetches and validates a specific game by its ID from the backend API.
@@ -11,6 +20,9 @@ export const getGame = async (gameId) => {
   try {
     const response = await apiService.get(`/game/${gameId}`);
     const game = response.data;
+
+    // Validate the game data. If it's invalid, throw an error.
+    gameSchema.parse(game);
 
     return game;
   } catch (error) {
