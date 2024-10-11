@@ -16,7 +16,7 @@ const PlayerInfo = ({ playerName, playerId, index, isTurn }) => {
 
   return (
     <div className={`absolute ${positionStyles[index]} p-2`}>
-      {currentPlayerID == playerId ? (
+      {currentPlayerID === playerId ? (
         <MovCardHand />
       ) : (
         <BackMovCardHand totalMovCards={3} /> // WARNING: Hardcoded value
