@@ -27,7 +27,7 @@ const GamePage = () => {
       {winnerInfo !== null && (
         <WinnerMessage winnerName={winnerInfo.nameWinner} />
       )}
-      <div className='absolute flex flex-col gap-3 top-2/3 left-10'>
+      <div className='absolute flex flex-col gap-3 top-96 left-24'>
         {playerID === playerTurnId && <EndTurnButton />}
         <LeaveButton />
       </div>
