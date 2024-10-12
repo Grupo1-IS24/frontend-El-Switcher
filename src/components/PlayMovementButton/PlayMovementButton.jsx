@@ -7,7 +7,7 @@ const PlayMovementButton = () => {
     canPlayMovement,
     selectedMovementCard,
     selectedColorCards,
-    resetMovementLogic,
+    resetSelectedCards,
   } = useContext(PlayMovementLogicContext);
 
   return (
@@ -19,7 +19,7 @@ const PlayMovementButton = () => {
           onPress={() => {
             console.log('Selected movement card:', selectedMovementCard);
             console.log('Selected color cards:', selectedColorCards);
-            resetMovementLogic();
+            resetSelectedCards();
           }}
         />
       )}

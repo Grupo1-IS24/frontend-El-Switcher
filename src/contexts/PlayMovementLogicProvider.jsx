@@ -9,7 +9,12 @@ const PlayMovementLogicProvider = ({ children }) => {
   const [selectedMovementCard, setSelectedMovementCard] = useState(null);
   const [selectedColorCards, setSelectedColorCards] = useState([]);
 
-  // The logic to determine if a movement card is selected.
+  /**
+   * Determines if a movement card is currently selected.
+   *
+   * @param {object} movementCard - The movement card to check.
+   * @returns {boolean} True if the movement card is selected, otherwise false.
+   */
   const isSelectedMovementCard = useCallback(
     (movementCard) =>
       selectedMovementCard !== null &&
@@ -17,13 +22,22 @@ const PlayMovementLogicProvider = ({ children }) => {
     [selectedMovementCard]
   );
 
-  // The logic to determine if the player can select a movement card.
+  /**
+   * Determines if the player can select a movement card.
+   *
+   * @returns {boolean} True if the player can select a movement card, otherwise false.
+   */
   const canSelectMovementCard = useCallback(
     () => isCurrentPlayerTurn(), // Only if it's the player's turn. In the future, we can add more conditions.
     [isCurrentPlayerTurn]
   );
 
-  // The logic to determine if the player can select a color card.
+  /**
+   * Selects or deselects a movement card.
+   * Deselects any previously selected color cards when a movement card is selected.
+   *
+   * @param {object} movementCard - The movement card to select or deselect.
+   */
   const selectMovementCard = useCallback(
     (movementCard) => {
       if (isSelectedMovementCard(movementCard)) {
@@ -36,6 +50,12 @@ const PlayMovementLogicProvider = ({ children }) => {
     [isSelectedMovementCard]
   );
 
+  /**
+   * Determines if a specific color card is currently selected.
+   *
+   * @param {object} colorCard - The color card to check.
+   * @returns {boolean} True if the color card is selected, otherwise false.
+   */
   const isSelectedColorCard = useCallback(
     (colorCard) =>
       selectedColorCards.some(
@@ -47,15 +67,31 @@ const PlayMovementLogicProvider = ({ children }) => {
     [selectedColorCards]
   );
 
-  // The logic to determine if a color card can be selected.
+  /**
+   * Determines if a color card can be selected based on current selections.
+   *
+   * @param {object} colorCard - The color card to check.
+   * @returns {boolean} True if the color card can be selected, otherwise false.
+   */
   const canSelectColorCard = useCallback(
     (colorCard) =>
+      isCurrentPlayerTurn() &&
       selectedMovementCard !== null &&
       (selectedColorCards.length < 2 || isSelectedColorCard(colorCard)),
-    [selectedColorCards, selectedMovementCard, isSelectedColorCard]
+    [
+      selectedColorCards,
+      selectedMovementCard,
+      isSelectedColorCard,
+      isCurrentPlayerTurn,
+    ]
   );
 
-  // The logic to select a color card.
+  /**
+   * Selects a color card. If the card is already selected, it will be deselected.
+   * Limits the selection to a maximum of two color cards.
+   *
+   * @param {object} colorCard - The color card to select or deselect.
+   */
   const selectColorCard = useCallback(
     (colorCard) => {
       if (isSelectedColorCard(colorCard)) {
@@ -71,28 +107,36 @@ const PlayMovementLogicProvider = ({ children }) => {
         setSelectedColorCards((prev) => [...prev, colorCard]);
       }
     },
-    [selectedColorCards.length, isSelectedColorCard]
+    [selectedColorCards, isSelectedColorCard]
   );
 
-  const resetMovementLogic = useCallback(() => {
+  /**
+   * Resets the movement logic, deselecting any selected movement and color cards.
+   */
+  const resetSelectedCards = useCallback(() => {
     setSelectedMovementCard(null);
     setSelectedColorCards([]);
   }, []);
 
+  /**
+   * Determines if the player can perform a movement based on the selected cards and the player's turn.
+   *
+   * @returns {boolean} True if the player can play a movement, otherwise false.
+   */
   const canPlayMovement = useCallback(
     () =>
+      isCurrentPlayerTurn() &&
       selectedMovementCard !== null &&
-      selectedColorCards.length === 2 &&
-      isCurrentPlayerTurn(),
+      selectedColorCards.length === 2,
     [selectedMovementCard, selectedColorCards, isCurrentPlayerTurn]
   );
 
   useEffect(() => {
-    // Deselect the cards if it's not the player's turn
+    // Reset logic if it's not the player's turn
     if (!isCurrentPlayerTurn()) {
-      resetMovementLogic();
+      resetSelectedCards();
     }
-  }, [isCurrentPlayerTurn, resetMovementLogic]);
+  }, [isCurrentPlayerTurn, resetSelectedCards]);
 
   // The provided state for the context.
   const providedState = {
@@ -104,7 +148,7 @@ const PlayMovementLogicProvider = ({ children }) => {
     canSelectColorCard,
     isSelectedMovementCard,
     isSelectedColorCard,
-    resetMovementLogic,
+    resetSelectedCards,
     canPlayMovement,
   };
 
