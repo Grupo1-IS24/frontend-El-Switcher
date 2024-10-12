@@ -17,10 +17,15 @@ const PlayMovementLogicProvider = ({ children }) => {
   const [selectedMovementCard, setSelectedMovementCard] = useState(null);
   const [selectedColorCards, setSelectedColorCards] = useState([]);
 
+  const isPlayerTurn = useCallback(
+    () => playerID === playerTurnId,
+    [playerID, playerTurnId]
+  );
+
   // The logic to determine if the player can select a movement card.
   const canSelectMovementCard = useCallback(
-    () => playerID === playerTurnId, // Only if it's the player's turn
-    [playerID, playerTurnId]
+    () => isPlayerTurn(), // Only if it's the player's turn. In the future, we can add more conditions.
+    [isPlayerTurn]
   );
 
   // The logic to determine if a movement card is selected.
@@ -71,7 +76,7 @@ const PlayMovementLogicProvider = ({ children }) => {
         setSelectedColorCards((prev) => [...prev, colorCard]);
       }
     },
-    [selectedColorCards.length]
+    [selectedColorCards.length, isSelectedColorCard]
   );
 
   // The logic to determine if a color card can be selected.
@@ -79,7 +84,7 @@ const PlayMovementLogicProvider = ({ children }) => {
     (colorCard) =>
       selectedMovementCard !== null &&
       (selectedColorCards.length < 2 || isSelectedColorCard(colorCard)),
-    [selectedColorCards, selectedMovementCard]
+    [selectedColorCards, selectedMovementCard, isSelectedColorCard]
   );
 
   const resetMovementLogic = useCallback(() => {
@@ -91,15 +96,16 @@ const PlayMovementLogicProvider = ({ children }) => {
     () =>
       selectedMovementCard !== null &&
       selectedColorCards.length === 2 &&
-      playerID === playerTurnId
+      isPlayerTurn(),
+    [selectedMovementCard, selectedColorCards, isPlayerTurn]
   );
 
   useEffect(() => {
     // Deselect the cards if it's not the player's turn
-    if (playerID !== playerTurnId) {
+    if (!isPlayerTurn()) {
       resetMovementLogic();
     }
-  }, [playerID, playerTurnId]);
+  }, [playerID, playerTurnId, isPlayerTurn, resetMovementLogic]);
 
   // The provided state for the context.
   const providedState = {
