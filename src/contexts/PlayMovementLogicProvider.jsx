@@ -87,6 +87,13 @@ const PlayMovementLogicProvider = ({ children }) => {
     setSelectedColorCards([]);
   }, []);
 
+  const canPlayMovement = useCallback(
+    () =>
+      selectedMovementCard !== null &&
+      selectedColorCards.length === 2 &&
+      playerID === playerTurnId
+  );
+
   useEffect(() => {
     // Deselect the cards if it's not the player's turn
     if (playerID !== playerTurnId) {
@@ -105,6 +112,7 @@ const PlayMovementLogicProvider = ({ children }) => {
     isSelectedMovementCard,
     isSelectedColorCard,
     resetMovementLogic,
+    canPlayMovement,
   };
 
   return (

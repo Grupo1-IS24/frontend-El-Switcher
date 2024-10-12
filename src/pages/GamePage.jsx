@@ -8,6 +8,7 @@ import { useContext } from 'react';
 import { PlayerContext } from '../contexts/PlayerProvider';
 import { GameContext } from '../contexts/GameProvider';
 import PlayMovementLogicProvider from '../contexts/PlayMovementLogicProvider';
+import PlayMovementButton from '../components/PlayMovementButton/PlayMovementButton';
 
 const GamePage = () => {
   const { listOfPlayers, board, playerTurnId, winnerInfo } =
@@ -23,14 +24,15 @@ const GamePage = () => {
           playerTurnId={playerTurnId}
         />
         <Board board={board} />
+        <div className='absolute flex flex-col gap-3 top-96 left-24'>
+          {playerID === playerTurnId && <EndTurnButton />}
+          <PlayMovementButton />
+        </div>
       </PlayMovementLogicProvider>
       {winnerInfo !== null && (
         <WinnerMessage winnerName={winnerInfo.nameWinner} />
       )}
-      <div className='absolute flex flex-col gap-3 top-96 left-24'>
-        {playerID === playerTurnId && <EndTurnButton />}
-        <LeaveButton />
-      </div>
+      <LeaveButton />
     </>
   );
 };
