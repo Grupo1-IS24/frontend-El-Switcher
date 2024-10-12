@@ -1,26 +1,13 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
-import { PlayerContext } from './PlayerProvider';
-import { GameContext } from './GameProvider';
+import { createContext, useCallback, useEffect, useState } from 'react';
+import useIsPlayerTurn from '../hooks/useIsPlayerTurn';
 
 export const PlayMovementLogicContext = createContext();
 
 const PlayMovementLogicProvider = ({ children }) => {
-  const { playerID } = useContext(PlayerContext);
-  const { playerTurnId } = useContext(GameContext);
+  const isPlayerTurn = useIsPlayerTurn();
 
   const [selectedMovementCard, setSelectedMovementCard] = useState(null);
   const [selectedColorCards, setSelectedColorCards] = useState([]);
-
-  const isPlayerTurn = useCallback(
-    () => playerID === playerTurnId,
-    [playerID, playerTurnId]
-  );
 
   // The logic to determine if a movement card is selected.
   const isSelectedMovementCard = useCallback(

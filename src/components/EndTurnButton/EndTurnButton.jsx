@@ -3,10 +3,12 @@ import { useContext } from 'react';
 import { PlayerContext } from '../../contexts/PlayerProvider';
 import { endTurn } from '../../service/EndTurnService';
 import { useParams } from 'react-router-dom';
+import useIsPlayerTurn from '../../hooks/useIsPlayerTurn';
 
 const EndTurnButton = () => {
   const { playerID } = useContext(PlayerContext);
   const { gameId } = useParams();
+  const isPlayerTurn = useIsPlayerTurn();
 
   const manageEndTurn = async (playerID) => {
     try {
@@ -18,11 +20,15 @@ const EndTurnButton = () => {
   };
 
   return (
-    <Button
-      text={'Pasar turno'}
-      style={'gameButton_endTurn'}
-      onPress={() => manageEndTurn(playerID)}
-    />
+    <>
+      {isPlayerTurn() && (
+        <Button
+          text={'Pasar turno'}
+          style={'gameButton_endTurn'}
+          onPress={() => manageEndTurn(playerID)}
+        />
+      )}
+    </>
   );
 };
 

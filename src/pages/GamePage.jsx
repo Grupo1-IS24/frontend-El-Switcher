@@ -5,7 +5,6 @@ import BgOverlay from '../components/BgOverlay/BgOverlay';
 import LeaveButton from '../components/LeaveButton/LeaveButton';
 import EndTurnButton from '../components/EndTurnButton/EndTurnButton';
 import { useContext } from 'react';
-import { PlayerContext } from '../contexts/PlayerProvider';
 import { GameContext } from '../contexts/GameProvider';
 import PlayMovementLogicProvider from '../contexts/PlayMovementLogicProvider';
 import PlayMovementButton from '../components/PlayMovementButton/PlayMovementButton';
@@ -13,7 +12,6 @@ import PlayMovementButton from '../components/PlayMovementButton/PlayMovementBut
 const GamePage = () => {
   const { listOfPlayers, board, playerTurnId, winnerInfo } =
     useContext(GameContext);
-  const { playerID } = useContext(PlayerContext);
 
   return (
     <>
@@ -25,7 +23,7 @@ const GamePage = () => {
         />
         <Board board={board} />
         <div className='absolute flex flex-col gap-3 top-96 left-24'>
-          {playerID === playerTurnId && <EndTurnButton />}
+          <EndTurnButton />
           <PlayMovementButton />
         </div>
       </PlayMovementLogicProvider>
