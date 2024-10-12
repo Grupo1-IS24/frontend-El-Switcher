@@ -1,5 +1,6 @@
 import { createContext, useCallback, useEffect, useState } from 'react';
 import usePlayerTurn from '../hooks/usePlayerTurn';
+import { isEqualColorCard } from '../utils/isEqualColorCard';
 
 export const PlayMovementLogicContext = createContext();
 
@@ -58,11 +59,8 @@ const PlayMovementLogicProvider = ({ children }) => {
    */
   const isSelectedColorCard = useCallback(
     (colorCard) =>
-      selectedColorCards.some(
-        (selectedColorCard) =>
-          selectedColorCard.row === colorCard.row &&
-          selectedColorCard.column === colorCard.column &&
-          selectedColorCard.color === colorCard.color
+      selectedColorCards.some((selectedColorCard) =>
+        isEqualColorCard(selectedColorCard, colorCard)
       ),
     [selectedColorCards]
   );
@@ -98,9 +96,7 @@ const PlayMovementLogicProvider = ({ children }) => {
         setSelectedColorCards((prev) =>
           prev.filter(
             (selectedColorCard) =>
-              selectedColorCard.row !== colorCard.row ||
-              selectedColorCard.column !== colorCard.column ||
-              selectedColorCard.color !== colorCard.color
+              !isEqualColorCard(selectedColorCard, colorCard)
           )
         );
       } else if (selectedColorCards.length < 2) {
