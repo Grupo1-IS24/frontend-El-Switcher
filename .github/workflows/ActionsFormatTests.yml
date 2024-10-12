@@ -14,67 +14,81 @@ permissions:
   contents: write
 
 jobs:
-  format:
+  format_and_test:
     runs-on: ubuntu-latest
 
     steps:
     # Verificar el repositorio y hacer checkout de la rama
-    - name: Checkout repository
+    - name: Verificar repositorio
       uses: actions/checkout@v3
       with:
         ref: ${{ github.head_ref || github.ref }}
 
+    # Restaurar caché de dependencias
+    - name: Restaurar caché de npm
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-npm-cache-
+
     # Configurar Node.js
-    - name: Set up Node.js
+    - name: Configurar Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '20'
 
     # Instalar dependencias
-    - name: Install dependencies
+    - name: Instalar dependencias
       run: npm install
 
+    # Guardar caché de dependencias
+    - name: Guardar caché de npm
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
+
     # Ejecutar el comando de formato
-    - name: Format code
+    - name: Formatear código
       run: npm run format
 
     # Configurar usuario de Git
-    - name: Set up Git user
+    - name: Configurar usuario de Git
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
     # Hacer commit de los cambios si los hay
-    - name: Commit changes
+    - name: Hacer commit de cambios
       run: |
         git add .
         git commit -m "Formato de código aplicado por GitHub Action" || echo "No changes to commit"
 
     # Hacer push de los cambios
-    - name: Push changes
+    - name: Hacer push de cambios
       run: git push origin HEAD:${{ github.head_ref || github.ref }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  test:
-    runs-on: ubuntu-latest
-    needs: format
+    # Ejecutar el servicio de desarrollo en segundo plano y redirigir los logs a un archivo
+    - name: Ejecutar servicio de desarrollo
+      run: npm run dev > dev.log 2>&1 &
+      continue-on-error: true
 
-    steps:
-    # Verificar el repositorio
-    - name: Checkout repository
-      uses: actions/checkout@v3
+    # Esperar a que el servicio de desarrollo esté listo
+    - name: Esperar servicio de desarrollo
+      run: npx wait-on http://localhost:5173
 
-    # Configurar Node.js
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20'
-
-    # Instalar dependencias
-    - name: Install dependencies
-      run: npm install
+    # Verificar los logs del servicio para asegurarse de que no haya errores
+    - name: Verificar logs del servicio
+      run: |
+        if grep -i "error" dev.log; then
+          echo "Error found in dev service logs"
+          exit 1
+        fi
 
     # Ejecutar pruebas
-    - name: Run tests
+    - name: Ejecutar pruebas
       run: npm run test
