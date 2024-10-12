@@ -15,7 +15,7 @@ const PlayMovementLogicProvider = ({ children }) => {
   const { playerTurnId } = useContext(GameContext);
 
   const [selectedMovementCard, setSelectedMovementCard] = useState(null);
-  const [selectedColorCard, setSelectedColorCard] = useState([]);
+  const [selectedColorCards, setSelectedColorCards] = useState([]);
 
   // The logic to determine if the player can select a movement card.
   const canSelectMovementCard = useCallback(
@@ -39,44 +39,67 @@ const PlayMovementLogicProvider = ({ children }) => {
       } else {
         setSelectedMovementCard(movementCard); // Select the card
       }
-      setSelectedColorCard([]); // Deselect the color cards
+      setSelectedColorCards([]); // Deselect the color cards
     },
     [isSelectedMovementCard]
+  );
+
+  const isSelectedColorCard = useCallback(
+    (colorCard) =>
+      selectedColorCards.some(
+        (selectedColorCard) =>
+          selectedColorCard.row === colorCard.row &&
+          selectedColorCard.column === colorCard.column &&
+          selectedColorCard.color === colorCard.color
+      ),
+    [selectedColorCards]
   );
 
   // The logic to select a color card.
   const selectColorCard = useCallback(
     (colorCard) => {
-      if (selectedColorCard.length < 2) {
-        setSelectedColorCard((prev) => [...prev, colorCard]);
+      if (isSelectedColorCard(colorCard)) {
+        setSelectedColorCards((prev) =>
+          prev.filter(
+            (selectedColorCard) =>
+              selectedColorCard.row !== colorCard.row ||
+              selectedColorCard.column !== colorCard.column ||
+              selectedColorCard.color !== colorCard.color
+          )
+        );
+      } else if (selectedColorCards.length < 2) {
+        setSelectedColorCards((prev) => [...prev, colorCard]);
       }
     },
-    [selectedColorCard.length]
+    [selectedColorCards.length]
   );
 
   // The logic to determine if a color card can be selected.
   const canSelectColorCard = useCallback(
-    () => selectedMovementCard !== null && selectedColorCard.length < 2,
-    [selectedColorCard, selectedMovementCard]
+    (colorCard) =>
+      (selectedMovementCard !== null && selectedColorCards.length < 2) ||
+      isSelectedColorCard(colorCard),
+    [selectedColorCards, selectedMovementCard]
   );
 
   useEffect(() => {
     // Deselect the cards if it's not the player's turn
     if (playerID !== playerTurnId) {
       setSelectedMovementCard(null);
-      setSelectedColorCard([]);
+      setSelectedColorCards([]);
     }
   }, [playerID, playerTurnId]);
 
   // The provided state for the context.
   const providedState = {
     selectedMovementCard,
-    selectedColorCard,
+    selectedColorCards,
     selectMovementCard,
     selectColorCard,
     canSelectMovementCard,
     canSelectColorCard,
     isSelectedMovementCard,
+    isSelectedColorCard,
   };
 
   return (
