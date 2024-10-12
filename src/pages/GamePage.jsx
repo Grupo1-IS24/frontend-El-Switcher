@@ -10,17 +10,13 @@ import PlayMovementLogicProvider from '../contexts/PlayMovementLogicProvider';
 import PlayMovementButton from '../components/PlayMovementButton/PlayMovementButton';
 
 const GamePage = () => {
-  const { listOfPlayers, board, playerTurnId, winnerInfo } =
-    useContext(GameContext);
+  const { listOfPlayers, board, winnerInfo } = useContext(GameContext);
 
   return (
     <>
       <BgOverlay />
       <PlayMovementLogicProvider>
-        <DisplayPlayers
-          listOfPlayers={listOfPlayers}
-          playerTurnId={playerTurnId}
-        />
+        <DisplayPlayers listOfPlayers={listOfPlayers} />
         <Board board={board} />
         <div className='absolute flex flex-col gap-3 top-96 left-24'>
           <EndTurnButton />

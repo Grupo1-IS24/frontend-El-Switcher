@@ -1,10 +1,10 @@
 import { createContext, useCallback, useEffect, useState } from 'react';
-import useIsPlayerTurn from '../hooks/useIsPlayerTurn';
+import usePlayerTurn from '../hooks/usePlayerTurn';
 
 export const PlayMovementLogicContext = createContext();
 
 const PlayMovementLogicProvider = ({ children }) => {
-  const isPlayerTurn = useIsPlayerTurn();
+  const { isCurrentPlayerTurn } = usePlayerTurn();
 
   const [selectedMovementCard, setSelectedMovementCard] = useState(null);
   const [selectedColorCards, setSelectedColorCards] = useState([]);
@@ -19,8 +19,8 @@ const PlayMovementLogicProvider = ({ children }) => {
 
   // The logic to determine if the player can select a movement card.
   const canSelectMovementCard = useCallback(
-    () => isPlayerTurn(), // Only if it's the player's turn. In the future, we can add more conditions.
-    [isPlayerTurn]
+    () => isCurrentPlayerTurn(), // Only if it's the player's turn. In the future, we can add more conditions.
+    [isCurrentPlayerTurn]
   );
 
   // The logic to determine if the player can select a color card.
@@ -83,16 +83,16 @@ const PlayMovementLogicProvider = ({ children }) => {
     () =>
       selectedMovementCard !== null &&
       selectedColorCards.length === 2 &&
-      isPlayerTurn(),
-    [selectedMovementCard, selectedColorCards, isPlayerTurn]
+      isCurrentPlayerTurn(),
+    [selectedMovementCard, selectedColorCards, isCurrentPlayerTurn]
   );
 
   useEffect(() => {
     // Deselect the cards if it's not the player's turn
-    if (!isPlayerTurn()) {
+    if (!isCurrentPlayerTurn()) {
       resetMovementLogic();
     }
-  }, [isPlayerTurn, resetMovementLogic]);
+  }, [isCurrentPlayerTurn, resetMovementLogic]);
 
   // The provided state for the context.
   const providedState = {
