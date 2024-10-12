@@ -1,4 +1,9 @@
-const ColorCard = ({ color, disabled, onClick, isSelected }) => {
+const ColorCard = ({
+  color = null,
+  disabled = true,
+  isSelected = false,
+  onClick = null,
+}) => {
   const colorStyle = {
     RED: 'bg-red-500',
     BLUE: 'bg-blue-500',
