@@ -23,6 +23,14 @@ const PlayMovementLogicProvider = ({ children }) => {
     [playerID, playerTurnId]
   );
 
+  // The logic to determine if a movement card is selected.
+  const isSelectedMovementCard = useCallback(
+    (movementCard) =>
+      selectedMovementCard !== null &&
+      selectedMovementCard.movementcardId === movementCard.movementcardId,
+    [selectedMovementCard]
+  );
+
   // The logic to determine if the player can select a color card.
   const selectMovementCard = useCallback(
     (movementCard) => {
@@ -33,15 +41,7 @@ const PlayMovementLogicProvider = ({ children }) => {
       }
       setSelectedColorCard([]); // Deselect the color cards
     },
-    [selectedMovementCard]
-  );
-
-  // The logic to determine if a movement card is selected.
-  const isSelectedMovementCard = useCallback(
-    (movementCard) =>
-      selectedMovementCard !== null &&
-      selectedMovementCard.movementcardId === movementCard.movementcardId,
-    [selectedMovementCard]
+    [isSelectedMovementCard]
   );
 
   // The logic to select a color card.
@@ -51,7 +51,7 @@ const PlayMovementLogicProvider = ({ children }) => {
         setSelectedColorCard((prev) => [...prev, colorCard]);
       }
     },
-    [setSelectedColorCard]
+    [selectedColorCard.length]
   );
 
   // The logic to determine if a color card can be selected.
@@ -66,7 +66,7 @@ const PlayMovementLogicProvider = ({ children }) => {
       setSelectedMovementCard(null);
       setSelectedColorCard([]);
     }
-  });
+  }, [playerID, playerTurnId]);
 
   // The provided state for the context.
   const providedState = {
