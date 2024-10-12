@@ -22,18 +22,18 @@ const PlayMovementLogicProvider = ({ children }) => {
     [playerID, playerTurnId]
   );
 
-  // The logic to determine if the player can select a movement card.
-  const canSelectMovementCard = useCallback(
-    () => isPlayerTurn(), // Only if it's the player's turn. In the future, we can add more conditions.
-    [isPlayerTurn]
-  );
-
   // The logic to determine if a movement card is selected.
   const isSelectedMovementCard = useCallback(
     (movementCard) =>
       selectedMovementCard !== null &&
       selectedMovementCard.movementcardId === movementCard.movementcardId,
     [selectedMovementCard]
+  );
+
+  // The logic to determine if the player can select a movement card.
+  const canSelectMovementCard = useCallback(
+    () => isPlayerTurn(), // Only if it's the player's turn. In the future, we can add more conditions.
+    [isPlayerTurn]
   );
 
   // The logic to determine if the player can select a color card.
@@ -60,6 +60,14 @@ const PlayMovementLogicProvider = ({ children }) => {
     [selectedColorCards]
   );
 
+  // The logic to determine if a color card can be selected.
+  const canSelectColorCard = useCallback(
+    (colorCard) =>
+      selectedMovementCard !== null &&
+      (selectedColorCards.length < 2 || isSelectedColorCard(colorCard)),
+    [selectedColorCards, selectedMovementCard, isSelectedColorCard]
+  );
+
   // The logic to select a color card.
   const selectColorCard = useCallback(
     (colorCard) => {
@@ -77,14 +85,6 @@ const PlayMovementLogicProvider = ({ children }) => {
       }
     },
     [selectedColorCards.length, isSelectedColorCard]
-  );
-
-  // The logic to determine if a color card can be selected.
-  const canSelectColorCard = useCallback(
-    (colorCard) =>
-      selectedMovementCard !== null &&
-      (selectedColorCards.length < 2 || isSelectedColorCard(colorCard)),
-    [selectedColorCards, selectedMovementCard, isSelectedColorCard]
   );
 
   const resetMovementLogic = useCallback(() => {
@@ -105,7 +105,7 @@ const PlayMovementLogicProvider = ({ children }) => {
     if (!isPlayerTurn()) {
       resetMovementLogic();
     }
-  }, [playerID, playerTurnId, isPlayerTurn, resetMovementLogic]);
+  }, [isPlayerTurn, resetMovementLogic]);
 
   // The provided state for the context.
   const providedState = {
