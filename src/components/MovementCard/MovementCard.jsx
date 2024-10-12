@@ -1,4 +1,4 @@
-const MovementCard = ({ movement = 0 }) => {
+const MovementCard = ({ movement = 0, onClick, isSelected, disabled }) => {
   const assets = '/src/assets/MovementCards/';
   const isNumberValid =
     typeof movement === 'number' && movement >= 1 && movement <= 7;
@@ -9,7 +9,15 @@ const MovementCard = ({ movement = 0 }) => {
     ? `Movimiento ${movement}`
     : 'Movimiento de espaldas';
 
-  return <img src={path} alt={alt} className='w-[80px] h-[140px]' />;
+  return (
+    <button
+      className={`transition-transform duration-300 ${isSelected ? 'translate-y-[-20px]' : ''}`}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      <img src={path} alt={alt} className='w-[80px] h-[140px]' />
+    </button>
+  );
 };
 
 export default MovementCard;

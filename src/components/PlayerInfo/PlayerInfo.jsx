@@ -15,7 +15,7 @@ const PlayerInfo = ({ playerName, playerId, index, isTurn }) => {
   ];
 
   return (
-    <div className={`absolute ${positionStyles[index]} p-2`}>
+    <div className={`absolute ${positionStyles[index]} z-20 p-2`}>
       {currentPlayerID === playerId ? (
         <MovCardHand />
       ) : (

@@ -7,6 +7,7 @@ import EndTurnButton from '../components/EndTurnButton/EndTurnButton';
 import { useContext } from 'react';
 import { PlayerContext } from '../contexts/PlayerProvider';
 import { GameContext } from '../contexts/GameProvider';
+import PlayMovementLogicProvider from '../contexts/PlayMovementLogicProvider';
 
 const GamePage = () => {
   const { listOfPlayers, board, playerTurnId, winnerInfo } =
@@ -16,11 +17,13 @@ const GamePage = () => {
   return (
     <>
       <BgOverlay />
-      <DisplayPlayers
-        listOfPlayers={listOfPlayers}
-        playerTurnId={playerTurnId}
-      />
-      <Board board={board} />
+      <PlayMovementLogicProvider>
+        <DisplayPlayers
+          listOfPlayers={listOfPlayers}
+          playerTurnId={playerTurnId}
+        />
+        <Board board={board} />
+      </PlayMovementLogicProvider>
       {winnerInfo !== null && (
         <WinnerMessage winnerName={winnerInfo.nameWinner} />
       )}
