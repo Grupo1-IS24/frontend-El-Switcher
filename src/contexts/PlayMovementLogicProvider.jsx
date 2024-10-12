@@ -77,8 +77,8 @@ const PlayMovementLogicProvider = ({ children }) => {
   // The logic to determine if a color card can be selected.
   const canSelectColorCard = useCallback(
     (colorCard) =>
-      (selectedMovementCard !== null && selectedColorCards.length < 2) ||
-      isSelectedColorCard(colorCard),
+      selectedMovementCard !== null &&
+      (selectedColorCards.length < 2 || isSelectedColorCard(colorCard)),
     [selectedColorCards, selectedMovementCard]
   );
 
