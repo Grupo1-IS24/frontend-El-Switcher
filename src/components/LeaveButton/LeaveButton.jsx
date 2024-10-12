@@ -33,7 +33,7 @@ const LeaveButton = ({ type }) => {
     />
   ) : (
     <Button
-      text={'Abandonar'}
+      text={'x'}
       onPress={() => manageLeave()}
       style={'gameButton_leave'}
     />
