@@ -1,4 +1,9 @@
-const MovementCard = ({ movement = 0, onClick, isSelected, disabled }) => {
+const MovementCard = ({
+  movement = 0,
+  isSelected = false,
+  disabled = true,
+  onClick = null,
+}) => {
   const assets = '/src/assets/MovementCards/';
   const isNumberValid =
     typeof movement === 'number' && movement >= 1 && movement <= 7;
