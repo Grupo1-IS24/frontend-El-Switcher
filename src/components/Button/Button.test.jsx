@@ -49,7 +49,12 @@ describe('Button', () => {
     {
       style: 'gameButton_leave',
       class:
-        'w-[16rem] h-[4.375rem] text-2xl border-2 border-[#ee6055] bg-[#ee6055] text-[#0c0c0c] hover:bg-transparent hover:text-[#ee6055]',
+        'fixed top-3 right-3 w-11 h-11 rounded text-2xl border-2 border-[#ee6055] bg-[#ee6055] text-[#0c0c0c] hover:bg-transparent hover:text-[#ee6055]',
+    },
+    {
+      style: 'gameButton_playMovement',
+      class:
+        'w-[16rem] h-[4.375rem] text-2xl border-2 border-[#000000] bg-[#000000] text-[#ffffff] hover:bg-transparent hover:text-[#000000]',
     },
   ];
 

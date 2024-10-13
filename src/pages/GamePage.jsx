@@ -5,29 +5,28 @@ import BgOverlay from '../components/BgOverlay/BgOverlay';
 import LeaveButton from '../components/LeaveButton/LeaveButton';
 import EndTurnButton from '../components/EndTurnButton/EndTurnButton';
 import { useContext } from 'react';
-import { PlayerContext } from '../contexts/PlayerProvider';
 import { GameContext } from '../contexts/GameProvider';
+import PlayMovementLogicProvider from '../contexts/PlayMovementLogicProvider';
+import PlayMovementButton from '../components/PlayMovementButton/PlayMovementButton';
 
 const GamePage = () => {
-  const { listOfPlayers, board, playerTurnId, winnerInfo } =
-    useContext(GameContext);
-  const { playerID } = useContext(PlayerContext);
+  const { listOfPlayers, board, winnerInfo } = useContext(GameContext);
 
   return (
     <>
       <BgOverlay />
-      <DisplayPlayers
-        listOfPlayers={listOfPlayers}
-        playerTurnId={playerTurnId}
-      />
-      <Board board={board} />
+      <PlayMovementLogicProvider>
+        <DisplayPlayers listOfPlayers={listOfPlayers} />
+        <Board board={board} />
+        <div className='absolute flex flex-col gap-3 top-96 left-24'>
+          <EndTurnButton />
+          <PlayMovementButton />
+        </div>
+      </PlayMovementLogicProvider>
       {winnerInfo !== null && (
         <WinnerMessage winnerName={winnerInfo.nameWinner} />
       )}
-      <div className='absolute flex flex-col gap-3 top-2/3 left-10'>
-        {playerID === playerTurnId && <EndTurnButton />}
-        <LeaveButton />
-      </div>
+      <LeaveButton />
     </>
   );
 };

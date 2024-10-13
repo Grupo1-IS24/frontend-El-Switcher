@@ -1,6 +1,9 @@
+import usePlayerTurn from '../../hooks/usePlayerTurn';
 import PlayerInfo from '../PlayerInfo/PlayerInfo';
 
-const DisplayPlayers = ({ listOfPlayers, playerTurnId }) => {
+const DisplayPlayers = ({ listOfPlayers }) => {
+  const { isPlayerTurn } = usePlayerTurn();
+
   return (
     <>
       {listOfPlayers.map((player, index) => (
@@ -8,7 +11,7 @@ const DisplayPlayers = ({ listOfPlayers, playerTurnId }) => {
           playerName={player.playerName}
           playerId={player.playerId}
           index={index}
-          isTurn={player.playerId === playerTurnId}
+          isTurn={isPlayerTurn(player.playerId)}
           key={player.playerId}
         />
       ))}
