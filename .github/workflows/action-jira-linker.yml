@@ -24,7 +24,7 @@ jobs:
         echo "TICKET_ID=$TICKET_ID" >> $GITHUB_ENV
 
     - name: Fetch PR comments
-      uses: octokit/request-action@v2
+      uses: octokit/request-action@v2.4.0
       id: fetch-comments
       with:
         route: GET /repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments
