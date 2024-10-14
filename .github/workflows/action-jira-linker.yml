@@ -28,7 +28,7 @@ jobs:
       id: fetch-comments
       with:
         route: GET /repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments
-        headers: '{"authorization": "token ${{ secrets.GITHUB_TOKEN }}"}'
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Update Jira Ticket
       run: |
