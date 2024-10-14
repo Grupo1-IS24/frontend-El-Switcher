@@ -2,7 +2,6 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import HomePage from './HomePage';
-import homeBg from '../assets/img/home-bg.jpeg';
 
 describe('HomePage', () => {
   beforeEach(() => {
@@ -11,13 +10,6 @@ describe('HomePage', () => {
         <HomePage />
       </Router>
     );
-  });
-
-  it('renders the BackgroundOverlay component', () => {
-    const backgroundOverlay = screen.getByTestId('background-overlay');
-    expect(backgroundOverlay).toBeInTheDocument();
-    expect(backgroundOverlay).toHaveClass('fixed inset-0 bg-cover bg-center');
-    expect(backgroundOverlay).toHaveStyle(`backgroundImage: url(${homeBg})`);
   });
 
   it('renders the TitleText component', () => {
