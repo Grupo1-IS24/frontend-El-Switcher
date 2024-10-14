@@ -41,7 +41,12 @@ jobs:
     - name: Update Jira Ticket
       run: |
         echo "Updating Jira Ticket with comments from PR..."
-        COMMENT_BODY=$(echo '${{ steps.fetch-comments.outputs.data }}' | jq '.[].body' | tr -d '"')
+        COMMENTS=$(echo '${{ steps.fetch-comments.outputs.data }}' | jq -r '.[].body')
+        COMMENT_BODY=""
+        for COMMENT in $COMMENTS; do
+          COMMENT_BODY="$COMMENT_BODY{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"$COMMENT\"}]},"
+        done
+        COMMENT_BODY=${COMMENT_BODY%,} # Eliminar la última coma
         curl --request POST \
           --url "https://ingsoft1grupo1.atlassian.net/rest/api/3/issue/${{ env.TICKET_ID }}/comment" \
           --user 'victor.diaz.jauregui@mi.unc.edu.ar:${{ secrets.JIRA_TOKEN }}' \
@@ -52,15 +57,7 @@ jobs:
               "type": "doc",
               "version": 1,
               "content": [
-                {
-                  "type": "paragraph",
-                  "content": [
-                    {
-                      "type": "text",
-                      "text": "'"$COMMENT_BODY"'"
-                    }
-                  ]
-                }
+                '"$COMMENT_BODY"'
               ]
             }
           }'
