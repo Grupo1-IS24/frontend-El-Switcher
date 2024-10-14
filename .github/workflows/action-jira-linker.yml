@@ -41,7 +41,7 @@ jobs:
     - name: Update Jira Ticket
       run: |
         echo "Updating Jira Ticket with comments from PR..."
-        COMMENTS=$(echo '${{ steps.fetch-comments.outputs.data }}' | jq -r '.[] | "\(.user.login): \(.body)"' | jq -sRr @json)
+        COMMENTS=$(echo '${{ steps.fetch-comments.outputs.data }}' | jq -r '.[] | "**\(.user.login):** \(.body)"' | jq -sRr @json)
         curl --request POST \
           --url "https://ingsoft1grupo1.atlassian.net/rest/api/3/issue/${{ env.TICKET_ID }}/comment" \
           --user '${{ secrets.JIRA_USER }}:${{ secrets.JIRA_TOKEN }}' \
