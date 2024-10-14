@@ -42,25 +42,30 @@ jobs:
       run: |
         echo "Updating Jira Ticket with comments from PR..."
         COMMENTS=$(echo '${{ steps.fetch-comments.outputs.data }}' | jq -r '.[].body')
-        COMMENT_BODY=""
         for COMMENT in $COMMENTS; do
           ESCAPED_COMMENT=$(echo "$COMMENT" | jq -sRr @json)
-          COMMENT_BODY="$COMMENT_BODY{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": $ESCAPED_COMMENT}]},"
+          curl --request POST \
+            --url "https://ingsoft1grupo1.atlassian.net/rest/api/3/issue/${{ env.TICKET_ID }}/comment" \
+            --user 'victor.diaz.jauregui@mi.unc.edu.ar:${{ secrets.JIRA_TOKEN }}' \
+            --header 'Accept: application/json' \
+            --header 'Content-Type: application/json' \
+            --data '{
+              "body": {
+                "type": "doc",
+                "version": 1,
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": '"$ESCAPED_COMMENT"'
+                      }
+                    ]
+                  }
+                ]
+              }
+            }'
         done
-        COMMENT_BODY=${COMMENT_BODY%,} # Eliminar la última coma
-        curl --request POST \
-          --url "https://ingsoft1grupo1.atlassian.net/rest/api/3/issue/${{ env.TICKET_ID }}/comment" \
-          --user 'victor.diaz.jauregui@mi.unc.edu.ar:${{ secrets.JIRA_TOKEN }}' \
-          --header 'Accept: application/json' \
-          --header 'Content-Type: application/json' \
-          --data '{
-            "body": {
-              "type": "doc",
-              "version": 1,
-              "content": [
-                '"$COMMENT_BODY"'
-              ]
-            }
-          }'
       env:
         JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
