@@ -7,6 +7,6 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: './src/testsSetup.js',
-    silent: true // Disable console.log output
+    silent: true, // Disable console.log output
   },
 });

@@ -30,7 +30,9 @@ describe('NotFoundPage', () => {
   it('renders the button with correct text and class', () => {
     const button = screen.getByText('Ir al inicio');
     expect(button).toBeInTheDocument();
-    expect(button).toHaveClass('px-4 py-2 bg-black text-white font-medium rounded border border-transparent hover:bg-gray-800');
+    expect(button).toHaveClass(
+      'px-4 py-2 bg-black text-white font-medium rounded border border-transparent hover:bg-gray-800'
+    );
   });
 
   it('calls redirectToHomePage when the button is clicked', () => {
