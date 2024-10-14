@@ -41,7 +41,7 @@ jobs:
     - name: Update Jira Ticket
       run: |
         echo "Updating Jira Ticket with comments from PR..."
-        COMMENTS=$(echo '${{ steps.fetch-comments.outputs.data }}' | jq -c '.[] | .body')
+        COMMENTS=$(echo '${{ steps.fetch-comments.outputs.data }}' | jq -r '.[] | .body')
         for COMMENT in $COMMENTS; do
           ESCAPED_COMMENT=$(echo "$COMMENT" | jq -sRr @json)
           curl --request POST \
