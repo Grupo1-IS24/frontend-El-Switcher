@@ -86,106 +86,46 @@ describe('playMovementCard Service', () => {
   });
 
   describe('when called with invalid arguments', () => {
-    it('should throw an error if a colorCardId is a string', async () => {
-      const invalidArguments = {
-        ...validArguments,
-        colorCardId1: '4', // Should be a number
-      };
+    const invalidCases = [
+      {
+        description: 'a colorCardId is a string',
+        args: { ...validArguments, colorCardId1: '4' },
+      },
+      {
+        description: 'a colorCardId is missing',
+        args: { ...validArguments, colorCardId2: undefined },
+      },
+      {
+        description: 'a colorCardId is negative',
+        args: { ...validArguments, colorCardId1: -4 },
+      },
+      {
+        description: 'movementCardId is a string',
+        args: { ...validArguments, movementCardId: '3' },
+      },
+      {
+        description: 'movementCardId is missing',
+        args: { ...validArguments, movementCardId: undefined },
+      },
+      {
+        description: 'movementCardId is negative',
+        args: { ...validArguments, movementCardId: -3 },
+      },
+    ];
 
-      await expect(
-        playMovementCard(
-          invalidArguments.gameId,
-          invalidArguments.playerId,
-          invalidArguments.movementCardId,
-          invalidArguments.colorCardId1,
-          invalidArguments.colorCardId2
-        )
-      ).rejects.toThrow('Datos de movimiento inválidos');
-    });
-
-    it('should throw an error if a colorCardId is missing', async () => {
-      const invalidArguments = {
-        ...validArguments,
-        colorCardId2: undefined, // Should be present
-      };
-
-      await expect(
-        playMovementCard(
-          invalidArguments.gameId,
-          invalidArguments.playerId,
-          invalidArguments.movementCardId,
-          invalidArguments.colorCardId1,
-          invalidArguments.colorCardId2
-        )
-      ).rejects.toThrow('Datos de movimiento inválidos');
-    });
-
-    it('should throw an error if a colorCardId is negative', async () => {
-      const invalidArguments = {
-        ...validArguments,
-        colorCardId1: -4, // Should be nonnegative
-      };
-
-      await expect(
-        playMovementCard(
-          invalidArguments.gameId,
-          invalidArguments.playerId,
-          invalidArguments.movementCardId,
-          invalidArguments.colorCardId1,
-          invalidArguments.colorCardId2
-        )
-      ).rejects.toThrow('Datos de movimiento inválidos');
-    });
-
-    it('should throw an error if movementCardId is a string', async () => {
-      const invalidArguments = {
-        ...validArguments,
-        movementCardId: '3', // Should be a number
-      };
-
-      await expect(
-        playMovementCard(
-          invalidArguments.gameId,
-          invalidArguments.playerId,
-          invalidArguments.movementCardId,
-          invalidArguments.colorCardId1,
-          invalidArguments.colorCardId2
-        )
-      ).rejects.toThrow('Datos de movimiento inválidos');
-    });
-
-    it('should throw an error if movementCardId is missing', async () => {
-      const invalidArguments = {
-        ...validArguments,
-        movementCardId: undefined, // Should be present
-      };
-
-      await expect(
-        playMovementCard(
-          invalidArguments.gameId,
-          invalidArguments.playerId,
-          invalidArguments.movementCardId,
-          invalidArguments.colorCardId1,
-          invalidArguments.colorCardId2
-        )
-      ).rejects.toThrow('Datos de movimiento inválidos');
-    });
-
-    it('should throw an error if movementCardId is negative', async () => {
-      const invalidArguments = {
-        ...validArguments,
-        movementCardId: -3, // Should be nonnegative
-      };
-
-      await expect(
-        playMovementCard(
-          invalidArguments.gameId,
-          invalidArguments.playerId,
-          invalidArguments.movementCardId,
-          invalidArguments.colorCardId1,
-          invalidArguments.colorCardId2
-        )
-      ).rejects.toThrow('Datos de movimiento inválidos');
-    });
+    it.each(invalidCases)(
+      'should throw an error if $description',
+      async ({ args }) => {
+        await expect(
+          playMovementCard(
+            args.gameId,
+            args.playerId,
+            args.movementCardId,
+            args.colorCardId1,
+            args.colorCardId2
+          )
+        ).rejects.toThrow('Datos de movimiento inválidos');
+      }
+    );
   });
 });
