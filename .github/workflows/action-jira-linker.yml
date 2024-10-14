@@ -3,9 +3,7 @@ name: Update Jira Ticket
 
 on:
   pull_request:
-    types: [opened, edited, synchronize]
-  schedule:
-    - cron: '*/1 * * * *' # Ejecutar cada 1 minuto
+    types: [closed]
 
 permissions:
   contents: write
@@ -14,6 +12,7 @@ permissions:
 
 jobs:
   update-jira:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -41,7 +40,7 @@ jobs:
     - name: Update Jira Ticket
       run: |
         echo "Updating Jira Ticket with comments from PR..."
-        COMMENTS=$(echo '${{ steps.fetch-comments.outputs.data }}' | jq -r '.[] | "**\(.user.login):** \(.body)"' | jq -sRr @json)
+        COMMENTS=$(echo '${{ steps.fetch-comments.outputs.data }}' | jq -r '.[] | "\(.user.login): \(.body)"' | jq -sRr @json)
         curl --request POST \
           --url "https://ingsoft1grupo1.atlassian.net/rest/api/3/issue/${{ env.TICKET_ID }}/comment" \
           --user '${{ secrets.JIRA_USER }}:${{ secrets.JIRA_TOKEN }}' \
