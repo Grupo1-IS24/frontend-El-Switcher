@@ -48,9 +48,13 @@ export const playMovementCard = async (
 
     if (axios.isAxiosError(error)) {
       console.error('Error jugando carta de movimiento:', error);
-      throw new Error(error.response.data.detail);
+      throw new Error(
+        error.response?.data?.detail ??
+          'Error desconocido en la respuesta del servidor'
+      );
     }
 
+    console.error('Error inesperado jugando carta de movimiento:', error);
     throw new Error('Error inesperado jugando carta de movimiento');
   }
 };
