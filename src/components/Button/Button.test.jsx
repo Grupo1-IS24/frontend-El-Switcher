@@ -56,6 +56,11 @@ describe('Button', () => {
       class:
         'w-[16rem] h-[4.375rem] text-2xl border-2 border-[#000000] bg-[#000000] text-[#ffffff] hover:bg-transparent hover:text-[#000000]',
     },
+    {
+      style: 'gameButton_cancelMovement',
+      class:
+        'w-[16rem] h-[4.375rem] text-2xl border-2 border-[#ff0000] bg-[#ff0000] text-[#ffffff] hover:bg-transparent hover:text-[#ff0000]',
+    },
   ];
 
   it('debería renderizar un botón con el texto "Click me"', () => {
