@@ -41,28 +41,31 @@ jobs:
     - name: Update Jira Ticket
       run: |
         echo "Updating Jira Ticket with comments from PR..."
-        COMMENTS=$(echo '${{ steps.fetch-comments.outputs.data }}' | jq -r '.[] | .body' | jq -sRr @json)
-        curl --request POST \
-          --url "https://ingsoft1grupo1.atlassian.net/rest/api/3/issue/${{ env.TICKET_ID }}/comment" \
-          --user 'victor.diaz.jauregui@mi.unc.edu.ar:${{ secrets.JIRA_TOKEN }}' \
-          --header 'Accept: application/json' \
-          --header 'Content-Type: application/json' \
-          --data '{
-            "body": {
-              "type": "doc",
-              "version": 1,
-              "content": [
-                {
-                  "type": "paragraph",
-                  "content": [
-                    {
-                      "type": "text",
-                      "text": '"$COMMENTS"'
-                    }
-                  ]
-                }
-              ]
-            }
-          }'
+        COMMENTS=$(echo '${{ steps.fetch-comments.outputs.data }}' | jq -r '.[] | .body')
+        for COMMENT in $COMMENTS; do
+          ESCAPED_COMMENT=$(echo "$COMMENT" | jq -sRr @json)
+          curl --request POST \
+            --url "https://ingsoft1grupo1.atlassian.net/rest/api/3/issue/${{ env.TICKET_ID }}/comment" \
+            --user 'victor.diaz.jauregui@mi.unc.edu.ar:${{ secrets.JIRA_TOKEN }}' \
+            --header 'Accept: application/json' \
+            --header 'Content-Type: application/json' \
+            --data '{
+              "body": {
+                "type": "doc",
+                "version": 1,
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": '"$ESCAPED_COMMENT"'
+                      }
+                    ]
+                  }
+                ]
+              }
+            }'
+        done
       env:
         JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
