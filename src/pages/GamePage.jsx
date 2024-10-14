@@ -19,7 +19,7 @@ const GamePage = () => {
       <PlayMovementLogicProvider>
         <DisplayPlayers listOfPlayers={listOfPlayers} />
         <Board board={board} />
-        <div className='absolute flex flex-col gap-3 top-96 left-24'>
+        <div className='absolute flex flex-col gap-3 top-96 left-24 z-[21]'>
           <EndTurnButton />
           <PlayMovementButton />
           <CancelMovementButton />
