@@ -22,17 +22,21 @@ describe('playMovementCard Service', () => {
     colorCardId2: 5,
   };
 
+  const callPlayMovementCard = async (args) => {
+    return await playMovementCard(
+      args.gameId,
+      args.playerId,
+      args.movementCardId,
+      args.colorCardId1,
+      args.colorCardId2
+    );
+  };
+
   describe('when called with valid arguments', () => {
     it('should call the API with the correct endpoint and body', async () => {
       apiService.post.mockResolvedValue({});
 
-      await playMovementCard(
-        validArguments.gameId,
-        validArguments.playerId,
-        validArguments.movementCardId,
-        validArguments.colorCardId1,
-        validArguments.colorCardId2
-      );
+      await callPlayMovementCard(validArguments);
 
       expect(apiService.post).toHaveBeenCalledWith(
         `/game/${validArguments.gameId}/move/${validArguments.playerId}`,
@@ -48,19 +52,12 @@ describe('playMovementCard Service', () => {
       apiService.post.mockResolvedValue({});
 
       await expect(
-        playMovementCard(
-          validArguments.gameId,
-          validArguments.playerId,
-          validArguments.movementCardId,
-          validArguments.colorCardId1,
-          validArguments.colorCardId2
-        )
+        callPlayMovementCard(validArguments)
       ).resolves.toBeUndefined();
     });
 
     it('should throw an error if the API call fails', async () => {
       const detailMessage = 'Mocked error message';
-
       const axiosError = {
         isAxiosError: true, // Mock the error to be an Axios error
         response: {
@@ -73,15 +70,9 @@ describe('playMovementCard Service', () => {
 
       apiService.post.mockRejectedValue(axiosError);
 
-      await expect(
-        playMovementCard(
-          validArguments.gameId,
-          validArguments.playerId,
-          validArguments.movementCardId,
-          validArguments.colorCardId1,
-          validArguments.colorCardId2
-        )
-      ).rejects.toThrow(detailMessage);
+      await expect(callPlayMovementCard(validArguments)).rejects.toThrow(
+        detailMessage
+      );
     });
   });
 
@@ -116,15 +107,9 @@ describe('playMovementCard Service', () => {
     it.each(invalidCases)(
       'should throw an error if $description',
       async ({ args }) => {
-        await expect(
-          playMovementCard(
-            args.gameId,
-            args.playerId,
-            args.movementCardId,
-            args.colorCardId1,
-            args.colorCardId2
-          )
-        ).rejects.toThrow('Datos de movimiento inválidos');
+        await expect(callPlayMovementCard(args)).rejects.toThrow(
+          'Datos de movimiento inválidos'
+        );
       }
     );
   });
