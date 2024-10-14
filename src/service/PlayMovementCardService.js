@@ -4,9 +4,9 @@ import { z } from 'zod';
 
 // Schema to validate the data of the movement card to play.
 const playMovementCardSchema = z.object({
-  movementCardId: z.number().int(),
-  squarePieceId1: z.number().int(),
-  squarePieceId2: z.number().int(),
+  movementCardId: z.number().int().nonnegative(),
+  squarePieceId1: z.number().int().nonnegative(),
+  squarePieceId2: z.number().int().nonnegative(),
 });
 
 /**
