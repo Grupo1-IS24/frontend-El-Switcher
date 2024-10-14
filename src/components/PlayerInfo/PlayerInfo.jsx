@@ -3,9 +3,11 @@ import FigureCardHand from '../FigureCardHand/FigureCardHand';
 import MovCardHand from '../MovCardHand/MovCardHand';
 import { PlayerContext } from '../../contexts/PlayerProvider';
 import BackMovCardHand from '../BackMovCardHand/BackMovCardHand';
+import useOpponentMovCards from '../../hooks/useOpponentMovCards';
 
 const PlayerInfo = ({ playerName, playerId, index, isTurn }) => {
   const { playerID: currentPlayerID } = useContext(PlayerContext);
+  const { getTotalMovCardsForOpponent } = useOpponentMovCards();
 
   const positionStyles = [
     'bottom-10 left-16', // corner bottom left
@@ -19,7 +21,9 @@ const PlayerInfo = ({ playerName, playerId, index, isTurn }) => {
       {currentPlayerID === playerId ? (
         <MovCardHand />
       ) : (
-        <BackMovCardHand totalMovCards={3} /> // WARNING: Hardcoded value
+        <BackMovCardHand
+          totalMovCards={getTotalMovCardsForOpponent(playerId)}
+        />
       )}
       <FigureCardHand playerId={playerId} />
       <p className='lekton-bold text-white text-lg'>
