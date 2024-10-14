@@ -44,7 +44,8 @@ jobs:
         COMMENTS=$(echo '${{ steps.fetch-comments.outputs.data }}' | jq -r '.[].body')
         COMMENT_BODY=""
         for COMMENT in $COMMENTS; do
-          COMMENT_BODY="$COMMENT_BODY{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": \"$COMMENT\"}]},"
+          ESCAPED_COMMENT=$(echo "$COMMENT" | jq -sRr @json)
+          COMMENT_BODY="$COMMENT_BODY{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\", \"text\": $ESCAPED_COMMENT}]},"
         done
         COMMENT_BODY=${COMMENT_BODY%,} # Eliminar la última coma
         curl --request POST \
