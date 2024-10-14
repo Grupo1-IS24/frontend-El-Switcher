@@ -4,6 +4,8 @@ name: Update Jira Ticket
 on:
   pull_request:
     types: [opened, edited, synchronize]
+  schedule:
+    - cron: '*/1 * * * *' # Ejecutar cada 1 minuto
 
 permissions:
   contents: write
