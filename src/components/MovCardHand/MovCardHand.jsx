@@ -17,7 +17,7 @@ const MovCardHand = () => {
           key={movementCard.movementcardId}
           movement={movementCard.moveType}
           isSelected={isSelectedMovementCard(movementCard)}
-          disabled={!canSelectMovementCard()}
+          disabled={!canSelectMovementCard(movementCard)}
           onClick={() => selectMovementCard(movementCard)}
           isPlayed={isMovementCardPlayed(movementCard)}
         />

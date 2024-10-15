@@ -1,11 +1,13 @@
 import { createContext, useCallback, useEffect, useState } from 'react';
 import usePlayerTurn from '../hooks/usePlayerTurn';
 import { isEqualColorCard } from '../utils/isEqualColorCard';
+import usePlayedMovCards from '../hooks/usePlayedMovCards';
 
 export const PlayMovementLogicContext = createContext();
 
 const PlayMovementLogicProvider = ({ children }) => {
   const { isCurrentPlayerTurn } = usePlayerTurn();
+  const { isMovementCardPlayed } = usePlayedMovCards();
 
   const [selectedMovementCard, setSelectedMovementCard] = useState(null);
   const [selectedColorCards, setSelectedColorCards] = useState([]);
@@ -29,8 +31,9 @@ const PlayMovementLogicProvider = ({ children }) => {
    * @returns {boolean} True if the player can select a movement card, otherwise false.
    */
   const canSelectMovementCard = useCallback(
-    () => isCurrentPlayerTurn(), // Only if it's the player's turn. In the future, we can add more conditions.
-    [isCurrentPlayerTurn]
+    (movementCard) =>
+      isCurrentPlayerTurn() && !isMovementCardPlayed(movementCard),
+    [isCurrentPlayerTurn, isMovementCardPlayed]
   );
 
   /**
