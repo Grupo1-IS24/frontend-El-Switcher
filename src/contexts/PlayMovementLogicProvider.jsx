@@ -7,8 +7,11 @@ export const PlayMovementLogicContext = createContext();
 
 const PlayMovementLogicProvider = ({ children }) => {
   const { isCurrentPlayerTurn } = usePlayerTurn();
-  const { isMovementCardPlayed, hasAnyMovementCardPlayed } =
-    usePlayedMovCards();
+  const {
+    isMovementCardPlayed,
+    hasAnyMovementCardPlayed,
+    areAllMovementCardsPlayed,
+  } = usePlayedMovCards();
 
   const [selectedMovementCard, setSelectedMovementCard] = useState(null);
   const [selectedColorCards, setSelectedColorCards] = useState([]);
@@ -78,6 +81,7 @@ const PlayMovementLogicProvider = ({ children }) => {
   const canSelectColorCard = useCallback(
     (colorCard) =>
       isCurrentPlayerTurn() &&
+      !areAllMovementCardsPlayed() &&
       selectedMovementCard !== null &&
       (selectedColorCards.length < 2 || isSelectedColorCard(colorCard)),
     [
@@ -85,6 +89,7 @@ const PlayMovementLogicProvider = ({ children }) => {
       selectedMovementCard,
       isSelectedColorCard,
       isCurrentPlayerTurn,
+      areAllMovementCardsPlayed,
     ]
   );
 
@@ -126,9 +131,15 @@ const PlayMovementLogicProvider = ({ children }) => {
   const canPlayMovement = useCallback(
     () =>
       isCurrentPlayerTurn() &&
+      !areAllMovementCardsPlayed() &&
       selectedMovementCard !== null &&
       selectedColorCards.length === 2,
-    [selectedMovementCard, selectedColorCards, isCurrentPlayerTurn]
+    [
+      selectedMovementCard,
+      selectedColorCards,
+      isCurrentPlayerTurn,
+      areAllMovementCardsPlayed,
+    ]
   );
 
   const canCancelMovement = useCallback(
