@@ -144,7 +144,7 @@ const PlayMovementLogicProvider = ({ children }) => {
 
   /**
    * Determines if the player can cancel a movement.
-   * 
+   *
    * @returns {boolean} True if the player can cancel a movement, otherwise false.
    */
   const canCancelMovement = useCallback(
