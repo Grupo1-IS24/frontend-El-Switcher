@@ -7,7 +7,8 @@ export const PlayMovementLogicContext = createContext();
 
 const PlayMovementLogicProvider = ({ children }) => {
   const { isCurrentPlayerTurn } = usePlayerTurn();
-  const { isMovementCardPlayed } = usePlayedMovCards();
+  const { isMovementCardPlayed, hasAnyMovementCardPlayed } =
+    usePlayedMovCards();
 
   const [selectedMovementCard, setSelectedMovementCard] = useState(null);
   const [selectedColorCards, setSelectedColorCards] = useState([]);
@@ -130,6 +131,11 @@ const PlayMovementLogicProvider = ({ children }) => {
     [selectedMovementCard, selectedColorCards, isCurrentPlayerTurn]
   );
 
+  const canCancelMovement = useCallback(
+    () => isCurrentPlayerTurn() && hasAnyMovementCardPlayed(),
+    [isCurrentPlayerTurn, hasAnyMovementCardPlayed]
+  );
+
   useEffect(() => {
     // Reset logic if it's not the player's turn
     if (!isCurrentPlayerTurn()) {
@@ -149,6 +155,7 @@ const PlayMovementLogicProvider = ({ children }) => {
     isSelectedColorCard,
     resetSelectedCards,
     canPlayMovement,
+    canCancelMovement,
   };
 
   return (

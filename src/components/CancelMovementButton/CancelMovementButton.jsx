@@ -1,12 +1,13 @@
+import { useContext } from 'react';
 import Button from '../Button/Button';
-import usePlayerTurn from '../../hooks/usePlayerTurn';
+import { PlayMovementLogicContext } from '../../contexts/PlayMovementLogicProvider';
 
 const CancelMovementButton = () => {
-  const { isCurrentPlayerTurn } = usePlayerTurn();
+  const { canCancelMovement } = useContext(PlayMovementLogicContext);
 
   return (
     <>
-      {isCurrentPlayerTurn() && (
+      {canCancelMovement() && (
         <Button
           text={'Cancelar movimiento'}
           style={'gameButton_cancelMovement'}
