@@ -1,9 +1,9 @@
 import { useContext } from 'react';
-import { PlayCardLogicContext } from '../../contexts/PlayCardLogicProvider';
 import Button from '../Button/Button';
 import { playMovementCard } from '../../service/PlayMovementCardService';
 import { PlayerContext } from '../../contexts/PlayerProvider';
 import { useParams } from 'react-router-dom';
+import usePlayMovementLogic from '../../hooks/usePlayMovementLogic';
 
 const PlayMovementButton = () => {
   const { gameId } = useParams();
@@ -12,8 +12,8 @@ const PlayMovementButton = () => {
     canPlayMovement,
     selectedMovementCard,
     selectedColorCards,
-    resetSelectedCards,
-  } = useContext(PlayCardLogicContext);
+    resetMovementCards,
+  } = usePlayMovementLogic();
 
   const handleOnPress = async () => {
     try {
@@ -25,7 +25,7 @@ const PlayMovementButton = () => {
         selectedColorCards[1].squarePieceId
       );
 
-      resetSelectedCards();
+      resetMovementCards();
     } catch (error) {
       alert(`Error jugando carta de movimiento: ${error.message}`);
     }

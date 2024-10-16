@@ -1,10 +1,9 @@
-import { useContext } from 'react';
-import { PlayCardLogicContext } from '../../contexts/PlayCardLogicProvider';
 import ColorCard from '../ColorCard/ColorCard';
+import usePlayMovementLogic from '../../hooks/usePlayMovementLogic';
 
 const Board = ({ board }) => {
   const { selectColorCard, canSelectColorCard, isSelectedColorCard } =
-    useContext(PlayCardLogicContext);
+    usePlayMovementLogic();
 
   return (
     <div className='fixed h-screen w-screen'>

@@ -1,13 +1,13 @@
 import MovementCard from '../MovementCard/MovementCard';
 import { useContext } from 'react';
 import { GameContext } from '../../contexts/GameProvider';
-import { PlayCardLogicContext } from '../../contexts/PlayCardLogicProvider';
 import usePlayedMovCards from '../../hooks/usePlayedMovCards';
+import usePlayMovementLogic from '../../hooks/usePlayMovementLogic';
 
 const MovCardHand = () => {
   const { movementCards } = useContext(GameContext);
   const { selectMovementCard, isSelectedMovementCard, canSelectMovementCard } =
-    useContext(PlayCardLogicContext);
+    usePlayMovementLogic();
   const { isMovementCardPlayed } = usePlayedMovCards();
 
   return (
