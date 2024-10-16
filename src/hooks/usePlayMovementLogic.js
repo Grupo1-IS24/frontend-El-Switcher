@@ -58,7 +58,7 @@ const usePlayMovementLogic = () => {
       }
       setSelectedColorCards([]); // Deselect the color cards
     },
-    [isSelectedMovementCard]
+    [isSelectedMovementCard, setSelectedMovementCard, setSelectedColorCards]
   );
 
   /**
@@ -115,7 +115,7 @@ const usePlayMovementLogic = () => {
         setSelectedColorCards((prev) => [...prev, colorCard]);
       }
     },
-    [selectedColorCards, isSelectedColorCard]
+    [selectedColorCards, isSelectedColorCard, setSelectedColorCards]
   );
 
   /**
