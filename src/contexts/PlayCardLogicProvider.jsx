@@ -3,9 +3,9 @@ import usePlayerTurn from '../hooks/usePlayerTurn';
 import { isEqualColorCard } from '../utils/isEqualColorCard';
 import usePlayedMovCards from '../hooks/usePlayedMovCards';
 
-export const PlayMovementLogicContext = createContext();
+export const PlayCardLogicContext = createContext();
 
-const PlayMovementLogicProvider = ({ children }) => {
+const PlayCardLogicProvider = ({ children }) => {
   const { isCurrentPlayerTurn } = usePlayerTurn();
   const {
     isMovementCardPlayed,
@@ -175,10 +175,10 @@ const PlayMovementLogicProvider = ({ children }) => {
   };
 
   return (
-    <PlayMovementLogicContext.Provider value={providedState}>
+    <PlayCardLogicContext.Provider value={providedState}>
       {children}
-    </PlayMovementLogicContext.Provider>
+    </PlayCardLogicContext.Provider>
   );
 };
 
-export default PlayMovementLogicProvider;
+export default PlayCardLogicProvider;

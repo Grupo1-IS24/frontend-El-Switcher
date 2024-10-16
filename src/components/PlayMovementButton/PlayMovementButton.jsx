@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { PlayMovementLogicContext } from '../../contexts/PlayMovementLogicProvider';
+import { PlayCardLogicContext } from '../../contexts/PlayCardLogicProvider';
 import Button from '../Button/Button';
 import { playMovementCard } from '../../service/PlayMovementCardService';
 import { PlayerContext } from '../../contexts/PlayerProvider';
@@ -13,7 +13,7 @@ const PlayMovementButton = () => {
     selectedMovementCard,
     selectedColorCards,
     resetSelectedCards,
-  } = useContext(PlayMovementLogicContext);
+  } = useContext(PlayCardLogicContext);
 
   const handleOnPress = async () => {
     try {

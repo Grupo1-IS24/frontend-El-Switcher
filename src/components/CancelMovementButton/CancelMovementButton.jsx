@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 import Button from '../Button/Button';
-import { PlayMovementLogicContext } from '../../contexts/PlayMovementLogicProvider';
+import { PlayCardLogicContext } from '../../contexts/PlayCardLogicProvider';
 
 const CancelMovementButton = () => {
-  const { canCancelMovement } = useContext(PlayMovementLogicContext);
+  const { canCancelMovement } = useContext(PlayCardLogicContext);
 
   return (
     <>

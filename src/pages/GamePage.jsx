@@ -6,7 +6,7 @@ import LeaveButton from '../components/LeaveButton/LeaveButton';
 import EndTurnButton from '../components/EndTurnButton/EndTurnButton';
 import { useContext } from 'react';
 import { GameContext } from '../contexts/GameProvider';
-import PlayMovementLogicProvider from '../contexts/PlayMovementLogicProvider';
+import PlayCardLogicProvider from '../contexts/PlayCardLogicProvider';
 import PlayMovementButton from '../components/PlayMovementButton/PlayMovementButton';
 import CancelMovementButton from '../components/CancelMovementButton/CancelMovementButton';
 
@@ -16,7 +16,7 @@ const GamePage = () => {
   return (
     <>
       <BgOverlay />
-      <PlayMovementLogicProvider>
+      <PlayCardLogicProvider>
         <DisplayPlayers listOfPlayers={listOfPlayers} />
         <Board board={board} />
         <div className='absolute flex flex-col gap-3 top-[330px] left-24 z-[21]'>
@@ -24,7 +24,7 @@ const GamePage = () => {
           <PlayMovementButton />
           <CancelMovementButton />
         </div>
-      </PlayMovementLogicProvider>
+      </PlayCardLogicProvider>
       {winnerInfo !== null && (
         <WinnerMessage winnerName={winnerInfo.nameWinner} />
       )}
