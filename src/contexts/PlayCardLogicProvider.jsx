@@ -8,6 +8,8 @@ const PlayCardLogicProvider = ({ children }) => {
 
   const [selectedMovementCard, setSelectedMovementCard] = useState(null);
   const [selectedColorCards, setSelectedColorCards] = useState([]);
+  const [selectedFigureCard, setSelectedFigureCard] = useState(null);
+  const [selectedFigureColorCards, setSelectedFigureColorCards] = useState([]);
 
   /**
    * Resets the movement logic, deselecting any selected movement and color cards.
@@ -17,20 +19,35 @@ const PlayCardLogicProvider = ({ children }) => {
     setSelectedColorCards([]);
   }, []);
 
+  const resetFigureCards = useCallback(() => {
+    setSelectedFigureCard(null);
+    setSelectedFigureColorCards([]);
+  }, []);
+
+  const resetAllCards = useCallback(() => {
+    resetMovementCards();
+    resetFigureCards();
+  }, [resetMovementCards, resetFigureCards]);
+
   useEffect(() => {
     // Reset logic if it's not the player's turn
     if (!isCurrentPlayerTurn()) {
-      resetMovementCards();
+      resetAllCards();
     }
-  }, [isCurrentPlayerTurn, resetMovementCards]);
+  }, [isCurrentPlayerTurn, resetAllCards]);
 
   // The provided state for the context.
   const providedState = {
     selectedMovementCard,
     selectedColorCards,
+    selectedFigureCard,
+    selectedFigureColorCards,
     setSelectedMovementCard,
     setSelectedColorCards,
+    setSelectedFigureCard,
+    setSelectedFigureColorCards,
     resetMovementCards,
+    resetFigureCards,
   };
 
   return (
