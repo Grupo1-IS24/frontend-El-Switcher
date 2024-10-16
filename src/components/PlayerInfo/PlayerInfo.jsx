@@ -21,15 +21,13 @@ const PlayerInfo = ({ playerName, playerId, index, isTurn }) => {
 
   return (
     <div className={`absolute ${positionStyles[index]} z-20 p-2`}>
-      {
-        currentPlayerID === playerId && (
-          <div className='flex flex-col-reverse gap-3 mb-4'>
-            <EndTurnButton />
-            <PlayMovementButton />
-            <CancelMovementButton />
-          </div>
-        )
-      }
+      {currentPlayerID === playerId && (
+        <div className='flex flex-col-reverse gap-3 mb-4'>
+          <EndTurnButton />
+          <PlayMovementButton />
+          <CancelMovementButton />
+        </div>
+      )}
       {currentPlayerID === playerId ? (
         <MovCardHand />
       ) : (

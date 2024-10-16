@@ -10,8 +10,8 @@ const Board = ({ board }) => {
   const { foundFigures } = useContext(GameContext);
 
   const isPartOfFigure = (index) => {
-    return foundFigures.some(figure =>
-      figure.some(chip => chip.row * 6 + chip.col === index)
+    return foundFigures.some((figure) =>
+      figure.some((chip) => chip.row * 6 + chip.col === index)
     );
   };
 
