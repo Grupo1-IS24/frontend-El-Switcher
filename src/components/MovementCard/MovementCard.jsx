@@ -3,6 +3,7 @@ const MovementCard = ({
   isSelected = false,
   disabled = true,
   onClick = null,
+  isPlayed = false,
 }) => {
   const assets = '/src/assets/MovementCards/';
   const isNumberValid =
@@ -22,7 +23,11 @@ const MovementCard = ({
       disabled={disabled}
       onClick={onClick}
     >
-      <img src={path} alt={alt} className='w-[80px] h-[140px]' />
+      <img
+        src={path}
+        alt={alt}
+        className={`w-[80px] h-[140px] ${isPlayed ? 'grayscale' : ''}`}
+      />
     </button>
   );
 };

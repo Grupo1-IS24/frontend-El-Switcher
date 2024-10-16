@@ -1,11 +1,17 @@
 import { createContext, useCallback, useEffect, useState } from 'react';
 import usePlayerTurn from '../hooks/usePlayerTurn';
 import { isEqualColorCard } from '../utils/isEqualColorCard';
+import usePlayedMovCards from '../hooks/usePlayedMovCards';
 
 export const PlayMovementLogicContext = createContext();
 
 const PlayMovementLogicProvider = ({ children }) => {
   const { isCurrentPlayerTurn } = usePlayerTurn();
+  const {
+    isMovementCardPlayed,
+    hasAnyMovementCardPlayed,
+    areAllMovementCardsPlayed,
+  } = usePlayedMovCards();
 
   const [selectedMovementCard, setSelectedMovementCard] = useState(null);
   const [selectedColorCards, setSelectedColorCards] = useState([]);
@@ -29,8 +35,9 @@ const PlayMovementLogicProvider = ({ children }) => {
    * @returns {boolean} True if the player can select a movement card, otherwise false.
    */
   const canSelectMovementCard = useCallback(
-    () => isCurrentPlayerTurn(), // Only if it's the player's turn. In the future, we can add more conditions.
-    [isCurrentPlayerTurn]
+    (movementCard) =>
+      isCurrentPlayerTurn() && !isMovementCardPlayed(movementCard),
+    [isCurrentPlayerTurn, isMovementCardPlayed]
   );
 
   /**
@@ -74,6 +81,7 @@ const PlayMovementLogicProvider = ({ children }) => {
   const canSelectColorCard = useCallback(
     (colorCard) =>
       isCurrentPlayerTurn() &&
+      !areAllMovementCardsPlayed() &&
       selectedMovementCard !== null &&
       (selectedColorCards.length < 2 || isSelectedColorCard(colorCard)),
     [
@@ -81,6 +89,7 @@ const PlayMovementLogicProvider = ({ children }) => {
       selectedMovementCard,
       isSelectedColorCard,
       isCurrentPlayerTurn,
+      areAllMovementCardsPlayed,
     ]
   );
 
@@ -122,9 +131,25 @@ const PlayMovementLogicProvider = ({ children }) => {
   const canPlayMovement = useCallback(
     () =>
       isCurrentPlayerTurn() &&
+      !areAllMovementCardsPlayed() &&
       selectedMovementCard !== null &&
       selectedColorCards.length === 2,
-    [selectedMovementCard, selectedColorCards, isCurrentPlayerTurn]
+    [
+      selectedMovementCard,
+      selectedColorCards,
+      isCurrentPlayerTurn,
+      areAllMovementCardsPlayed,
+    ]
+  );
+
+  /**
+   * Determines if the player can cancel a movement.
+   *
+   * @returns {boolean} True if the player can cancel a movement, otherwise false.
+   */
+  const canCancelMovement = useCallback(
+    () => isCurrentPlayerTurn() && hasAnyMovementCardPlayed(),
+    [isCurrentPlayerTurn, hasAnyMovementCardPlayed]
   );
 
   useEffect(() => {
@@ -146,6 +171,7 @@ const PlayMovementLogicProvider = ({ children }) => {
     isSelectedColorCard,
     resetSelectedCards,
     canPlayMovement,
+    canCancelMovement,
   };
 
   return (
