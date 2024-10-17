@@ -3,12 +3,12 @@ import { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { PlayerContext } from '../../contexts/PlayerProvider';
 import { cancelMovement } from '../../service/CancelMovementService';
-import { PlayMovementLogicContext } from '../../contexts/PlayMovementLogicProvider';
+import usePlayMovementLogic from '../../hooks/usePlayMovementLogic';
 
 const CancelMovementButton = () => {
   const { gameId } = useParams();
   const { playerID } = useContext(PlayerContext);
-  const { canCancelMovement } = useContext(PlayMovementLogicContext);
+  const { canCancelMovement } = usePlayMovementLogic();
 
   const handleCancelMovement = async () => {
     try {
