@@ -8,6 +8,7 @@ import OpponentFigureCardHand from '../OpponentFigureCardHand/OpponentFigureCard
 import PlayMovementButton from '../PlayMovementButton/PlayMovementButton';
 import CancelMovementButton from '../CancelMovementButton/CancelMovementButton';
 import EndTurnButton from '../EndTurnButton/EndTurnButton';
+import PlayFigureButton from '../PlayFigureButton/PlayFigureButton';
 
 const PlayerInfo = ({ playerName, playerId, index, isTurn }) => {
   const { playerID: currentPlayerID } = useContext(PlayerContext);
@@ -26,6 +27,7 @@ const PlayerInfo = ({ playerName, playerId, index, isTurn }) => {
         <div className='flex flex-col-reverse gap-3 mb-4'>
           <EndTurnButton />
           <PlayMovementButton />
+          <PlayFigureButton />
           <CancelMovementButton />
         </div>
       )}

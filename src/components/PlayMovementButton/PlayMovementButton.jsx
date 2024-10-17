@@ -36,7 +36,7 @@ const PlayMovementButton = () => {
       {canPlayMovement() && (
         <Button
           text={'Jugar movimiento'}
-          style={'gameButton_playMovement'}
+          style={'gameButton_play'}
           onPress={handleOnPress}
         />
       )}
