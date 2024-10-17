@@ -11,7 +11,7 @@ const Board = ({ board }) => {
 
   const isPartOfFigure = (index) => {
     return foundFigures.some((figure) =>
-      figure.some((chip) => chip.row * 6 + chip.col === index)
+      figure.some((chip) => chip.row * 6 + chip.column === index)
     );
   };
 
