@@ -8,11 +8,12 @@ import usePlayMovementLogic from '../../hooks/usePlayMovementLogic';
 const CancelMovementButton = () => {
   const { gameId } = useParams();
   const { playerID } = useContext(PlayerContext);
-  const { canCancelMovement } = usePlayMovementLogic();
+  const { canCancelMovement, resetMovementCards } = usePlayMovementLogic();
 
   const handleCancelMovement = async () => {
     try {
       await cancelMovement(Number(gameId), playerID);
+      resetMovementCards();
     } catch (error) {
       console.error('Error cancelando movimiento:', error);
     }
