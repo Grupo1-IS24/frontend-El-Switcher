@@ -1,9 +1,16 @@
 import ColorCard from '../ColorCard/ColorCard';
 import usePlayMovementLogic from '../../hooks/usePlayMovementLogic';
+import usePlayFigureLogic from '../../hooks/usePlayFigureLogic';
 
 const Board = ({ board }) => {
   const { selectColorCard, canSelectColorCard, isSelectedColorCard } =
     usePlayMovementLogic();
+
+  const {
+    selectFigureColorCard,
+    canSelectFigureColorCard,
+    isSelectedFigureColorCard,
+  } = usePlayFigureLogic();
 
   return (
     <div className='fixed h-screen w-screen'>
@@ -13,9 +20,19 @@ const Board = ({ board }) => {
             <ColorCard
               key={index}
               color={colorCard.color}
-              onClick={() => selectColorCard(colorCard)}
-              disabled={!canSelectColorCard(colorCard)}
-              isSelected={isSelectedColorCard(colorCard)}
+              disabled={
+                !canSelectColorCard(colorCard) &&
+                !canSelectFigureColorCard(colorCard)
+              }
+              isSelected={
+                isSelectedColorCard(colorCard) ||
+                isSelectedFigureColorCard(colorCard)
+              }
+              onClick={() => {
+                if (canSelectColorCard(colorCard)) selectColorCard(colorCard);
+                else if (canSelectFigureColorCard(colorCard))
+                  selectFigureColorCard(colorCard);
+              }}
             />
           ))}
         </div>
