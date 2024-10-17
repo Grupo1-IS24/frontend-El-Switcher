@@ -2,6 +2,7 @@ import axios from 'axios';
 import { apiService } from './axiosConfig';
 import { z } from 'zod';
 
+// Schema to validate the data of the figure card to play.
 const playFigureCardSchema = z.object({
   figureCardId: z.number().int().nonnegative(),
   colorCards: z.array(
@@ -13,6 +14,16 @@ const playFigureCardSchema = z.object({
   ),
 });
 
+/**
+ * Function to play a figure card. It sends a request to the server to play a figure card.
+ *
+ * @param {number} gameId - The game identifier.
+ * @param {number} playerId - The player identifier.
+ * @param {number} figureCardId - The figure card identifier.
+ * @param {object[]} colorCards - The color cards to play with the figure card.
+ * @returns {Promise<void>} A promise that resolves if the figure card was played successfully, otherwise rejects with an error.
+ * @throws {Error} If the data is invalid or an error occurs while playing the figure card
+ */
 export const playFigureCard = async (
   gameId,
   playerId,
