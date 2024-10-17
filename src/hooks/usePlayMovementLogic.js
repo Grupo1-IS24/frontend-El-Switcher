@@ -4,6 +4,22 @@ import usePlayerTurn from './usePlayerTurn';
 import { PlayCardLogicContext } from '../contexts/PlayCardLogicProvider';
 import { isEqualColorCard } from '../utils/isEqualColorCard';
 
+/**
+ * Custom hook for managing the selection and play of movement and color cards.
+ *
+ * @returns {object} An object containing:
+ *  - selectedMovementCard: The currently selected movement card.
+ *  - selectedColorCards: An array of currently selected color cards.
+ *  - canSelectMovementCard: Function to check if a movement card can be selected.
+ *  - selectMovementCard: Function to select or deselect a movement card.
+ *  - canSelectColorCard: Function to check if a color card can be selected.
+ *  - selectColorCard: Function to select or deselect a color card.
+ *  - canPlayMovement: Function to determine if a movement can be played.
+ *  - canCancelMovement: Function to check if a movement can be canceled.
+ *  - resetMovementCards: Function to reset the selection state of movement cards.
+ *  - isSelectedColorCard: Function to check if a color card is currently selected.
+ *  - isSelectedMovementCard: Function to check if a movement card is currently selected.
+ */
 const usePlayMovementLogic = () => {
   const { isCurrentPlayerTurn } = usePlayerTurn();
   const {
@@ -47,7 +63,8 @@ const usePlayMovementLogic = () => {
   /**
    * Selects or deselects a movement card.
    * Deselects any previously selected color cards when a movement card is selected.
-   *
+   * Resets the figure cards when a movement card is selected.
+   * 
    * @param {object} movementCard - The movement card to select or deselect.
    */
   const selectMovementCard = useCallback(
