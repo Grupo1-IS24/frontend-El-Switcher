@@ -1,19 +1,19 @@
-import { useContext } from 'react';
-import { PlayMovementLogicContext } from '../../contexts/PlayMovementLogicProvider';
-import { GameContext } from '../../contexts/GameProvider';
 import ColorCard from '../ColorCard/ColorCard';
+import usePlayMovementLogic from '../../hooks/usePlayMovementLogic';
+import usePlayFigureLogic from '../../hooks/usePlayFigureLogic';
+import useFoundFigures from '../../hooks/useFoundFigures';
 
 const Board = ({ board }) => {
   const { selectColorCard, canSelectColorCard, isSelectedColorCard } =
-    useContext(PlayMovementLogicContext);
+    usePlayMovementLogic();
 
-  const { foundFigures } = useContext(GameContext);
+  const {
+    selectFigureColorCard,
+    canSelectFigureColorCard,
+    isSelectedFigureColorCard,
+  } = usePlayFigureLogic();
 
-  const isPartOfFigure = (index) => {
-    return foundFigures.some((figure) =>
-      figure.some((chip) => chip.row * 6 + chip.column === index)
-    );
-  };
+  const { isColorCardInAnyFigure } = useFoundFigures();
 
   return (
     <div className='fixed h-screen w-screen'>
@@ -23,10 +23,20 @@ const Board = ({ board }) => {
             <ColorCard
               key={index}
               color={colorCard.color}
-              onClick={() => selectColorCard(colorCard)}
-              disabled={!canSelectColorCard(colorCard)}
-              isSelected={isSelectedColorCard(colorCard)}
-              isPartOfFigure={isPartOfFigure(index)}
+              disabled={
+                !canSelectColorCard(colorCard) &&
+                !canSelectFigureColorCard(colorCard)
+              }
+              isSelected={
+                isSelectedColorCard(colorCard) ||
+                isSelectedFigureColorCard(colorCard)
+              }
+              onClick={() => {
+                if (canSelectColorCard(colorCard)) selectColorCard(colorCard);
+                else if (canSelectFigureColorCard(colorCard))
+                  selectFigureColorCard(colorCard);
+              }}
+              isPartOfFigure={isColorCardInAnyFigure(colorCard)}
             />
           ))}
         </div>

@@ -5,7 +5,7 @@ import BgOverlay from '../components/BgOverlay/BgOverlay';
 import LeaveButton from '../components/LeaveButton/LeaveButton';
 import { useContext } from 'react';
 import { GameContext } from '../contexts/GameProvider';
-import PlayMovementLogicProvider from '../contexts/PlayMovementLogicProvider';
+import PlayCardLogicProvider from '../contexts/PlayCardLogicProvider';
 
 const GamePage = () => {
   const { listOfPlayers, board, winnerInfo } = useContext(GameContext);
@@ -13,10 +13,10 @@ const GamePage = () => {
   return (
     <>
       <BgOverlay />
-      <PlayMovementLogicProvider>
+      <PlayCardLogicProvider>
         <DisplayPlayers listOfPlayers={listOfPlayers} />
         <Board board={board} />
-      </PlayMovementLogicProvider>
+      </PlayCardLogicProvider>
       {winnerInfo !== null && (
         <WinnerMessage winnerName={winnerInfo.nameWinner} />
       )}
