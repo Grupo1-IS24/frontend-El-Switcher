@@ -3,10 +3,20 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { io } from 'socket.io-client';
 import useWebsocketGame from './useWebsocketGame';
 import { PlayerContext } from '../contexts/PlayerProvider';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 // Mock socket.io-client
 vi.mock('socket.io-client');
+
+// Mock useParams to avoid MemoryRouter and Routes
+vi.mock('react-router-dom', async () => {
+  // Import the actual module to preserve other functionalities
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useParams: vi.fn(),
+  };
+});
 
 describe('useWebsocketGame Hook', () => {
   let socket;
@@ -18,6 +28,7 @@ describe('useWebsocketGame Hook', () => {
       disconnect: vi.fn(),
     };
     io.mockReturnValue(socket);
+    useParams.mockReturnValue({ gameId: '1' });
   });
 
   afterEach(() => {
@@ -26,17 +37,13 @@ describe('useWebsocketGame Hook', () => {
 
   // Helper function to render the useWebsocketGame hook within a controlled test environment
   const renderUseWebsocketGameHook = (playerID = 1) => {
-    return renderHook(() => useWebsocketGame(), {
-      wrapper: ({ children }) => (
-        <MemoryRouter initialEntries={['/game/1']}>
-          <PlayerContext.Provider value={{ playerID }}>
-            <Routes>
-              <Route path='/game/:gameId' element={children} />
-            </Routes>
-          </PlayerContext.Provider>
-        </MemoryRouter>
-      ),
-    });
+    const wrapper = ({ children }) => (
+      <PlayerContext.Provider value={{ playerID }}>
+        {children}
+      </PlayerContext.Provider>
+    );
+
+    return renderHook(() => useWebsocketGame(), { wrapper });
   };
 
   // Helper function to get the callback for a specific event
