@@ -12,7 +12,7 @@ const CancelMovementButton = () => {
 
   const handleCancelMovement = async () => {
     try {
-      await cancelMovement(gameId, playerID);
+      await cancelMovement(Number(gameId), playerID);
     } catch (error) {
       console.error('Error cancelando movimiento:', error);
     }
