@@ -77,6 +77,14 @@ const usePlayFigureLogic = () => {
     ]
   );
 
+  const canPlayFigure = useCallback(
+    () =>
+      isCurrentPlayerTurn() &&
+      selectedFigureCard !== null &&
+      selectedFigureColorCards.length > 0,
+    [selectedFigureCard, selectedFigureColorCards, isCurrentPlayerTurn]
+  );
+
   return {
     selectedFigureCard,
     selectedFigureColorCards,
@@ -86,6 +94,7 @@ const usePlayFigureLogic = () => {
     isSelectedFigureColorCard,
     canSelectFigureColorCard,
     selectFigureColorCard,
+    canPlayFigure,
     resetFigureCards,
   };
 };
