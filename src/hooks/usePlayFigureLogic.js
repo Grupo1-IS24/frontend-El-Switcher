@@ -1,9 +1,12 @@
 import { useCallback, useContext } from 'react';
 import { PlayCardLogicContext } from '../contexts/PlayCardLogicProvider';
 import usePlayerTurn from './usePlayerTurn';
+import { isEqualColorCard } from '../utils/isEqualColorCard';
+import useFoundFigures from './useFoundFigures';
 
 const usePlayFigureLogic = () => {
   const { isCurrentPlayerTurn } = usePlayerTurn();
+  const { findFigureByColorCard, isColorCardInFoundFigure } = useFoundFigures();
   const {
     selectedFigureCard,
     selectedFigureColorCards,
@@ -43,12 +46,46 @@ const usePlayFigureLogic = () => {
     ]
   );
 
+  const isSelectedFigureColorCard = useCallback(
+    (targetColorCard) =>
+      selectedFigureColorCards.some((colorCard) =>
+        isEqualColorCard(colorCard, targetColorCard)
+      ),
+    [selectedFigureColorCards]
+  );
+
+  const canSelectFigureColorCard = useCallback(
+    (colorCard) =>
+      isCurrentPlayerTurn() &&
+      selectedFigureCard !== null &&
+      isColorCardInFoundFigure(colorCard),
+    [isCurrentPlayerTurn, selectedFigureCard, isColorCardInFoundFigure]
+  );
+
+  const selectFigureColorCard = useCallback(
+    (colorCard) => {
+      if (isSelectedFigureColorCard(colorCard)) {
+        setSelectedFigureColorCards([]); // Deselect the figure color cards
+      } else {
+        setSelectedFigureColorCards(findFigureByColorCard(colorCard));
+      }
+    },
+    [
+      selectedFigureColorCards,
+      setSelectedFigureColorCards,
+      findFigureByColorCard,
+    ]
+  );
+
   return {
     selectedFigureCard,
     selectedFigureColorCards,
     isSelectedFigureCard,
     canSelectFigureCard,
     selectFigureCard,
+    isSelectedFigureColorCard,
+    canSelectFigureColorCard,
+    selectFigureColorCard,
     resetFigureCards,
   };
 };
