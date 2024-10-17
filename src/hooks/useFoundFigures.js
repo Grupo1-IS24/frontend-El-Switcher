@@ -18,12 +18,17 @@ const useFoundFigures = () => {
     [foundFigures]
   );
 
-  const isColorCardInFoundFigure = useCallback(
-    (colorCard) => findFigureByColorCard(colorCard).length > 0,
-    [findFigureByColorCard]
+  const isColorCardInAnyFigure = useCallback(
+    (targetColorCard) =>
+      foundFigures.some((figureColorCards) =>
+        figureColorCards.some((colorCard) =>
+          isEqualColorCard(colorCard, targetColorCard)
+        )
+      ),
+    [foundFigures]
   );
 
-  return { findFigureByColorCard, isColorCardInFoundFigure };
+  return { findFigureByColorCard, isColorCardInAnyFigure };
 };
 
 export default useFoundFigures;

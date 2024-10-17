@@ -6,7 +6,7 @@ import useFoundFigures from './useFoundFigures';
 
 const usePlayFigureLogic = () => {
   const { isCurrentPlayerTurn } = usePlayerTurn();
-  const { findFigureByColorCard, isColorCardInFoundFigure } = useFoundFigures();
+  const { findFigureByColorCard, isColorCardInAnyFigure } = useFoundFigures();
   const {
     selectedFigureCard,
     selectedFigureColorCards,
@@ -58,8 +58,8 @@ const usePlayFigureLogic = () => {
     (colorCard) =>
       isCurrentPlayerTurn() &&
       selectedFigureCard !== null &&
-      isColorCardInFoundFigure(colorCard),
-    [isCurrentPlayerTurn, selectedFigureCard, isColorCardInFoundFigure]
+      isColorCardInAnyFigure(colorCard),
+    [isCurrentPlayerTurn, selectedFigureCard, isColorCardInAnyFigure]
   );
 
   const selectFigureColorCard = useCallback(
