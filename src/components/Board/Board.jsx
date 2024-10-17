@@ -1,3 +1,5 @@
+import { useContext } from 'react';
+import { GameContext } from '../../contexts/GameProvider';
 import ColorCard from '../ColorCard/ColorCard';
 import usePlayMovementLogic from '../../hooks/usePlayMovementLogic';
 import usePlayFigureLogic from '../../hooks/usePlayFigureLogic';
@@ -12,10 +14,18 @@ const Board = ({ board }) => {
     isSelectedFigureColorCard,
   } = usePlayFigureLogic();
 
+  const { foundFigures } = useContext(GameContext);
+
+  const isPartOfFigure = (index) => {
+    return foundFigures.some((figure) =>
+      figure.some((chip) => chip.row * 6 + chip.column === index)
+    );
+  };
+
   return (
     <div className='fixed h-screen w-screen'>
       <div className='flex justify-center items-center h-screen'>
-        <div className='grid grid-cols-6 grid-rows-6'>
+        <div className='grid grid-cols-6 grid-rows-6 gap-2'>
           {board.map((colorCard, index) => (
             <ColorCard
               key={index}
@@ -33,6 +43,7 @@ const Board = ({ board }) => {
                 else if (canSelectFigureColorCard(colorCard))
                   selectFigureColorCard(colorCard);
               }}
+              isPartOfFigure={isPartOfFigure(index)}
             />
           ))}
         </div>

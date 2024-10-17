@@ -5,6 +5,9 @@ import { PlayerContext } from '../../contexts/PlayerProvider';
 import BackMovCardHand from '../BackMovCardHand/BackMovCardHand';
 import useOpponentMovCards from '../../hooks/useOpponentMovCards';
 import OpponentFigureCardHand from '../OpponentFigureCardHand/OpponentFigureCardHand';
+import PlayMovementButton from '../PlayMovementButton/PlayMovementButton';
+import CancelMovementButton from '../CancelMovementButton/CancelMovementButton';
+import EndTurnButton from '../EndTurnButton/EndTurnButton';
 
 const PlayerInfo = ({ playerName, playerId, index, isTurn }) => {
   const { playerID: currentPlayerID } = useContext(PlayerContext);
@@ -19,6 +22,13 @@ const PlayerInfo = ({ playerName, playerId, index, isTurn }) => {
 
   return (
     <div className={`absolute ${positionStyles[index]} z-20 p-2`}>
+      {currentPlayerID === playerId && (
+        <div className='flex flex-col-reverse gap-3 mb-4'>
+          <EndTurnButton />
+          <PlayMovementButton />
+          <CancelMovementButton />
+        </div>
+      )}
       {currentPlayerID === playerId ? (
         <MovCardHand />
       ) : (
