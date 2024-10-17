@@ -17,6 +17,7 @@ const usePlayMovementLogic = () => {
     setSelectedMovementCard,
     setSelectedColorCards,
     resetMovementCards,
+    resetFigureCards,
   } = useContext(PlayCardLogicContext);
 
   /**
@@ -57,8 +58,14 @@ const usePlayMovementLogic = () => {
         setSelectedMovementCard(movementCard); // Select the card
       }
       setSelectedColorCards([]); // Deselect the color cards
+      resetFigureCards(); // Reset the figure cards
     },
-    [isSelectedMovementCard, setSelectedMovementCard, setSelectedColorCards]
+    [
+      isSelectedMovementCard,
+      setSelectedMovementCard,
+      setSelectedColorCards,
+      resetFigureCards,
+    ]
   );
 
   /**
