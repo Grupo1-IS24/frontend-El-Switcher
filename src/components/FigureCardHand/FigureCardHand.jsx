@@ -1,29 +1,18 @@
 import FigureCard from '../FigureCard/FigureCard';
-import { useContext } from 'react';
-import { GameContext } from '../../contexts/GameProvider';
+import useFigureCards from '../../hooks/useFigureCards';
 
-const FigureCardHand = ({ playerId }) => {
-  const { figureCards } = useContext(GameContext);
-
-  const playerFigureCards = figureCards.find(
-    (figurecardSet) => figurecardSet.ownerId === playerId
-  );
+const FigureCardHand = () => {
+  const { currentPlayerFigureCards } = useFigureCards();
 
   return (
     <>
-      {playerFigureCards ? (
-        <div className='flex flex-row gap-2'>
-          {playerFigureCards.cards.map((figurecard, index) => (
-            <FigureCard
-              key={index}
-              figure={figurecard.figureType}
-              difficulty={figurecard.difficulty}
-            />
-          ))}
-        </div>
-      ) : (
-        <p>No tienes cartas.</p>
-      )}
+      {currentPlayerFigureCards.map((figureCard, index) => (
+        <FigureCard
+          key={index}
+          figure={figureCard.figureType}
+          difficulty={figureCard.difficulty}
+        />
+      ))}
     </>
   );
 };

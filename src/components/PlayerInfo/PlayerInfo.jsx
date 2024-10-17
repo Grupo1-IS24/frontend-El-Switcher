@@ -4,6 +4,7 @@ import MovCardHand from '../MovCardHand/MovCardHand';
 import { PlayerContext } from '../../contexts/PlayerProvider';
 import BackMovCardHand from '../BackMovCardHand/BackMovCardHand';
 import useOpponentMovCards from '../../hooks/useOpponentMovCards';
+import OpponentFigureCardHand from '../OpponentFigureCardHand/OpponentFigureCardHand';
 
 const PlayerInfo = ({ playerName, playerId, index, isTurn }) => {
   const { playerID: currentPlayerID } = useContext(PlayerContext);
@@ -25,7 +26,13 @@ const PlayerInfo = ({ playerName, playerId, index, isTurn }) => {
           totalMovCards={getTotalMovCardsForOpponent(playerId)}
         />
       )}
-      <FigureCardHand playerId={playerId} />
+      <div className='flex flex-row gap-2'>
+        {currentPlayerID === playerId ? (
+          <FigureCardHand />
+        ) : (
+          <OpponentFigureCardHand playerId={playerId} />
+        )}
+      </div>
       <p className='lekton-bold text-white text-lg'>
         {playerName}{' '}
         <span className='text-gray-500'>{isTurn && '(En turno)'}</span>
