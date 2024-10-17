@@ -54,12 +54,12 @@ describe('Button', () => {
     {
       style: 'gameButton_playMovement',
       class:
-        'w-[16rem] h-[4.375rem] text-2xl border-2 border-[#000000] bg-[#000000] text-[#ffffff] hover:bg-transparent hover:text-[#000000]',
+        'w-[16rem] h-[4.375rem] text-2xl border-2 border-[#000000] bg-[#000000] text-[#f1f1f1] hover:bg-transparent hover:text-[#f1f1f1]',
     },
     {
       style: 'gameButton_cancelMovement',
       class:
-        'w-[16rem] h-[4.375rem] text-2xl border-2 border-[#ff0000] bg-[#ff0000] text-[#ffffff] hover:bg-transparent hover:text-[#ff0000]',
+        'w-[16rem] h-[4.375rem] text-2xl border-2 border-[#ee6055] bg-[#ee6055] text-[#0c0c0c] hover:bg-transparent hover:text-[#ee6055]',
     },
   ];
 
