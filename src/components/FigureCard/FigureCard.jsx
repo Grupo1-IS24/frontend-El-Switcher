@@ -1,4 +1,10 @@
-const FigureCard = ({ figure = 0, difficulty = 0 }) => {
+const FigureCard = ({
+  figure = 0,
+  difficulty = 0,
+  isSelected = false,
+  disabled = true,
+  onClick = null,
+}) => {
   const capitalizeFirstLetter = (word) =>
     word.charAt(0).toUpperCase() + word.slice(1);
 
@@ -22,7 +28,17 @@ const FigureCard = ({ figure = 0, difficulty = 0 }) => {
     ? `Figura ${difficulty} ${figure}`
     : 'Figura de espaldas';
 
-  return <img src={path} alt={alt} className='w-[100px] h-[100px]' />;
+  return (
+    <button
+      className={`transition-transform duration-300 
+        ${isSelected ? 'translate-y-[-20px]' : ''} 
+        ${disabled ? 'cursor-not-allowed' : ''}`}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      <img src={path} alt={alt} className='w-[100px] h-[100px]' />
+    </button>
+  );
 };
 
 export default FigureCard;

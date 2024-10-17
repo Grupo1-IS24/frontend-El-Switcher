@@ -1,20 +1,40 @@
-import { createContext, useCallback, useEffect, useState } from 'react';
-import usePlayerTurn from '../hooks/usePlayerTurn';
+import { useCallback, useContext } from 'react';
+import usePlayedMovCards from './usePlayedMovCards';
+import usePlayerTurn from './usePlayerTurn';
+import { PlayCardLogicContext } from '../contexts/PlayCardLogicProvider';
 import { isEqualColorCard } from '../utils/isEqualColorCard';
-import usePlayedMovCards from '../hooks/usePlayedMovCards';
 
-export const PlayMovementLogicContext = createContext();
-
-const PlayMovementLogicProvider = ({ children }) => {
+/**
+ * Custom hook for managing the selection and play of movement and color cards.
+ *
+ * @returns {object} An object containing:
+ *  - selectedMovementCard: The currently selected movement card.
+ *  - selectedColorCards: An array of currently selected color cards.
+ *  - canSelectMovementCard: Function to check if a movement card can be selected.
+ *  - selectMovementCard: Function to select or deselect a movement card.
+ *  - canSelectColorCard: Function to check if a color card can be selected.
+ *  - selectColorCard: Function to select or deselect a color card.
+ *  - canPlayMovement: Function to determine if a movement can be played.
+ *  - canCancelMovement: Function to check if a movement can be canceled.
+ *  - resetMovementCards: Function to reset the selection state of movement cards.
+ *  - isSelectedColorCard: Function to check if a color card is currently selected.
+ *  - isSelectedMovementCard: Function to check if a movement card is currently selected.
+ */
+const usePlayMovementLogic = () => {
   const { isCurrentPlayerTurn } = usePlayerTurn();
   const {
     isMovementCardPlayed,
     hasAnyMovementCardPlayed,
     areAllMovementCardsPlayed,
   } = usePlayedMovCards();
-
-  const [selectedMovementCard, setSelectedMovementCard] = useState(null);
-  const [selectedColorCards, setSelectedColorCards] = useState([]);
+  const {
+    selectedMovementCard,
+    selectedColorCards,
+    setSelectedMovementCard,
+    setSelectedColorCards,
+    resetMovementCards,
+    resetFigureCards,
+  } = useContext(PlayCardLogicContext);
 
   /**
    * Determines if a movement card is currently selected.
@@ -43,6 +63,7 @@ const PlayMovementLogicProvider = ({ children }) => {
   /**
    * Selects or deselects a movement card.
    * Deselects any previously selected color cards when a movement card is selected.
+   * Resets the figure cards when a movement card is selected.
    *
    * @param {object} movementCard - The movement card to select or deselect.
    */
@@ -54,8 +75,14 @@ const PlayMovementLogicProvider = ({ children }) => {
         setSelectedMovementCard(movementCard); // Select the card
       }
       setSelectedColorCards([]); // Deselect the color cards
+      resetFigureCards(); // Reset the figure cards
     },
-    [isSelectedMovementCard]
+    [
+      isSelectedMovementCard,
+      setSelectedMovementCard,
+      setSelectedColorCards,
+      resetFigureCards,
+    ]
   );
 
   /**
@@ -112,16 +139,8 @@ const PlayMovementLogicProvider = ({ children }) => {
         setSelectedColorCards((prev) => [...prev, colorCard]);
       }
     },
-    [selectedColorCards, isSelectedColorCard]
+    [selectedColorCards, isSelectedColorCard, setSelectedColorCards]
   );
-
-  /**
-   * Resets the movement logic, deselecting any selected movement and color cards.
-   */
-  const resetSelectedCards = useCallback(() => {
-    setSelectedMovementCard(null);
-    setSelectedColorCards([]);
-  }, []);
 
   /**
    * Determines if the player can perform a movement based on the selected cards and the player's turn.
@@ -152,33 +171,19 @@ const PlayMovementLogicProvider = ({ children }) => {
     [isCurrentPlayerTurn, hasAnyMovementCardPlayed]
   );
 
-  useEffect(() => {
-    // Reset logic if it's not the player's turn
-    if (!isCurrentPlayerTurn()) {
-      resetSelectedCards();
-    }
-  }, [isCurrentPlayerTurn, resetSelectedCards]);
-
-  // The provided state for the context.
-  const providedState = {
+  return {
     selectedMovementCard,
     selectedColorCards,
-    selectMovementCard,
-    selectColorCard,
     canSelectMovementCard,
+    selectMovementCard,
     canSelectColorCard,
-    isSelectedMovementCard,
-    isSelectedColorCard,
-    resetSelectedCards,
+    selectColorCard,
     canPlayMovement,
     canCancelMovement,
+    resetMovementCards,
+    isSelectedColorCard,
+    isSelectedMovementCard,
   };
-
-  return (
-    <PlayMovementLogicContext.Provider value={providedState}>
-      {children}
-    </PlayMovementLogicContext.Provider>
-  );
 };
 
-export default PlayMovementLogicProvider;
+export default usePlayMovementLogic;

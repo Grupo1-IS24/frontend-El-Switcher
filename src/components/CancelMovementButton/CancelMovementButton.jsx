@@ -1,9 +1,22 @@
-import { useContext } from 'react';
 import Button from '../Button/Button';
-import { PlayMovementLogicContext } from '../../contexts/PlayMovementLogicProvider';
+import { useContext } from 'react';
+import { useParams } from 'react-router-dom';
+import { PlayerContext } from '../../contexts/PlayerProvider';
+import { cancelMovement } from '../../service/CancelMovementService';
+import usePlayMovementLogic from '../../hooks/usePlayMovementLogic';
 
 const CancelMovementButton = () => {
-  const { canCancelMovement } = useContext(PlayMovementLogicContext);
+  const { gameId } = useParams();
+  const { playerID } = useContext(PlayerContext);
+  const { canCancelMovement } = usePlayMovementLogic();
+
+  const handleCancelMovement = async () => {
+    try {
+      await cancelMovement(Number(gameId), playerID);
+    } catch (error) {
+      console.error('Error cancelando movimiento:', error);
+    }
+  };
 
   return (
     <>
@@ -11,9 +24,7 @@ const CancelMovementButton = () => {
         <Button
           text={'Cancelar movimiento'}
           style={'gameButton_cancelMovement'}
-          onPress={() => {
-            console.log('Movimiento cancelado');
-          }}
+          onPress={handleCancelMovement}
         />
       )}
     </>
