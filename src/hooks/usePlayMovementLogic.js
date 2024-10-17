@@ -64,7 +64,7 @@ const usePlayMovementLogic = () => {
    * Selects or deselects a movement card.
    * Deselects any previously selected color cards when a movement card is selected.
    * Resets the figure cards when a movement card is selected.
-   * 
+   *
    * @param {object} movementCard - The movement card to select or deselect.
    */
   const selectMovementCard = useCallback(

@@ -123,9 +123,9 @@ const usePlayFigureLogic = () => {
       }
     },
     [
-      selectedFigureColorCards,
       setSelectedFigureColorCards,
       findFigureByColorCard,
+      isSelectedFigureColorCard,
     ]
   );
 
