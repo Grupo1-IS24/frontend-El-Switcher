@@ -26,6 +26,12 @@ describe('useWebsocketGameList Hook', () => {
     return renderHook(() => useWebsocketGameList());
   };
 
+  // Helper function to get the callback for a specific event
+  const getCallbackForEvent = (eventName) => {
+    const call = socket.on.mock.calls.find((call) => call[0] === eventName);
+    return call ? call[1] : null;
+  };
+
   // Test initialization and event handling
   describe('Initialization and Event Handling', () => {
     // Test initial state
@@ -42,7 +48,10 @@ describe('useWebsocketGameList Hook', () => {
       const { result } = renderUseWebsocketGameListHook();
 
       act(() => {
-        socket.on.mock.calls[0][1]([{ id: 1, name: 'Game 1' }]);
+        const gameListCallback = getCallbackForEvent('game_list');
+        if (gameListCallback) {
+          gameListCallback([{ id: 1, name: 'Game 1' }]);
+        }
       });
 
       expect(result.current.gameList).toEqual([{ id: 1, name: 'Game 1' }]);
@@ -55,7 +64,10 @@ describe('useWebsocketGameList Hook', () => {
       const { result } = renderUseWebsocketGameListHook();
 
       act(() => {
-        socket.on.mock.calls[1][1]();
+        const connectErrorCallback = getCallbackForEvent('connect_error');
+        if (connectErrorCallback) {
+          connectErrorCallback();
+        }
       });
 
       expect(result.current.error).toBe('Failed to connect to the server.');

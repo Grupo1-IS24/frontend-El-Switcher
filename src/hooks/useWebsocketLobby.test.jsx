@@ -52,6 +52,12 @@ describe('useWebsocketLobby Hook', () => {
     });
   };
 
+  // Helper function to get the callback for a specific event
+  const getCallbackForEvent = (eventName) => {
+    const call = socket.on.mock.calls.find((call) => call[0] === eventName);
+    return call ? call[1] : null;
+  };
+
   // Test initialization and event handling
   describe('Initialization and Event Handling', () => {
     // Test initial state
@@ -67,7 +73,10 @@ describe('useWebsocketLobby Hook', () => {
       const { result } = renderUseWebsocketLobbyHook();
 
       act(() => {
-        socket.on.mock.calls[0][1]([{ id: 1, name: 'Player 1' }]);
+        const playerListCallback = getCallbackForEvent('player_list');
+        if (playerListCallback) {
+          playerListCallback([{ id: 1, name: 'Player 1' }]);
+        }
       });
 
       expect(result.current.listOfPlayers).toEqual([
@@ -80,7 +89,10 @@ describe('useWebsocketLobby Hook', () => {
       const { result } = renderUseWebsocketLobbyHook();
 
       act(() => {
-        socket.on.mock.calls[1][1]({ canStart: true });
+        const startGameCallback = getCallbackForEvent('start_game');
+        if (startGameCallback) {
+          startGameCallback({ canStart: true });
+        }
       });
 
       expect(result.current.canStartGame).toBe(true);
@@ -91,7 +103,10 @@ describe('useWebsocketLobby Hook', () => {
       renderUseWebsocketLobbyHook();
 
       act(() => {
-        socket.on.mock.calls[2][1]({ gameStarted: true });
+        const gameStartedCallback = getCallbackForEvent('game_started');
+        if (gameStartedCallback) {
+          gameStartedCallback({ gameStarted: true });
+        }
       });
 
       expect(mockRedirectToGamePage).toHaveBeenCalledWith('1');

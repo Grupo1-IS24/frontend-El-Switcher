@@ -39,6 +39,12 @@ describe('useWebsocketGame Hook', () => {
     });
   };
 
+  // Helper function to get the callback for a specific event
+  const getCallbackForEvent = (eventName) => {
+    const call = socket.on.mock.calls.find((call) => call[0] === eventName);
+    return call ? call[1] : null;
+  };
+
   // Test initialization and event handling
   describe('Initialization and Event Handling', () => {
     it('should have initial state', () => {
@@ -58,7 +64,10 @@ describe('useWebsocketGame Hook', () => {
       const { result } = renderUseWebsocketGameHook();
 
       act(() => {
-        socket.on.mock.calls[0][1]([{ playerId: 1, name: 'Player 1' }]);
+        const playerListCallback = getCallbackForEvent('player_list');
+        if (playerListCallback) {
+          playerListCallback([{ playerId: 1, name: 'Player 1' }]);
+        }
       });
 
       expect(result.current.listOfPlayers).toEqual([
@@ -70,7 +79,10 @@ describe('useWebsocketGame Hook', () => {
       const { result } = renderUseWebsocketGameHook();
 
       act(() => {
-        socket.on.mock.calls[1][1]({ playerTurnId: 2 });
+        const turnCallback = getCallbackForEvent('turn');
+        if (turnCallback) {
+          turnCallback({ playerTurnId: 2 });
+        }
       });
 
       expect(result.current.playerTurnId).toBe(2);
@@ -80,7 +92,10 @@ describe('useWebsocketGame Hook', () => {
       const { result } = renderUseWebsocketGameHook();
 
       act(() => {
-        socket.on.mock.calls[2][1]([{ row: 1, column: 1 }]);
+        const boardCallback = getCallbackForEvent('board');
+        if (boardCallback) {
+          boardCallback([{ row: 1, column: 1 }]);
+        }
       });
 
       expect(result.current.board).toEqual([{ row: 1, column: 1 }]);
@@ -90,7 +105,10 @@ describe('useWebsocketGame Hook', () => {
       const { result } = renderUseWebsocketGameHook();
 
       act(() => {
-        socket.on.mock.calls[3][1]([{ figureCardId: 1 }]);
+        const figureCardsCallback = getCallbackForEvent('figure_cards');
+        if (figureCardsCallback) {
+          figureCardsCallback([{ figureCardId: 1 }]);
+        }
       });
 
       expect(result.current.figureCards).toEqual([{ figureCardId: 1 }]);
@@ -100,7 +118,10 @@ describe('useWebsocketGame Hook', () => {
       const { result } = renderUseWebsocketGameHook();
 
       act(() => {
-        socket.on.mock.calls[4][1]([{ movementcardId: 1 }]);
+        const movementCardsCallback = getCallbackForEvent('movement_cards');
+        if (movementCardsCallback) {
+          movementCardsCallback([{ movementcardId: 1 }]);
+        }
       });
 
       expect(result.current.movementCards).toEqual([{ movementcardId: 1 }]);
@@ -110,7 +131,10 @@ describe('useWebsocketGame Hook', () => {
       const { result } = renderUseWebsocketGameHook();
 
       act(() => {
-        socket.on.mock.calls[5][1]({ winnerId: 1 });
+        const winnerCallback = getCallbackForEvent('winner');
+        if (winnerCallback) {
+          winnerCallback({ winnerId: 1 });
+        }
       });
 
       expect(result.current.winnerInfo).toEqual({ winnerId: 1 });
@@ -120,7 +144,12 @@ describe('useWebsocketGame Hook', () => {
       const { result } = renderUseWebsocketGameHook();
 
       act(() => {
-        socket.on.mock.calls[6][1]([{ playerId: 2, totalMovCards: 3 }]);
+        const opponentsTotalMovCardsCallback = getCallbackForEvent(
+          'opponents_total_mov_cards'
+        );
+        if (opponentsTotalMovCardsCallback) {
+          opponentsTotalMovCardsCallback([{ playerId: 2, totalMovCards: 3 }]);
+        }
       });
 
       expect(result.current.opponentsTotalMovCards).toEqual([
@@ -132,7 +161,10 @@ describe('useWebsocketGame Hook', () => {
       const { result } = renderUseWebsocketGameHook();
 
       act(() => {
-        socket.on.mock.calls[7][1]([{ figureId: 1 }]);
+        const foundFiguresCallback = getCallbackForEvent('found_figures');
+        if (foundFiguresCallback) {
+          foundFiguresCallback([{ figureId: 1 }]);
+        }
       });
 
       expect(result.current.foundFigures).toEqual([{ figureId: 1 }]);
