@@ -72,9 +72,12 @@ describe('useWebsocket Hook', () => {
     it('should attempt to reconnect infinitely', () => {
       renderUseWebsocketHook();
 
-      expect(io).toHaveBeenCalledWith(expect.any(String), expect.objectContaining({
-        reconnectionAttempts: Infinity,
-      }));
+      expect(io).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.objectContaining({
+          reconnectionAttempts: Infinity,
+        })
+      );
     });
   });
 
