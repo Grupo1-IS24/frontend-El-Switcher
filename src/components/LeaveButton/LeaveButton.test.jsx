@@ -44,17 +44,17 @@ describe('LeaveButton', () => {
     );
   };
 
-  it('debería renderizar el botón con el texto "Abandonar lobby" cuando el tipo es "lobby"', () => {
+  it('it should render the button with the text "Abandonar lobby" when the type is "lobby"', () => {
     renderLeaveButton('lobby');
     expect(screen.getByText('Abandonar lobby')).toBeInTheDocument();
   });
 
-  it('debería renderizar el botón con el texto "x" cuando el tipo no es "lobby"', () => {
+  it('it should render the button with the text "x" when the type is "game"', () => {
     renderLeaveButton('game');
     expect(screen.getByText('x')).toBeInTheDocument();
   });
 
-  it('debería llamar a leaveGame y redirectToHomePage al hacer clic en el botón', async () => {
+  it('it should call leaveGame and redirectToHomePage when clicking the button when the type is "lobby"', async () => {
     renderLeaveButton('lobby');
     fireEvent.click(screen.getByText('Abandonar lobby'));
 
@@ -64,7 +64,17 @@ describe('LeaveButton', () => {
     });
   });
 
-  it('debería mostrar un error en consola si gameId o playerID no están definidos', async () => {
+  it('it should call leaveGame and redirectToHomePage when clicking the button when the type is "game"', async () => {
+    renderLeaveButton('game');
+    fireEvent.click(screen.getByText('x'));
+
+    await waitFor(() => {
+      expect(leaveGame).toHaveBeenCalledWith('game456', 'player123');
+      expect(mockRedirect).toHaveBeenCalled();
+    });
+  });
+
+  it('it should log an error to the console if gameId or playerID are not defined when the type is "lobby"', async () => {
     console.error = vi.fn();
 
     useParams.mockReturnValue({ gameId: null });
@@ -80,13 +90,48 @@ describe('LeaveButton', () => {
     });
   });
 
-  it('debería mostrar una alerta y registrar el error en consola si leaveGame falla', async () => {
+  it('it should log an error to the console if gameId or playerID are not defined when the type is "game"', async () => {
+    console.error = vi.fn();
+
+    useParams.mockReturnValue({ gameId: null });
+    renderLeaveButton('game');
+    fireEvent.click(screen.getByText('x'));
+
+    await waitFor(() => {
+      expect(console.error).toHaveBeenCalledWith(
+        'gameId o playerID no están definidos.'
+      );
+      expect(leaveGame).not.toHaveBeenCalled();
+      expect(mockRedirect).not.toHaveBeenCalled();
+    });
+  });
+
+  it('it should display an alert and log the error to the console if leaveGame fails when the type is "lobby"', async () => {
     console.error = vi.fn();
     window.alert = vi.fn();
 
     leaveGame.mockRejectedValue(new Error('Error en el servidor'));
     renderLeaveButton('lobby');
     fireEvent.click(screen.getByText('Abandonar lobby'));
+
+    await waitFor(() => {
+      expect(window.alert).toHaveBeenCalledWith(
+        'Error al abandonar el juego. Intente nuevamente.'
+      );
+      expect(console.error).toHaveBeenCalledWith(
+        'Error al abandonar el juego',
+        expect.any(Error)
+      );
+    });
+  });
+
+  it('it should display an alert and log the error to the console if leaveGame fails when the type is "game"', async () => {
+    console.error = vi.fn();
+    window.alert = vi.fn();
+
+    leaveGame.mockRejectedValue(new Error('Error en el servidor'));
+    renderLeaveButton('game');
+    fireEvent.click(screen.getByText('x'));
 
     await waitFor(() => {
       expect(window.alert).toHaveBeenCalledWith(
