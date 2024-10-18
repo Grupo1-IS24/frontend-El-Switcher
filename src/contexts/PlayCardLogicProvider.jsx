@@ -48,6 +48,7 @@ const PlayCardLogicProvider = ({ children }) => {
     setSelectedFigureColorCards,
     resetMovementCards,
     resetFigureCards,
+    resetAllCards,
   };
 
   return (
