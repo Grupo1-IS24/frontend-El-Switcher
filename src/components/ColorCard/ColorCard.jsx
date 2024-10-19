@@ -17,7 +17,8 @@ const ColorCard = ({
       className={`w-24 h-24
         ${colorStyle[color] ?? 'bg-gray-500'} rounded
         ${disabled ? 'cursor-not-allowed' : ''}
-        ${isSelected ? 'transform scale-90 shadow-inner border-4 border-white transition-all duration-200' : 'scale-100 transition-all duration-200'}
+        ${isSelected ? 'animate-shriggle' 
+                     : 'scale-100 transition-all duration-500'}
         ${isPartOfFigure ? 'border-4' : ''}`}
       disabled={disabled}
       onClick={onClick}
