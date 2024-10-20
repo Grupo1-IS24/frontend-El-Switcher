@@ -50,6 +50,7 @@ jobs:
         COMMENTS=$(echo '${{ steps.fetch-comments.outputs.data }}' | jq -r '.[] | "\(.user.login): \(.body)"')
         IFS=$'\n' read -r -a COMMENT_ARRAY <<< "$COMMENTS"
         for COMMENT in "${COMMENT_ARRAY[@]}"; do
+          echo "Sending comment to Jira: $COMMENT"
           COMMENT_JSON=$(jq -n --arg comment "$COMMENT" '{
             "body": {
               "type": "doc",
