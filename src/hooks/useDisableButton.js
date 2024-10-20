@@ -17,13 +17,11 @@ const useDisableButton = (asyncFunction) => {
   const handleClick = async (...args) => {
     setIsDisabled(true);
     try {
-      await asyncFunction(...args)
-    } catch (error) {
-      console.error('Error:', error);
+      await asyncFunction(...args);
     } finally {
-      setIsDisabled(false)
+      setIsDisabled(false);
     }
-  }
+  };
 
   return [isDisabled, handleClick];
 }
