@@ -9,8 +9,6 @@ on:
     branches:
       - develop
       - main
-  # pull_request:
-  #   types: [closed]
 
 permissions:
   contents: write
@@ -19,7 +17,6 @@ permissions:
 
 jobs:
   update-jira:
-    # if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -27,7 +24,6 @@ jobs:
 
     - name: Extract Jira Ticket ID from branch name
       run: |
-        # Extraer el ID de Jira que comienza con SCRUM- seguido de números
         TICKET_ID=$(echo "${{ github.head_ref }}" | grep -o 'SCRUM-[0-9]*')
         if [ -z "$TICKET_ID" ]; then
           echo "No Jira ticket ID found in the branch name. Skipping..."
@@ -48,7 +44,7 @@ jobs:
       run: |
         echo "Updating Jira Ticket with comments from PR..."
         COMMENTS=$(echo '${{ steps.fetch-comments.outputs.data }}' | jq -r '.[] | "\(.user.login): \(.body)"')
-        IFS=$'\n' read -r -d '' -a COMMENT_ARRAY <<< "$COMMENTS"
+        IFS=$'\n' read -r -a COMMENT_ARRAY <<< "$COMMENTS"
         for COMMENT in "${COMMENT_ARRAY[@]}"; do
           echo "Sending comment to Jira: $COMMENT"
           COMMENT_JSON=$(jq -n --arg comment "$COMMENT" '{
@@ -68,12 +64,17 @@ jobs:
               ]
             }
           }')
-          curl --request POST \
+          RESPONSE=$(curl --request POST \
             --url "https://ingsoft1grupo1.atlassian.net/rest/api/3/issue/${{ env.TICKET_ID }}/comment" \
             --user '${{ secrets.JIRA_USER }}:${{ secrets.JIRA_TOKEN }}' \
             --header 'Accept: application/json' \
             --header 'Content-Type: application/json' \
-            --data "$COMMENT_JSON"
+            --data "$COMMENT_JSON" \
+            --write-out '%{http_code}' --silent --output /dev/null)
+          if [ "$RESPONSE" -ne 201 ]; then
+            echo "Failed to send comment: $COMMENT"
+            exit 1
+          fi
         done
       env:
         JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
