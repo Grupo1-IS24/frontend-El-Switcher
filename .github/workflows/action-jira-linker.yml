@@ -1,8 +1,16 @@
 name: Comentarios a tickets de Jira
 
 on:
+  push:
+    branches:
+      - develop
+      - main
   pull_request:
-    types: [closed]
+    branches:
+      - develop
+      - main
+  # pull_request:
+  #   types: [closed]
 
 permissions:
   contents: write
