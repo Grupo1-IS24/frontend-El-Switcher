@@ -49,7 +49,9 @@ jobs:
         echo "Updating Jira Ticket with comments from PR..."
         COMMENTS=$(echo '${{ steps.fetch-comments.outputs.data }}' | jq -r '.[] | "\(.user.login): \(.body)"')
         for COMMENT in $COMMENTS; do
-          COMMENT_JSON=$(jq -n --arg comment "$COMMENT" '{
+          USER=$(echo $COMMENT | cut -d':' -f1)
+          BODY=$(echo $COMMENT | cut -d':' -f2-)
+          COMMENT_JSON=$(jq -n --arg user "$USER" --arg body "$BODY" '{
             "body": {
               "type": "doc",
               "version": 1,
@@ -59,7 +61,16 @@ jobs:
                   "content": [
                     {
                       "type": "text",
-                      "text": $comment
+                      "text": $user,
+                      "marks": [
+                        {
+                          "type": "strong"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "text": ": " + $body
                     }
                   ]
                 }
