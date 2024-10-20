@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 /**
  * Custom hook to handle button disabling during the execution of an asynchronous function.
- * 
+ *
  * This hook disables the button when the asynchronous operation starts, and re-enables it once the operation finishes,
  * regardless of whether it was successful or encountered an error.
  *
@@ -17,15 +17,15 @@ const useDisableButton = (asyncFunction) => {
   const handleClick = async (...args) => {
     setIsDisabled(true);
     try {
-      await asyncFunction(...args)
+      await asyncFunction(...args);
     } catch (error) {
       console.error('Error:', error);
     } finally {
-      setIsDisabled(false)
+      setIsDisabled(false);
     }
-  }
+  };
 
   return [isDisabled, handleClick];
-}
+};
 
 export default useDisableButton;
