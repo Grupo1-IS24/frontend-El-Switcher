@@ -14,10 +14,10 @@ import { useState } from 'react';
 const useDisableButton = (asyncFunction) => {
   const [isDisabled, setIsDisabled] = useState(false);
 
-  const handleClick = async (...args) => {
+  const handleClick = async () => {
     setIsDisabled(true);
     try {
-      await asyncFunction(...args);
+      await asyncFunction();
     } finally {
       setIsDisabled(false);
     }
