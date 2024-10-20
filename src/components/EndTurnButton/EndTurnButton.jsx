@@ -1,27 +1,24 @@
 import Button from '../Button/Button';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { PlayerContext } from '../../contexts/PlayerProvider';
 import { endTurn } from '../../service/EndTurnService';
 import { useParams } from 'react-router-dom';
 import usePlayerTurn from '../../hooks/usePlayerTurn';
+import useDisableButton from '../../hooks/useDisableButton';
 
 const EndTurnButton = () => {
   const { playerID } = useContext(PlayerContext);
   const { gameId } = useParams();
   const { isCurrentPlayerTurn } = usePlayerTurn();
-  const [isDisabled, setIsDisabled] = useState(false);
 
-  const manageEndTurn = async (playerID) => {
+  const [isDisabled, handleEndTurnClick] = useDisableButton(async () => {
     try {
-      setIsDisabled(true);
       await endTurn(gameId, playerID);
     } catch (error) {
       window.alert('Error al terminar el turno. Intente nuevamente.');
       console.error('Error al terminar el turno', error);
-    } finally {
-      setIsDisabled(false);
     }
-  };
+  });
 
   return (
     <>
@@ -29,7 +26,7 @@ const EndTurnButton = () => {
         <Button
           text={'Pasar turno'}
           style={'gameButton_endTurn'}
-          onPress={() => manageEndTurn(playerID)}
+          onPress={handleEndTurnClick}
           isDisabled={isDisabled}
         />
       )}
