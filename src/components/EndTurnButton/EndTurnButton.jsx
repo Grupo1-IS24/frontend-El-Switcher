@@ -1,5 +1,5 @@
 import Button from '../Button/Button';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { PlayerContext } from '../../contexts/PlayerProvider';
 import { endTurn } from '../../service/EndTurnService';
 import { useParams } from 'react-router-dom';
