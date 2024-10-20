@@ -1,5 +1,4 @@
-# .github/workflows/update-jira-ticket.yml
-name: Update Jira Ticket
+name: Comentarios a tickets de Jira
 
 on:
   pull_request:
@@ -40,13 +39,9 @@ jobs:
     - name: Update Jira Ticket
       run: |
         echo "Updating Jira Ticket with comments from PR..."
-        COMMENTS=$(echo '${{ steps.fetch-comments.outputs.data }}' | jq -r '.[] | "\(.user.login): \(.body)"' | jq -sRr @json)
-        curl --request POST \
-          --url "https://ingsoft1grupo1.atlassian.net/rest/api/3/issue/${{ env.TICKET_ID }}/comment" \
-          --user '${{ secrets.JIRA_USER }}:${{ secrets.JIRA_TOKEN }}' \
-          --header 'Accept: application/json' \
-          --header 'Content-Type: application/json' \
-          --data '{
+        COMMENTS=$(echo '${{ steps.fetch-comments.outputs.data }}' | jq -r '.[] | "\(.user.login): \(.body)"')
+        for COMMENT in $COMMENTS; do
+          COMMENT_JSON=$(jq -n --arg comment "$COMMENT" '{
             "body": {
               "type": "doc",
               "version": 1,
@@ -56,13 +51,20 @@ jobs:
                   "content": [
                     {
                       "type": "text",
-                      "text": '"$COMMENTS"'
+                      "text": $comment
                     }
                   ]
                 }
               ]
             }
-          }'
+          }')
+          curl --request POST \
+            --url "https://ingsoft1grupo1.atlassian.net/rest/api/3/issue/${{ env.TICKET_ID }}/comment" \
+            --user '${{ secrets.JIRA_USER }}:${{ secrets.JIRA_TOKEN }}' \
+            --header 'Accept: application/json' \
+            --header 'Content-Type: application/json' \
+            --data "$COMMENT_JSON"
+        done
       env:
         JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
         JIRA_USER: ${{ secrets.JIRA_USER }}
