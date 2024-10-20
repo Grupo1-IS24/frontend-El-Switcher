@@ -17,7 +17,7 @@ const useDisableButton = (asyncFunction) => {
   const handleClick = async (...args) => {
     setIsDisabled(true);
     try {
-      await asyncFunction(...args)
+      await asyncFunction(...args);
     } finally {
       setIsDisabled(false);
     }
