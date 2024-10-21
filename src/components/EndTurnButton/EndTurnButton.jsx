@@ -5,13 +5,16 @@ import { endTurn } from '../../service/EndTurnService';
 import { useParams } from 'react-router-dom';
 import usePlayerTurn from '../../hooks/usePlayerTurn';
 import useDisableButton from '../../hooks/useDisableButton';
+import { PlayCardLogicContext } from '../../contexts/PlayCardLogicProvider';
 
 const EndTurnButton = () => {
   const { playerID } = useContext(PlayerContext);
   const { gameId } = useParams();
   const { isCurrentPlayerTurn } = usePlayerTurn();
+  const { resetAllCards } = useContext(PlayCardLogicContext);
 
   const [isDisabled, handleEndTurnClick] = useDisableButton(async () => {
+    resetAllCards();
     try {
       await endTurn(gameId, playerID);
     } catch (error) {
