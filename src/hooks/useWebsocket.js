@@ -1,23 +1,19 @@
-import { useContext, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { PlayerContext } from '../contexts/PlayerProvider';
+import { useEffect } from 'react';
 import { io } from 'socket.io-client';
 
 /**
  * Custom hook to handle websocket connections.
- * 
+ *
  * @param {string} path The path to connect to the websocket.
  * @param {function} handleSocketEvents The function to handle the socket events.
+ * @param {Object} query The query parameters to pass to the websocket.
  * @returns {void}
  */
-const useWebsocket = (path, handleSocketEvents) => {
-  const { gameId } = useParams();
-  const { playerID } = useContext(PlayerContext);
-
+const useWebsocket = (path, handleSocketEvents, query = {}) => {
   useEffect(() => {
     const socket = io('http://localhost:8000', {
       path: path,
-      query: { playerId: playerID, gameId: gameId },
+      query: query,
       reconnection: true,
       reconnectionAttempts: Infinity,
     });
@@ -27,6 +23,7 @@ const useWebsocket = (path, handleSocketEvents) => {
     return () => {
       socket.disconnect();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };
 

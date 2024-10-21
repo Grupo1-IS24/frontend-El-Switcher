@@ -14,6 +14,7 @@ const StartGameButton = ({ isDisabled = true }) => {
       redirectToGamePage(response);
     } catch (error) {
       window.alert('Error al iniciar la partida. Intente nuevamente.');
+      console.error('Error al iniciar la partida', error);
     }
   };
 

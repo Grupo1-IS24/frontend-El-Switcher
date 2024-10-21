@@ -3,6 +3,7 @@ import useWebsocket from './useWebsocket';
 import { sortListOfPlayers } from '../utils/sortListOfPlayers';
 import { PlayerContext } from '../contexts/PlayerProvider';
 import { sortBoardColorCards } from '../utils/sortBoardColorCards';
+import { useParams } from 'react-router-dom';
 
 /**
  * Custom hook to handle websocket events for the game.
@@ -16,6 +17,7 @@ import { sortBoardColorCards } from '../utils/sortBoardColorCards';
  * - winnerInfo: Information about the winner of the game.
  */
 const useWebsocketGame = () => {
+  const { gameId } = useParams();
   const { playerID } = useContext(PlayerContext);
 
   const [listOfPlayers, setListOfPlayers] = useState([]);
@@ -24,6 +26,8 @@ const useWebsocketGame = () => {
   const [figureCards, setFigureCards] = useState([]);
   const [movementCards, setMovementCards] = useState([]);
   const [winnerInfo, setWinnerInfo] = useState(null);
+  const [opponentsTotalMovCards, setOpponentsTotalMovCards] = useState([]);
+  const [foundFigures, setfoundFigures] = useState([]);
 
   const handleSocketEvents = useCallback((socket) => {
     socket.on('player_list', (listOfPlayers) => {
@@ -45,15 +49,31 @@ const useWebsocketGame = () => {
     });
 
     socket.on('movement_cards', (movementCards) => {
+      movementCards = movementCards.sort(
+        (a, b) => a.movementcardId - b.movementcardId
+      );
       setMovementCards(movementCards);
     });
 
     socket.on('winner', (winnerInfo) => {
       setWinnerInfo(winnerInfo);
     });
+
+    socket.on('opponents_total_mov_cards', (opponentsTotalMovCards) => {
+      setOpponentsTotalMovCards(opponentsTotalMovCards);
+    });
+
+    socket.on('found_figures', (foundFigures) => {
+      setfoundFigures(foundFigures);
+    });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useWebsocket('/game/ws', handleSocketEvents);
+  useWebsocket('/game/ws', handleSocketEvents, {
+    playerId: playerID,
+    gameId: gameId,
+  });
 
   return {
     listOfPlayers,
@@ -62,6 +82,8 @@ const useWebsocketGame = () => {
     figureCards,
     movementCards,
     winnerInfo,
+    opponentsTotalMovCards,
+    foundFigures,
   };
 };
 

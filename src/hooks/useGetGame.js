@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { getGame } from '../service/GetGameService'
+import { getGame } from '../service/GetGameService';
 
 const useGetGame = (gameId) => {
   const [game, setGame] = useState(null);

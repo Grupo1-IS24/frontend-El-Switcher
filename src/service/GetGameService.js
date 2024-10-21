@@ -5,8 +5,8 @@ import { apiService } from './axiosConfig';
 const gameSchema = z.object({
   gameId: z.number().int(), // must be an integer.
   gameName: z.string(), // must be a string.
-  connectedPlayers: z.number().int(), // must be an integer.
   maxPlayers: z.number().int(), // must be an integer.
+  minPlayers: z.number().int(), // must be an integer.
 });
 
 /**
@@ -19,11 +19,9 @@ const gameSchema = z.object({
 export const getGame = async (gameId) => {
   try {
     const response = await apiService.get(`/game/${gameId}`);
-    console.log(response.data);
     const game = response.data;
-
-    // Validate the game object. If it's invalid, throw an error.
-    // gameSchema.parse(game);
+    // Validate the game data. If it's invalid, throw an error.
+    gameSchema.parse(game);
 
     return game;
   } catch (error) {
