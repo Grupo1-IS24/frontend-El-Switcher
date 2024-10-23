@@ -97,4 +97,4 @@ const createGame = async (gameData) => {
   }
 };
 
-export { createGame };
+export { createGame, isEmpty };
