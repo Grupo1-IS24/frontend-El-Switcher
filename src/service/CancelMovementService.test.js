@@ -58,6 +58,32 @@ describe('cancelMovement Service', () => {
         detailMessage
       );
     });
+
+    it('should throw a generic error if the API response does not contain a detail message', async () => {
+      const axiosError = {
+        isAxiosError: true,
+        response: {
+          status: 400,
+          data: {},
+        },
+      };
+
+      apiService.post.mockRejectedValue(axiosError);
+
+      await expect(callCancelMovement(validArguments)).rejects.toThrow(
+        'Error desconocido en la respuesta del servidor'
+      );
+    });
+
+    it('should throw an unexpected error if a non-Axios error occurs', async () => {
+      const unexpectedError = new Error('Unexpected error');
+
+      apiService.post.mockRejectedValue(unexpectedError);
+
+      await expect(callCancelMovement(validArguments)).rejects.toThrow(
+        'Error inesperado cancelando el movimiento'
+      );
+    });
   });
 
   describe('when called with invalid arguments', () => {
@@ -73,6 +99,10 @@ describe('cancelMovement Service', () => {
       {
         description: 'gameID is negative',
         args: { ...validArguments, gameID: -1 },
+      },
+      {
+        description: 'playerID is a string',
+        args: { ...validArguments, playerID: '2' },
       },
     ];
 
