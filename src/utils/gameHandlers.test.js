@@ -64,7 +64,9 @@ describe('gameHandlers', () => {
 
       await handleCreateGame(elements, createPlayer, redirectToLobbyPage);
 
-      expect(alertMock).toHaveBeenCalledWith('Hubo un problema al crear el juego');
+      expect(alertMock).toHaveBeenCalledWith(
+        'Hubo un problema al crear el juego'
+      );
       alertMock.mockRestore();
     });
   });
@@ -80,7 +82,12 @@ describe('gameHandlers', () => {
     it('should call joinGame with correct parameters', async () => {
       joinGame.mockResolvedValue({ playerId: 1 });
 
-      await handleJoinGame(elements, selectedGame, createPlayer, redirectToLobbyPage);
+      await handleJoinGame(
+        elements,
+        selectedGame,
+        createPlayer,
+        redirectToLobbyPage
+      );
 
       expect(joinGame).toHaveBeenCalledWith({ playerName: 'Player' }, 1);
     });
@@ -88,7 +95,12 @@ describe('gameHandlers', () => {
     it('should call createPlayer and redirectToLobbyPage on success', async () => {
       joinGame.mockResolvedValue({ playerId: 1 });
 
-      await handleJoinGame(elements, selectedGame, createPlayer, redirectToLobbyPage);
+      await handleJoinGame(
+        elements,
+        selectedGame,
+        createPlayer,
+        redirectToLobbyPage
+      );
 
       expect(createPlayer).toHaveBeenCalledWith(1);
       expect(redirectToLobbyPage).toHaveBeenCalledWith(1);
@@ -98,7 +110,12 @@ describe('gameHandlers', () => {
       const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => {});
       joinGame.mockRejectedValue(new Error('Game is full'));
 
-      await handleJoinGame(elements, selectedGame, createPlayer, redirectToLobbyPage);
+      await handleJoinGame(
+        elements,
+        selectedGame,
+        createPlayer,
+        redirectToLobbyPage
+      );
 
       expect(alertMock).toHaveBeenCalledWith("La partida 'Game' está llena");
       alertMock.mockRestore();
@@ -108,7 +125,12 @@ describe('gameHandlers', () => {
       const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => {});
       joinGame.mockRejectedValue(new Error('Network Error'));
 
-      await handleJoinGame(elements, selectedGame, createPlayer, redirectToLobbyPage);
+      await handleJoinGame(
+        elements,
+        selectedGame,
+        createPlayer,
+        redirectToLobbyPage
+      );
 
       expect(alertMock).toHaveBeenCalledWith('Network Error');
       alertMock.mockRestore();
