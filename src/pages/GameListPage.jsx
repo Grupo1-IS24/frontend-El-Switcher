@@ -20,7 +20,11 @@ const GameListPage = () => {
       return <MessageCard type={'error'} message={error} />;
     }
 
-    if (gameList.length === 0) {
+    const filteredGameList = gameList.filter(
+      (game) => game.connectedPlayers < game.maxPlayers
+    );
+
+    if (filteredGameList.length === 0) {
       return (
         <MessageCard type={'info'} message='No hay partidas disponibles.' />
       );
