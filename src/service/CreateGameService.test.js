@@ -84,7 +84,9 @@ describe('createGame', () => {
     });
 
     it('should return null if the server response contains non-numeric ownerId or gameId', async () => {
-      apiService.post.mockResolvedValue({ data: { ownerId: '1', gameId: '1' } });
+      apiService.post.mockResolvedValue({
+        data: { ownerId: '1', gameId: '1' },
+      });
       const gameData = {
         gameName: 'Game',
         ownerName: 'Host',
