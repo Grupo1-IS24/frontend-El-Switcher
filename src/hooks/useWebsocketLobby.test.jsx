@@ -119,6 +119,20 @@ describe('useWebsocketLobby Hook', () => {
 
       expect(mockRedirectToGamePage).toHaveBeenCalledWith('1');
     });
+
+    // Test handling of game_started event with gameStarted as false
+    it('should not redirect if game_started event has gameStarted as false', () => {
+      renderUseWebsocketLobbyHook();
+
+      act(() => {
+        const gameStartedCallback = getCallbackForEvent('game_started');
+        if (gameStartedCallback) {
+          gameStartedCallback({ gameStarted: false });
+        }
+      });
+
+      expect(mockRedirectToGamePage).not.toHaveBeenCalled();
+    });
   });
 
   // Test cleanup on unmount
