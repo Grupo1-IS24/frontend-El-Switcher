@@ -36,15 +36,27 @@ describe('useGetGameList', () => {
     });
 
     expect(result.current.gameList).toEqual([
-      { gameId: 1, gameName: 'Test Game 1', connectedPlayers: 2, maxPlayers: 4 },
-      { gameId: 3, gameName: 'Test Game 3', connectedPlayers: 1, maxPlayers: 4 },
+      {
+        gameId: 1,
+        gameName: 'Test Game 1',
+        connectedPlayers: 2,
+        maxPlayers: 4,
+      },
+      {
+        gameId: 3,
+        gameName: 'Test Game 3',
+        connectedPlayers: 1,
+        maxPlayers: 4,
+      },
     ]);
     expect(result.current.error).toBeNull();
     expect(getGameList).toHaveBeenCalled();
   });
 
   it('should handle error when fetching game list', async () => {
-    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
     const errorMessage = 'Error fetching game list';
     getGameList.mockRejectedValueOnce(new Error(errorMessage));
 
@@ -70,12 +82,27 @@ describe('useGetGameList', () => {
     });
 
     expect(result.current.gameList).toEqual([
-      { gameId: 1, gameName: 'Test Game 1', connectedPlayers: 2, maxPlayers: 4 },
-      { gameId: 3, gameName: 'Test Game 3', connectedPlayers: 1, maxPlayers: 4 },
+      {
+        gameId: 1,
+        gameName: 'Test Game 1',
+        connectedPlayers: 2,
+        maxPlayers: 4,
+      },
+      {
+        gameId: 3,
+        gameName: 'Test Game 3',
+        connectedPlayers: 1,
+        maxPlayers: 4,
+      },
     ]);
 
     const newMockGameList = [
-      { gameId: 4, gameName: 'Test Game 4', connectedPlayers: 2, maxPlayers: 4 },
+      {
+        gameId: 4,
+        gameName: 'Test Game 4',
+        connectedPlayers: 2,
+        maxPlayers: 4,
+      },
     ];
     getGameList.mockResolvedValueOnce(newMockGameList);
 

@@ -48,6 +48,9 @@ describe('useFigureCards', () => {
 
   it('should return the correct figure cards for a specific player', () => {
     const { result } = renderHook(() => useFigureCards());
-    expect(result.current.getFigureCardsByPlayerId(2)).toEqual(['card3', 'card4']);
+    expect(result.current.getFigureCardsByPlayerId(2)).toEqual([
+      'card3',
+      'card4',
+    ]);
   });
 });

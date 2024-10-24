@@ -21,8 +21,14 @@ vi.mock('../utils/isEqualColorCard', () => ({
 describe('useFoundFigures', () => {
   const mockGameContext = {
     foundFigures: [
-      [{ row: 1, column: 1, color: 'red' }, { row: 1, column: 2, color: 'red' }],
-      [{ row: 2, column: 1, color: 'blue' }, { row: 2, column: 2, color: 'blue' }],
+      [
+        { row: 1, column: 1, color: 'red' },
+        { row: 1, column: 2, color: 'red' },
+      ],
+      [
+        { row: 2, column: 1, color: 'blue' },
+        { row: 2, column: 2, color: 'blue' },
+      ],
     ],
   };
 
@@ -39,8 +45,11 @@ describe('useFoundFigures', () => {
   });
 
   it('should return the correct figure that contains the target color card', () => {
-    isEqualColorCard.mockImplementation((card1, card2) => 
-      card1.row === card2.row && card1.column === card2.column && card1.color === card2.color
+    isEqualColorCard.mockImplementation(
+      (card1, card2) =>
+        card1.row === card2.row &&
+        card1.column === card2.column &&
+        card1.color === card2.color
     );
 
     const { result } = renderHook(() => useFoundFigures());
@@ -52,8 +61,11 @@ describe('useFoundFigures', () => {
   });
 
   it('should return an empty array if no figure contains the target color card', () => {
-    isEqualColorCard.mockImplementation((card1, card2) => 
-      card1.row === card2.row && card1.column === card2.column && card1.color === card2.color
+    isEqualColorCard.mockImplementation(
+      (card1, card2) =>
+        card1.row === card2.row &&
+        card1.column === card2.column &&
+        card1.color === card2.color
     );
 
     const { result } = renderHook(() => useFoundFigures());
@@ -62,8 +74,11 @@ describe('useFoundFigures', () => {
   });
 
   it('should return true if the target color card is part of any figure', () => {
-    isEqualColorCard.mockImplementation((card1, card2) => 
-      card1.row === card2.row && card1.column === card2.column && card1.color === card2.color
+    isEqualColorCard.mockImplementation(
+      (card1, card2) =>
+        card1.row === card2.row &&
+        card1.column === card2.column &&
+        card1.color === card2.color
     );
 
     const { result } = renderHook(() => useFoundFigures());
@@ -72,8 +87,11 @@ describe('useFoundFigures', () => {
   });
 
   it('should return false if the target color card is not part of any figure', () => {
-    isEqualColorCard.mockImplementation((card1, card2) => 
-      card1.row === card2.row && card1.column === card2.column && card1.color === card2.color
+    isEqualColorCard.mockImplementation(
+      (card1, card2) =>
+        card1.row === card2.row &&
+        card1.column === card2.column &&
+        card1.color === card2.color
     );
 
     const { result } = renderHook(() => useFoundFigures());

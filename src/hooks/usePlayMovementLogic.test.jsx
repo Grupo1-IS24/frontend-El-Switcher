@@ -133,7 +133,9 @@ describe('usePlayMovementLogic', () => {
       act(() => {
         result.current.selectColorCard(colorCard);
       });
-      expect(mockSetSelectedColorCards).toHaveBeenCalledWith(expect.any(Function));
+      expect(mockSetSelectedColorCards).toHaveBeenCalledWith(
+        expect.any(Function)
+      );
       act(() => {
         const updateFn = mockSetSelectedColorCards.mock.calls[0][0];
         expect(updateFn([])).toEqual([colorCard]);

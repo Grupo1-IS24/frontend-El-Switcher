@@ -71,7 +71,9 @@ describe('usePlayFigureLogic', () => {
   it('should return false if the figure card is not selected', () => {
     mockPlayCardLogicContext.selectedFigureCard = { figureCardId: 1 };
     const { result } = renderHook(() => usePlayFigureLogic());
-    expect(result.current.isSelectedFigureCard({ figureCardId: 2 })).toBe(false);
+    expect(result.current.isSelectedFigureCard({ figureCardId: 2 })).toBe(
+      false
+    );
   });
 
   it('should return true if the player can select a figure card', () => {
@@ -87,17 +89,33 @@ describe('usePlayFigureLogic', () => {
   });
 
   it('should return true if the figure color card is selected', () => {
-    mockPlayCardLogicContext.selectedFigureColorCards = [{ row: 1, column: 1, color: 'red' }];
+    mockPlayCardLogicContext.selectedFigureColorCards = [
+      { row: 1, column: 1, color: 'red' },
+    ];
     isEqualColorCard.mockReturnValue(true);
     const { result } = renderHook(() => usePlayFigureLogic());
-    expect(result.current.isSelectedFigureColorCard({ row: 1, column: 1, color: 'red' })).toBe(true);
+    expect(
+      result.current.isSelectedFigureColorCard({
+        row: 1,
+        column: 1,
+        color: 'red',
+      })
+    ).toBe(true);
   });
 
   it('should return false if the figure color card is not selected', () => {
-    mockPlayCardLogicContext.selectedFigureColorCards = [{ row: 1, column: 1, color: 'red' }];
+    mockPlayCardLogicContext.selectedFigureColorCards = [
+      { row: 1, column: 1, color: 'red' },
+    ];
     isEqualColorCard.mockReturnValue(false);
     const { result } = renderHook(() => usePlayFigureLogic());
-    expect(result.current.isSelectedFigureColorCard({ row: 2, column: 2, color: 'blue' })).toBe(false);
+    expect(
+      result.current.isSelectedFigureColorCard({
+        row: 2,
+        column: 2,
+        color: 'blue',
+      })
+    ).toBe(false);
   });
 
   it('should return true if the player can select a figure color card', () => {
@@ -105,19 +123,33 @@ describe('usePlayFigureLogic', () => {
     mockPlayCardLogicContext.selectedFigureCard = { figureCardId: 1 };
     mockUseFoundFigures.isColorCardInAnyFigure.mockReturnValue(true);
     const { result } = renderHook(() => usePlayFigureLogic());
-    expect(result.current.canSelectFigureColorCard({ row: 1, column: 1, color: 'red' })).toBe(true);
+    expect(
+      result.current.canSelectFigureColorCard({
+        row: 1,
+        column: 1,
+        color: 'red',
+      })
+    ).toBe(true);
   });
 
   it('should return false if the player cannot select a figure color card', () => {
     mockUsePlayerTurn.isCurrentPlayerTurn.mockReturnValue(false);
     const { result } = renderHook(() => usePlayFigureLogic());
-    expect(result.current.canSelectFigureColorCard({ row: 1, column: 1, color: 'red' })).toBe(false);
+    expect(
+      result.current.canSelectFigureColorCard({
+        row: 1,
+        column: 1,
+        color: 'red',
+      })
+    ).toBe(false);
   });
 
   it('should return true if the player can play a figure', () => {
     mockUsePlayerTurn.isCurrentPlayerTurn.mockReturnValue(true);
     mockPlayCardLogicContext.selectedFigureCard = { figureCardId: 1 };
-    mockPlayCardLogicContext.selectedFigureColorCards = [{ row: 1, column: 1, color: 'red' }];
+    mockPlayCardLogicContext.selectedFigureColorCards = [
+      { row: 1, column: 1, color: 'red' },
+    ];
     const { result } = renderHook(() => usePlayFigureLogic());
     expect(result.current.canPlayFigure()).toBe(true);
   });
@@ -136,8 +168,12 @@ describe('usePlayFigureLogic', () => {
       result.current.selectFigureCard(figureCard);
     });
 
-    expect(mockPlayCardLogicContext.setSelectedFigureCard).toHaveBeenCalledWith(figureCard);
-    expect(mockPlayCardLogicContext.setSelectedFigureColorCards).toHaveBeenCalledWith([]);
+    expect(mockPlayCardLogicContext.setSelectedFigureCard).toHaveBeenCalledWith(
+      figureCard
+    );
+    expect(
+      mockPlayCardLogicContext.setSelectedFigureColorCards
+    ).toHaveBeenCalledWith([]);
     expect(mockPlayCardLogicContext.resetMovementCards).toHaveBeenCalled();
   });
 
@@ -150,8 +186,12 @@ describe('usePlayFigureLogic', () => {
       result.current.selectFigureCard(figureCard);
     });
 
-    expect(mockPlayCardLogicContext.setSelectedFigureCard).toHaveBeenCalledWith(null);
-    expect(mockPlayCardLogicContext.setSelectedFigureColorCards).toHaveBeenCalledWith([]);
+    expect(mockPlayCardLogicContext.setSelectedFigureCard).toHaveBeenCalledWith(
+      null
+    );
+    expect(
+      mockPlayCardLogicContext.setSelectedFigureColorCards
+    ).toHaveBeenCalledWith([]);
     expect(mockPlayCardLogicContext.resetMovementCards).toHaveBeenCalled();
   });
 
@@ -165,7 +205,9 @@ describe('usePlayFigureLogic', () => {
       result.current.selectFigureColorCard(colorCard);
     });
 
-    expect(mockPlayCardLogicContext.setSelectedFigureColorCards).toHaveBeenCalledWith(figureColorCards);
+    expect(
+      mockPlayCardLogicContext.setSelectedFigureColorCards
+    ).toHaveBeenCalledWith(figureColorCards);
   });
 
   it('should deselect a figure color card', () => {
@@ -178,6 +220,8 @@ describe('usePlayFigureLogic', () => {
       result.current.selectFigureColorCard(colorCard);
     });
 
-    expect(mockPlayCardLogicContext.setSelectedFigureColorCards).toHaveBeenCalledWith([]);
+    expect(
+      mockPlayCardLogicContext.setSelectedFigureColorCards
+    ).toHaveBeenCalledWith([]);
   });
 });

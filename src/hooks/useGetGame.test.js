@@ -10,7 +10,12 @@ vi.mock('../service/GetGameService', () => ({
 
 describe('useGetGame', () => {
   const gameId = 1;
-  const mockGame = { gameId: 1, gameName: 'Test Game', maxPlayers: 4, minPlayers: 2 };
+  const mockGame = {
+    gameId: 1,
+    gameName: 'Test Game',
+    maxPlayers: 4,
+    minPlayers: 2,
+  };
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -34,7 +39,9 @@ describe('useGetGame', () => {
   });
 
   it('should handle error when fetching game', async () => {
-    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
     const errorMessage = 'Error fetching game';
     getGame.mockRejectedValueOnce(new Error(errorMessage));
 
@@ -45,7 +52,10 @@ describe('useGetGame', () => {
     });
 
     expect(getGame).toHaveBeenCalledWith(gameId);
-    expect(consoleErrorSpy).toHaveBeenCalledWith(`Error fetching game with ID ${gameId}:`, expect.any(Error));
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      `Error fetching game with ID ${gameId}:`,
+      expect.any(Error)
+    );
 
     consoleErrorSpy.mockRestore();
   });
@@ -59,7 +69,12 @@ describe('useGetGame', () => {
       expect(result.current.game).toEqual(mockGame);
     });
 
-    const newMockGame = { gameId: 1, gameName: 'Updated Test Game', maxPlayers: 4, minPlayers: 2 };
+    const newMockGame = {
+      gameId: 1,
+      gameName: 'Updated Test Game',
+      maxPlayers: 4,
+      minPlayers: 2,
+    };
     getGame.mockResolvedValueOnce(newMockGame);
 
     act(() => {
