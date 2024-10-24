@@ -11,7 +11,12 @@ export default defineConfig({
     coverage: {
       reporter: ['text', 'html', 'text-summary'],
       include: ['src/*/*.{js,jsx}', 'src/*/*/*.{js,jsx}'],
-      exclude: ['src/*/*.test.{js,jsx}', 'src/*.{js,jsx}', 'src/contexts/*','src/*/*/*.test.{js,jsx}'],
+      exclude: [
+        'src/*/*.test.{js,jsx}',
+        'src/*.{js,jsx}',
+        'src/contexts/*',
+        'src/*/*/*.test.{js,jsx}',
+      ],
     },
   },
 });
