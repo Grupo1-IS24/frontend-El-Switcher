@@ -6,7 +6,7 @@ const LoadingLobby = () => {
   };
 
   return (
-    <div className='bg-[#0c0c0c] rounded-xl text-[#f1f1f1] text-center flex flex-col gap-16 px-8 py-12 w-[660px] m-auto h-[487px]'>
+    <div className='bg-[#0c0c0c] rounded-xl text-[#f1f1f1] text-center flex flex-col gap-16 px-8 py-12 w-[660px] m-auto h-[487px]' data-testid="loading-lobby">
       <div className='lekton-bold text-6xl underline animate-pulse bg-gray-700 rounded-2xl h-[60px]'></div>
       <div className='flex flex-col gap-2'>
         {renderDivs(
