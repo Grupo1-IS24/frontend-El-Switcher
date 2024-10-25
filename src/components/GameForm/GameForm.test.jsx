@@ -3,6 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import GameForm from './GameForm';
 import { PlayerContext } from '../../contexts/PlayerProvider';
 import useRouteNavigation from '../../hooks/useRouteNavigation';
+import { handleCreateGame, handleJoinGame } from '../../utils/gameHandlers';
 
 vi.mock('../../hooks/useRouteNavigation', () => ({
   default: vi.fn(),
@@ -10,6 +11,11 @@ vi.mock('../../hooks/useRouteNavigation', () => ({
 
 vi.mock('../../service/JoinGameService', () => ({
   joinGame: vi.fn(),
+}));
+
+vi.mock('../../utils/gameHandlers', () => ({
+  handleCreateGame: vi.fn(),
+  handleJoinGame: vi.fn(),
 }));
 
 describe('GameForm', () => {
@@ -32,49 +38,46 @@ describe('GameForm', () => {
     );
   };
 
-  describe('Funcionalidad común', () => {
-    it('debería renderizar el botón de cerrar correctamente', () => {
-      setup({
-        type: 'join',
-        selectedGame: { gameId: '123', gameName: 'Juego de Prueba' },
-        onClose: mockOnClose,
-      });
+  const renderForm = (type, additionalProps = {}) => {
+    const defaultProps = {
+      type,
+      onClose: mockOnClose,
+      ...(type === 'join' && { selectedGame: { gameId: '123', gameName: 'Test Game' } }),
+      ...(type === 'create' && { setshowForm: mockSetShowForm }),
+    };
+    setup({ ...defaultProps, ...additionalProps });
+  };
+
+  describe('Common functionality', () => {
+    it('should render the close button correctly', () => {
+      renderForm('join');
       expect(screen.getByText('x')).toBeInTheDocument();
     });
 
-    it('debería llamar a onClose cuando se hace clic en el botón de cerrar', () => {
-      setup({
-        type: 'join',
-        selectedGame: { gameId: '123', gameName: 'Juego de Prueba' },
-        onClose: mockOnClose,
-      });
+    it('should call onClose when the close button is clicked', () => {
+      renderForm('join');
       fireEvent.click(screen.getByText('x'));
       expect(mockOnClose).toHaveBeenCalledTimes(1);
     });
+
+    it('should call setshowForm when the close button is clicked in the create form', () => {
+      renderForm('create');
+      fireEvent.click(screen.getByText('x'));
+      expect(mockSetShowForm).toHaveBeenCalledTimes(1);
+      expect(mockSetShowForm).toHaveBeenCalledWith(false);
+    });
   });
 
-  describe('Formulario de unirse', () => {
-    it('debería renderizar el formulario de unirse correctamente', () => {
-      setup({
-        type: 'join',
-        selectedGame: { gameId: '123', gameName: 'Juego de Prueba' },
-        onClose: mockOnClose,
-      });
-      expect(
-        screen.getByText(`Unirse a "Juego de Prueba"`)
-      ).toBeInTheDocument();
-      expect(
-        screen.getByPlaceholderText('Ingresa tu nombre')
-      ).toBeInTheDocument();
+  describe('Join form', () => {
+    it('should render the join form correctly', () => {
+      renderForm('join');
+      expect(screen.getByText(`Unirse a "Test Game"`)).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Ingresa tu nombre')).toBeInTheDocument();
       expect(screen.getByText('Unirse')).toBeInTheDocument();
     });
 
-    it('debería tener el número y tipos correctos de inputs y botones', () => {
-      setup({
-        type: 'join',
-        selectedGame: { gameId: '123', gameName: 'Juego de Prueba' },
-        onClose: mockOnClose,
-      });
+    it('should have the correct number and types of inputs and buttons', () => {
+      renderForm('join');
       const inputs = screen.getAllByRole('textbox');
       expect(inputs).toHaveLength(1);
       expect(inputs[0]).toHaveAttribute('name', 'playerName');
@@ -84,37 +87,35 @@ describe('GameForm', () => {
       expect(buttons[0]).toHaveTextContent('Unirse');
       expect(buttons[1]).toHaveTextContent('x');
     });
+
+    it('should call handleJoinGame with the correct arguments when the form is submitted', () => {
+      renderForm('join');
+      fireEvent.change(screen.getByPlaceholderText('Ingresa tu nombre'), {
+        target: { value: 'Player' },
+      });
+      fireEvent.submit(screen.getByRole('form'));
+      expect(handleJoinGame).toHaveBeenCalledWith(
+        expect.any(Object),
+        { gameId: '123', gameName: 'Test Game' },
+        mockCreatePlayer,
+        mockRedirectToLobbyPage
+      );
+    });
   });
 
-  describe('Formulario de crear', () => {
-    it('debería renderizar el formulario de crear correctamente', () => {
-      setup({
-        type: 'create',
-        onClose: mockOnClose,
-        setshowForm: mockSetShowForm,
-      });
-      expect(screen.getByText('Crear Partida')).toBeInTheDocument();
-      expect(
-        screen.getByPlaceholderText('Ingresa tu nombre')
-      ).toBeInTheDocument();
-      expect(
-        screen.getByPlaceholderText('Ingresa el nombre de la partida')
-      ).toBeInTheDocument();
-      expect(
-        screen.getByPlaceholderText('Cant. min. jugadores')
-      ).toBeInTheDocument();
-      expect(
-        screen.getByPlaceholderText('Cant. max. jugadores')
-      ).toBeInTheDocument();
+  describe('Create form', () => {
+    it('should render the create form correctly', () => {
+      renderForm('create');
+      expect(screen.getByText('Crear partida')).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Ingresa tu nombre')).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Ingresa el nombre de la partida')).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Cant. min. jugadores')).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Cant. max. jugadores')).toBeInTheDocument();
       expect(screen.getByText('Crear partida')).toBeInTheDocument();
     });
 
-    it('debería tener el número y tipos correctos de inputs y botones', () => {
-      setup({
-        type: 'create',
-        onClose: mockOnClose,
-        setshowForm: mockSetShowForm,
-      });
+    it('should have the correct number and types of inputs and buttons', () => {
+      renderForm('create');
       const textInputs = screen.getAllByRole('textbox');
       expect(textInputs).toHaveLength(2);
       expect(textInputs[0]).toHaveAttribute('name', 'ownerName');
@@ -129,6 +130,39 @@ describe('GameForm', () => {
       expect(buttons).toHaveLength(2);
       expect(buttons[0]).toHaveTextContent('Crear partida');
       expect(buttons[1]).toHaveTextContent('x');
+    });
+
+    it('should call handleCreateGame with the correct arguments when the form is submitted', () => {
+      renderForm('create');
+      fireEvent.change(screen.getByPlaceholderText('Ingresa tu nombre'), {
+        target: { value: 'Host' },
+      });
+      fireEvent.change(screen.getByPlaceholderText('Ingresa el nombre de la partida'), {
+        target: { value: 'Test Game' },
+      });
+      fireEvent.change(screen.getByPlaceholderText('Cant. min. jugadores'), {
+        target: { value: '2' },
+      });
+      fireEvent.change(screen.getByPlaceholderText('Cant. max. jugadores'), {
+        target: { value: '4' },
+      });
+      fireEvent.submit(screen.getByRole('form'));
+      expect(handleCreateGame).toHaveBeenCalledWith(
+        expect.any(Object),
+        mockCreatePlayer,
+        mockRedirectToLobbyPage
+      );
+    });
+  });
+
+  describe('Conditional behavior', () => {
+    it('should not render the component when type is "join" and selectedGame is null', () => {
+      const { container } = render(
+        <PlayerContext.Provider value={{ createPlayer: mockCreatePlayer }}>
+          <GameForm type='join' selectedGame={null} onClose={mockOnClose} />
+        </PlayerContext.Provider>
+      );
+      expect(container.firstChild).toBeNull();
     });
   });
 });
