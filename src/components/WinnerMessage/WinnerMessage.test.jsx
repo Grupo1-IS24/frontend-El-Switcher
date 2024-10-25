@@ -12,41 +12,38 @@ vi.mock('../../hooks/useRouteNavigation', () => ({
   }),
 }));
 
-describe('WinnerMessage', () => {
-  const setup = (winnerName) =>
-    render(<WinnerMessage winnerName={winnerName} />);
+const setup = (winnerName) => render(<WinnerMessage winnerName={winnerName} />);
 
-  afterEach(() => {
-    vi.clearAllMocks(); // Clear all mocks after each test.
-  });
+const clearMocks = () => vi.clearAllMocks();
+
+const expectTextInDocument = (text) => {
+  expect(screen.getByText(text)).toBeInTheDocument();
+};
+
+describe('WinnerMessage', () => {
+  afterEach(clearMocks);
 
   describe('when winnerName is provided', () => {
-    beforeEach(() => {
-      setup('Edward Elric');
-    });
+    beforeEach(() => setup('Edward Elric'));
 
     it('renders the winner message with the name', () => {
-      expect(screen.getByText('¡Ganaste! Edward Elric')).toBeInTheDocument();
+      expectTextInDocument('¡Ganaste! Edward Elric');
     });
   });
 
   describe('when winnerName is null', () => {
-    beforeEach(() => {
-      setup(null);
-    });
+    beforeEach(() => setup(null));
 
     it('renders the winner message without a name', () => {
-      expect(screen.getByText('¡Ganaste!')).toBeInTheDocument();
+      expectTextInDocument('¡Ganaste!');
     });
   });
 
   describe('Button functionality', () => {
-    beforeEach(() => {
-      setup('Edward Elric');
-    });
+    beforeEach(() => setup('Edward Elric'));
 
     it('renders the "Ir al inicio" button', () => {
-      expect(screen.getByText('Ir al inicio')).toBeInTheDocument();
+      expectTextInDocument('Ir al inicio');
     });
 
     it('calls redirectToHomePage when button is clicked', async () => {
