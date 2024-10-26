@@ -4,6 +4,7 @@ import { PlayerContext } from '../../contexts/PlayerProvider';
 import { playFigureCard } from '../../service/PlayFigureCardService';
 import usePlayFigureLogic from '../../hooks/usePlayFigureLogic';
 import Button from '../Button/Button';
+import showToast from '../../utils/toastUtil';
 
 const PlayFigureButton = () => {
   const { gameId } = useParams();
@@ -26,7 +27,11 @@ const PlayFigureButton = () => {
 
       resetFigureCards();
     } catch (error) {
-      alert(`Error jugando carta de figura: ${error.message}`);
+      showToast({
+        type: 'error',
+        message: `Error jugando carta de figura: ${error.message}`,
+        autoClose: 3000,
+      });
     }
   };
 
