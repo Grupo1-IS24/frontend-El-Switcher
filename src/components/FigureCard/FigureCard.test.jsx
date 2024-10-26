@@ -19,12 +19,18 @@ describe('FigureCard', () => {
   describe('Image rendering', () => {
     it('should render the FigureCard component with the correct image path and alt text for valid inputs', () => {
       renderComponent({ figure: 3, difficulty: 'easy' });
-      checkImageAttributes('/src/assets/FigureCards/Easy/fig3.svg', 'Figura easy 3');
+      checkImageAttributes(
+        '/src/assets/FigureCards/Easy/fig3.svg',
+        'Figura easy 3'
+      );
     });
 
     it('should render the default image path and alt text for invalid inputs', () => {
       renderComponent({ figure: 20, difficulty: 'easy' });
-      checkImageAttributes('/src/assets/FigureCards/back-fig.svg', 'Figura de espaldas');
+      checkImageAttributes(
+        '/src/assets/FigureCards/back-fig.svg',
+        'Figura de espaldas'
+      );
     });
   });
 

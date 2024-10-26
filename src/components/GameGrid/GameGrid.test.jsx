@@ -5,14 +5,16 @@ import GameCard from '../GameCard/GameCard';
 
 // Mock del componente GameCard
 vi.mock('../GameCard/GameCard', () => ({
-  default: vi.fn(({ gameName, maxPlayers, connectedPlayers, onPressButton }) => (
-    <div>
-      <h2>{gameName}</h2>
-      <p>Conectados: {connectedPlayers}</p>
-      <p>Max. jugadores: {maxPlayers}</p>
-      <button onClick={onPressButton}>Unirme</button>
-    </div>
-  )),
+  default: vi.fn(
+    ({ gameName, maxPlayers, connectedPlayers, onPressButton }) => (
+      <div>
+        <h2>{gameName}</h2>
+        <p>Conectados: {connectedPlayers}</p>
+        <p>Max. jugadores: {maxPlayers}</p>
+        <button onClick={onPressButton}>Unirme</button>
+      </div>
+    )
+  ),
 }));
 
 describe('GameGrid', () => {

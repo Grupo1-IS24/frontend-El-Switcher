@@ -48,13 +48,19 @@ describe('PlayerInfo', () => {
     );
 
   it('should render the PlayerInfo component', () => {
-    renderComponent({ playerName: 'Player 1', playerId: '1', index: 0, isTurn: true }, '1');
+    renderComponent(
+      { playerName: 'Player 1', playerId: '1', index: 0, isTurn: true },
+      '1'
+    );
     expect(screen.getByText('Player 1')).toBeInTheDocument();
     expect(screen.getByText('(En turno)')).toBeInTheDocument();
   });
 
   it('should render action buttons when currentPlayerID is equal to playerId', () => {
-    renderComponent({ playerName: 'Player 1', playerId: '1', index: 0, isTurn: true }, '1');
+    renderComponent(
+      { playerName: 'Player 1', playerId: '1', index: 0, isTurn: true },
+      '1'
+    );
     expect(screen.getByText('EndTurnButton')).toBeInTheDocument();
     expect(screen.getByText('PlayMovementButton')).toBeInTheDocument();
     expect(screen.getByText('PlayFigureButton')).toBeInTheDocument();
@@ -62,32 +68,50 @@ describe('PlayerInfo', () => {
   });
 
   it('should render MovCardHand when currentPlayerID is equal to playerId', () => {
-    renderComponent({ playerName: 'Player 1', playerId: '1', index: 0, isTurn: true }, '1');
+    renderComponent(
+      { playerName: 'Player 1', playerId: '1', index: 0, isTurn: true },
+      '1'
+    );
     expect(screen.getByText('MovCardHand')).toBeInTheDocument();
   });
 
   it('should render BackMovCardHand when currentPlayerID is not equal to playerId', () => {
-    renderComponent({ playerName: 'Player 1', playerId: '1', index: 0, isTurn: true }, '2');
+    renderComponent(
+      { playerName: 'Player 1', playerId: '1', index: 0, isTurn: true },
+      '2'
+    );
     expect(screen.getByText('BackMovCardHand')).toBeInTheDocument();
     expect(mockGetTotalMovCardsForOpponent).toHaveBeenCalledWith('1');
   });
 
   it('should render FigureCardHand when currentPlayerID is equal to playerId', () => {
-    renderComponent({ playerName: 'Player 1', playerId: '1', index: 0, isTurn: true }, '1');
+    renderComponent(
+      { playerName: 'Player 1', playerId: '1', index: 0, isTurn: true },
+      '1'
+    );
     expect(screen.getByText('FigureCardHand')).toBeInTheDocument();
   });
 
   it('should render OpponentFigureCardHand when currentPlayerID is not equal to playerId', () => {
-    renderComponent({ playerName: 'Player 1', playerId: '1', index: 0, isTurn: true }, '2');
+    renderComponent(
+      { playerName: 'Player 1', playerId: '1', index: 0, isTurn: true },
+      '2'
+    );
     expect(screen.getByText('OpponentFigureCardHand')).toBeInTheDocument();
   });
 
   it('should display player name and turn status', () => {
-    renderComponent({ playerName: 'Player 1', playerId: '1', index: 0, isTurn: true }, '1');
+    renderComponent(
+      { playerName: 'Player 1', playerId: '1', index: 0, isTurn: true },
+      '1'
+    );
     expect(screen.getByText('Player 1')).toBeInTheDocument();
     expect(screen.getByText('(En turno)')).toBeInTheDocument();
     cleanup();
-    renderComponent({ playerName: 'Player 2', playerId: '2', index: 1, isTurn: false }, '1');
+    renderComponent(
+      { playerName: 'Player 2', playerId: '2', index: 1, isTurn: false },
+      '1'
+    );
     expect(screen.getByText('Player 2')).toBeInTheDocument();
     expect(screen.queryByText('(En turno)')).not.toBeInTheDocument();
   });

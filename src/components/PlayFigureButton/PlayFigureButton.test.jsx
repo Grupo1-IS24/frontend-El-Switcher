@@ -89,7 +89,9 @@ describe('PlayFigureButton', () => {
         { color: 'red', row: 1, column: 1 },
         { color: 'blue', row: 2, column: 2 },
       ]);
-      expect(window.alert).toHaveBeenCalledWith(`Error jugando carta de figura: ${errorMessage}`);
+      expect(window.alert).toHaveBeenCalledWith(
+        `Error jugando carta de figura: ${errorMessage}`
+      );
     });
   });
 });

@@ -21,7 +21,13 @@ describe('GameCard', () => {
   };
 
   const renderComponent = (props = {}) =>
-    render(<GameCard {...defaultProps} {...props} onPressButton={mockOnPressButton} />);
+    render(
+      <GameCard
+        {...defaultProps}
+        {...props}
+        onPressButton={mockOnPressButton}
+      />
+    );
 
   it('should render the GameCard component', () => {
     renderComponent();

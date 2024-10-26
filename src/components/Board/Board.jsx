@@ -16,7 +16,7 @@ const Board = ({ board }) => {
   const { isColorCardInAnyFigure } = useFoundFigures();
 
   return (
-    <div className='fixed h-screen w-screen' data-testid="board">
+    <div className='fixed h-screen w-screen' data-testid='board'>
       <div className='flex justify-center items-center h-screen'>
         <div className='grid grid-cols-6 grid-rows-6 gap-2'>
           {board.map((colorCard, index) => (

@@ -13,8 +13,8 @@ describe('ValidatePositiveIntegerParam', () => {
   const renderComponent = (paramValue) => {
     useParams.mockReturnValue({ paramName: paramValue });
     return render(
-      <ValidatePositiveIntegerParam paramName="paramName">
-        <div data-testid="child-component">Child Component</div>
+      <ValidatePositiveIntegerParam paramName='paramName'>
+        <div data-testid='child-component'>Child Component</div>
       </ValidatePositiveIntegerParam>
     );
   };

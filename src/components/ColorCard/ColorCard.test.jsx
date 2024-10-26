@@ -17,7 +17,7 @@ describe('ColorCard', () => {
     colors.forEach((color) => {
       renderComponent({ color });
       const buttons = screen.getAllByRole('button');
-      const button = buttons[buttons.length - 1]; 
+      const button = buttons[buttons.length - 1];
       expect(button).toHaveClass(colorClasses[color]);
     });
   });

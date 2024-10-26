@@ -11,7 +11,7 @@ vi.mock('../../hooks/usePlayerTurn', () => ({
 
 // Mock PlayerInfo
 vi.mock('../PlayerInfo/PlayerInfo', () => ({
-  default: vi.fn(() => <div data-testid="player-info">Player Info</div>),
+  default: vi.fn(() => <div data-testid='player-info'>Player Info</div>),
 }));
 
 describe('DisplayPlayers', () => {
@@ -28,7 +28,8 @@ describe('DisplayPlayers', () => {
     });
   });
 
-  const renderComponent = (listOfPlayers) => render(<DisplayPlayers listOfPlayers={listOfPlayers} />);
+  const renderComponent = (listOfPlayers) =>
+    render(<DisplayPlayers listOfPlayers={listOfPlayers} />);
 
   it('should render the DisplayPlayers component', () => {
     renderComponent(players);
@@ -39,7 +40,7 @@ describe('DisplayPlayers', () => {
   it('should call isPlayerTurn for each player', () => {
     renderComponent(players);
     expect(mockIsPlayerTurn).toHaveBeenCalledTimes(players.length);
-    players.forEach(player => {
+    players.forEach((player) => {
       expect(mockIsPlayerTurn).toHaveBeenCalledWith(player.playerId);
     });
   });

@@ -40,7 +40,9 @@ describe('CancelMovementButton', () => {
     mockCanCancelMovement.mockReturnValue(canCancel);
     render(
       <PlayerContext.Provider value={{ playerID: '123' }}>
-        <PlayCardLogicContext.Provider value={{ resetAllCards: mockResetAllCards }}>
+        <PlayCardLogicContext.Provider
+          value={{ resetAllCards: mockResetAllCards }}
+        >
           <CancelMovementButton />
         </PlayCardLogicContext.Provider>
       </PlayerContext.Provider>
@@ -66,15 +68,22 @@ describe('CancelMovementButton', () => {
   });
 
   it('should handle errors in cancelMovement', async () => {
-    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    mockCancelMovement.mockRejectedValue(new Error('Error cancelando movimiento'));
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+    mockCancelMovement.mockRejectedValue(
+      new Error('Error cancelando movimiento')
+    );
     renderComponent(true);
     const button = screen.getByText('Cancelar movimiento');
     fireEvent.click(button);
     await waitFor(() => {
       expect(mockResetAllCards).toHaveBeenCalled();
       expect(cancelMovement).toHaveBeenCalledWith(1, '123');
-      expect(consoleErrorSpy).toHaveBeenCalledWith('Error cancelando movimiento:', expect.any(Error));
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Error cancelando movimiento:',
+        expect.any(Error)
+      );
     });
     consoleErrorSpy.mockRestore();
   });

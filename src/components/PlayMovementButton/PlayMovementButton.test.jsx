@@ -33,10 +33,7 @@ describe('PlayMovementButton', () => {
     usePlayMovementLogic.mockReturnValue({
       canPlayMovement: mockCanPlayMovement,
       selectedMovementCard: { movementcardId: 1 },
-      selectedColorCards: [
-        { squarePieceId: 1 },
-        { squarePieceId: 2 },
-      ],
+      selectedColorCards: [{ squarePieceId: 1 }, { squarePieceId: 2 }],
       resetMovementCards: mockResetMovementCards,
     });
     vi.spyOn(window, 'alert').mockImplementation(() => {});
@@ -83,7 +80,9 @@ describe('PlayMovementButton', () => {
     fireEvent.click(button);
     await waitFor(() => {
       expect(playMovementCard).toHaveBeenCalledWith('1', 1, 1, 1, 2);
-      expect(window.alert).toHaveBeenCalledWith(`Error jugando carta de movimiento: ${errorMessage}`);
+      expect(window.alert).toHaveBeenCalledWith(
+        `Error jugando carta de movimiento: ${errorMessage}`
+      );
     });
   });
 });

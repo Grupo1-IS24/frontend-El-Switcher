@@ -46,9 +46,15 @@ describe('OpponentFigureCardHand', () => {
     mockGetFigureCardsByPlayerId.mockReturnValue(figureCards);
     renderComponent('player1');
     const figureCardElements = screen.getAllByRole('img');
-    expect(figureCardElements[0]).toHaveAttribute('src', '/src/assets/FigureCards/Easy/fig1.svg');
+    expect(figureCardElements[0]).toHaveAttribute(
+      'src',
+      '/src/assets/FigureCards/Easy/fig1.svg'
+    );
     expect(figureCardElements[0]).toHaveAttribute('alt', 'Figura easy 1');
-    expect(figureCardElements[1]).toHaveAttribute('src', '/src/assets/FigureCards/Hard/fig2.svg');
+    expect(figureCardElements[1]).toHaveAttribute(
+      'src',
+      '/src/assets/FigureCards/Hard/fig2.svg'
+    );
     expect(figureCardElements[1]).toHaveAttribute('alt', 'Figura hard 2');
   });
 });

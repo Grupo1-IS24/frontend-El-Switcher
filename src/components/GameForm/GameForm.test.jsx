@@ -42,7 +42,9 @@ describe('GameForm', () => {
     const defaultProps = {
       type,
       onClose: mockOnClose,
-      ...(type === 'join' && { selectedGame: { gameId: '123', gameName: 'Test Game' } }),
+      ...(type === 'join' && {
+        selectedGame: { gameId: '123', gameName: 'Test Game' },
+      }),
       ...(type === 'create' && { setshowForm: mockSetShowForm }),
     };
     setup({ ...defaultProps, ...additionalProps });
@@ -72,7 +74,9 @@ describe('GameForm', () => {
     it('should render the join form correctly', () => {
       renderForm('join');
       expect(screen.getByText(`Unirse a "Test Game"`)).toBeInTheDocument();
-      expect(screen.getByPlaceholderText('Ingresa tu nombre')).toBeInTheDocument();
+      expect(
+        screen.getByPlaceholderText('Ingresa tu nombre')
+      ).toBeInTheDocument();
       expect(screen.getByText('Unirse')).toBeInTheDocument();
     });
 
@@ -107,10 +111,18 @@ describe('GameForm', () => {
     it('should render the create form correctly', () => {
       renderForm('create');
       expect(screen.getByText('Crear partida')).toBeInTheDocument();
-      expect(screen.getByPlaceholderText('Ingresa tu nombre')).toBeInTheDocument();
-      expect(screen.getByPlaceholderText('Ingresa el nombre de la partida')).toBeInTheDocument();
-      expect(screen.getByPlaceholderText('Cant. min. jugadores')).toBeInTheDocument();
-      expect(screen.getByPlaceholderText('Cant. max. jugadores')).toBeInTheDocument();
+      expect(
+        screen.getByPlaceholderText('Ingresa tu nombre')
+      ).toBeInTheDocument();
+      expect(
+        screen.getByPlaceholderText('Ingresa el nombre de la partida')
+      ).toBeInTheDocument();
+      expect(
+        screen.getByPlaceholderText('Cant. min. jugadores')
+      ).toBeInTheDocument();
+      expect(
+        screen.getByPlaceholderText('Cant. max. jugadores')
+      ).toBeInTheDocument();
       expect(screen.getByText('Crear partida')).toBeInTheDocument();
     });
 
@@ -137,9 +149,12 @@ describe('GameForm', () => {
       fireEvent.change(screen.getByPlaceholderText('Ingresa tu nombre'), {
         target: { value: 'Host' },
       });
-      fireEvent.change(screen.getByPlaceholderText('Ingresa el nombre de la partida'), {
-        target: { value: 'Test Game' },
-      });
+      fireEvent.change(
+        screen.getByPlaceholderText('Ingresa el nombre de la partida'),
+        {
+          target: { value: 'Test Game' },
+        }
+      );
       fireEvent.change(screen.getByPlaceholderText('Cant. min. jugadores'), {
         target: { value: '2' },
       });

@@ -82,15 +82,22 @@ describe('StartGameButton', () => {
   });
 
   it('should handle errors in startGame', async () => {
-    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
     mockStartGame.mockRejectedValue(new Error('Error al iniciar la partida'));
     renderComponent(false);
     const button = screen.getByText('Iniciar partida');
     fireEvent.click(button);
     await waitFor(() => {
       expect(startGame).toHaveBeenCalledWith('1');
-      expect(window.alert).toHaveBeenCalledWith('Error al iniciar la partida. Intente nuevamente.');
-      expect(consoleErrorSpy).toHaveBeenCalledWith('Error al iniciar la partida', expect.any(Error));
+      expect(window.alert).toHaveBeenCalledWith(
+        'Error al iniciar la partida. Intente nuevamente.'
+      );
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Error al iniciar la partida',
+        expect.any(Error)
+      );
     });
     consoleErrorSpy.mockRestore();
   });

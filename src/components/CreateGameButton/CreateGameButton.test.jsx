@@ -5,7 +5,7 @@ import GameForm from '../GameForm/GameForm';
 
 // Mock GameForm
 vi.mock('../GameForm/GameForm', () => ({
-  default: vi.fn(() => <div data-testid="game-form">Game Form</div>),
+  default: vi.fn(() => <div data-testid='game-form'>Game Form</div>),
 }));
 
 describe('CreateGameButton', () => {

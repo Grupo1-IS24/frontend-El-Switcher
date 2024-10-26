@@ -15,7 +15,10 @@ describe('MovementCard', () => {
   it('should render the default image path and alt text for invalid movement', () => {
     renderComponent({ movement: 10 });
     const img = screen.getByRole('img');
-    expect(img).toHaveAttribute('src', '/src/assets/MovementCards/back-mov.svg');
+    expect(img).toHaveAttribute(
+      'src',
+      '/src/assets/MovementCards/back-mov.svg'
+    );
     expect(img).toHaveAttribute('alt', 'Movimiento de espaldas');
   });
 
