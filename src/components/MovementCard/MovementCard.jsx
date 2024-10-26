@@ -17,6 +17,8 @@ const MovementCard = ({
 
   return (
     <button
+      data-testid='movement-card'
+      data-movement={movement}
       className={`transition-transform duration-300 
         ${isSelected ? 'translate-y-[-20px]' : ''} 
         ${disabled ? 'cursor-not-allowed' : ''}`}

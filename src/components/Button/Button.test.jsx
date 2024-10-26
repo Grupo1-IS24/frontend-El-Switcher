@@ -11,12 +11,10 @@ describe('Button', () => {
 
   const renderButton = (props) => render(<Button {...props} />);
 
+  const baseClasses =
+    'text-3xl w-80 py-6 bg-white text-black hover:bg-black hover:text-white';
   const buttonStyles = [
-    {
-      style: 'homeButton',
-      class:
-        'text-3xl w-80 py-6 bg-white text-black hover:bg-black hover:text-white',
-    },
+    { style: 'homeButton', class: baseClasses },
     {
       style: 'formButton',
       class: 'text-xl p-4 bg-white text-black hover:bg-black hover:text-white',
@@ -63,55 +61,59 @@ describe('Button', () => {
     },
   ];
 
-  it('debería renderizar un botón con el texto "Click me"', () => {
+  it('should render a button with the text "Click me"', () => {
     renderButton({ text: 'Click me', onPress: mockFn, style: 'homeButton' });
     expect(screen.getByText('Click me')).toBeInTheDocument();
   });
 
-  it('debería llamar a onPress cuando se hace clic en el botón', () => {
+  it('should call onPress when the button is clicked', () => {
     renderButton({ text: 'Click me', onPress: mockFn, style: 'homeButton' });
     fireEvent.click(screen.getByText('Click me'));
     expect(mockFn).toHaveBeenCalledTimes(1);
   });
 
-  buttonStyles.forEach(({ style, class: className }) => {
-    it(`debería aplicar los estilos correctos para ${style}`, () => {
-      renderButton({ text: style, onPress: mockFn, style });
-      const button = screen.getByText(style);
-      expect(button).toHaveClass(className);
-    });
+  describe('Button styles', () => {
+    buttonStyles.forEach(({ style, class: className }) => {
+      it(`should apply the correct styles for ${style}`, () => {
+        renderButton({ text: style, onPress: mockFn, style });
+        const button = screen.getByText(style);
+        expect(button).toHaveClass(className);
+      });
 
-    it(`debería cambiar los estilos al pasar el mouse sobre ${style}`, () => {
-      renderButton({ text: `Hover ${style}`, onPress: mockFn, style });
-      const button = screen.getByText(`Hover ${style}`);
-      fireEvent.mouseOver(button);
-      className.split(' ').forEach((cls) => {
-        if (cls.startsWith('hover:')) {
-          expect(button).toHaveClass(cls);
-        }
+      it(`should change styles on hover for ${style}`, () => {
+        renderButton({ text: `Hover ${style}`, onPress: mockFn, style });
+        const button = screen.getByText(`Hover ${style}`);
+        fireEvent.mouseOver(button);
+        className.split(' ').forEach((cls) => {
+          if (cls.startsWith('hover:')) {
+            expect(button).toHaveClass(cls);
+          }
+        });
       });
     });
   });
 
-  it('debería estar deshabilitado cuando isDisabled es true', () => {
-    renderButton({
-      text: 'Disabled',
-      onPress: mockFn,
-      style: 'homeButton',
-      isDisabled: true,
+  describe('Disabled state', () => {
+    it('should be disabled when isDisabled is true', () => {
+      renderButton({
+        text: 'Disabled',
+        onPress: mockFn,
+        style: 'homeButton',
+        isDisabled: true,
+      });
+      const button = screen.getByText('Disabled');
+      expect(button).toBeDisabled();
     });
-    const button = screen.getByText('Disabled');
-    expect(button).toBeDisabled();
-  });
 
-  it('no debería llamar a onPress cuando el botón está deshabilitado', () => {
-    renderButton({
-      text: 'Disabled',
-      onPress: mockFn,
-      style: 'homeButton',
-      isDisabled: true,
+    it('should not call onPress when the button is disabled', () => {
+      renderButton({
+        text: 'Disabled',
+        onPress: mockFn,
+        style: 'homeButton',
+        isDisabled: true,
+      });
+      fireEvent.click(screen.getByText('Disabled'));
+      expect(mockFn).not.toHaveBeenCalled();
     });
-    fireEvent.click(screen.getByText('Disabled'));
-    expect(mockFn).not.toHaveBeenCalled();
   });
 });
