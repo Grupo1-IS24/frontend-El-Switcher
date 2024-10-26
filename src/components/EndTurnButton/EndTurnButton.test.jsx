@@ -1,5 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import EndTurnButton from './EndTurnButton';
 import { PlayerContext } from '../../contexts/PlayerProvider';
@@ -7,7 +6,6 @@ import { PlayCardLogicContext } from '../../contexts/PlayCardLogicProvider';
 import usePlayerTurn from '../../hooks/usePlayerTurn';
 import useDisableButton from '../../hooks/useDisableButton';
 import { useParams } from 'react-router-dom';
-import { endTurn } from '../../service/EndTurnService';
 
 // Mock hooks and services
 vi.mock('../../hooks/usePlayerTurn', () => ({
@@ -34,7 +32,9 @@ describe('EndTurnButton', () => {
   const renderComponent = () =>
     render(
       <PlayerContext.Provider value={{ playerID: '456' }}>
-        <PlayCardLogicContext.Provider value={{ resetAllCards: mockResetAllCards }}>
+        <PlayCardLogicContext.Provider
+          value={{ resetAllCards: mockResetAllCards }}
+        >
           <EndTurnButton />
         </PlayCardLogicContext.Provider>
       </PlayerContext.Provider>
@@ -51,14 +51,14 @@ describe('EndTurnButton', () => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
-  it('should render the EndTurnButton component when it is the player\'s turn', () => {
+  it("should render the EndTurnButton component when it is the player's turn", () => {
     mockIsCurrentPlayerTurn.mockReturnValue(true);
     renderComponent();
     const button = screen.getByText('Pasar turno');
     expect(button).toBeInTheDocument();
   });
 
-  it('should not render the EndTurnButton component when it is not the player\'s turn', () => {
+  it("should not render the EndTurnButton component when it is not the player's turn", () => {
     mockIsCurrentPlayerTurn.mockReturnValue(false);
     renderComponent();
     const button = screen.queryByText('Pasar turno');

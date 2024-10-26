@@ -2,8 +2,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import MovCardHand from './MovCardHand';
 import { GameContext } from '../../contexts/GameProvider';
-import usePlayedMovCards from '../../hooks/usePlayedMovCards';
-import usePlayMovementLogic from '../../hooks/usePlayMovementLogic';
 
 // Mock de los hooks
 const mockIsMovementCardPlayed = vi.fn(() => false);
@@ -45,17 +43,28 @@ describe('MovCardHand', () => {
 
   it('should render the MovCardHand component', () => {
     renderComponent();
-    expect(screen.getByRole('button', { name: /Movimiento 1/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Movimiento 2/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Movimiento 3/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /Movimiento 1/i })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /Movimiento 2/i })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /Movimiento 3/i })
+    ).toBeInTheDocument();
   });
 
   it('should pass the correct props to MovementCard', () => {
     renderComponent();
 
     mockMovementCards.forEach((movementCard) => {
-      const button = screen.getByRole('button', { name: new RegExp(`Movimiento ${movementCard.moveType}`, 'i') });
-      expect(button).toHaveAttribute('data-movement', `${movementCard.moveType}`);
+      const button = screen.getByRole('button', {
+        name: new RegExp(`Movimiento ${movementCard.moveType}`, 'i'),
+      });
+      expect(button).toHaveAttribute(
+        'data-movement',
+        `${movementCard.moveType}`
+      );
       expect(mockIsSelectedMovementCard).toHaveBeenCalledWith(movementCard);
       expect(mockCanSelectMovementCard).toHaveBeenCalledWith(movementCard);
       expect(mockIsMovementCardPlayed).toHaveBeenCalledWith(movementCard);
