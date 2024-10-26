@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import GameGrid from './GameGrid';
 import GameCard from '../GameCard/GameCard';
 
@@ -23,24 +23,41 @@ describe('GameGrid', () => {
   const renderComponent = (props) =>
     render(<GameGrid {...props} selectGame={mockSelectGame} />);
 
-  it('should render the GameGrid component', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('renders only games with available player slots', () => {
     const gameList = [
       { gameId: 1, gameName: 'Game 1', maxPlayers: 4, connectedPlayers: 2 },
       { gameId: 2, gameName: 'Game 2', maxPlayers: 4, connectedPlayers: 4 },
     ];
 
-    renderComponent({ gameList });
+    renderComponent({ gameList, searchGame: '' });
 
     expect(screen.getByText('Game 1')).toBeInTheDocument();
     expect(screen.queryByText('Game 2')).not.toBeInTheDocument();
   });
 
-  it('should pass the correct props to GameCard', () => {
+  it('renders a message when no games match the search', () => {
     const gameList = [
       { gameId: 1, gameName: 'Game 1', maxPlayers: 4, connectedPlayers: 2 },
     ];
 
-    renderComponent({ gameList });
+    renderComponent({ gameList, searchGame: 'Nonexistent' });
+
+    expect(
+      screen.getByText('No se encontró ninguna partida con ese nombre.')
+    ).toBeInTheDocument();
+    expect(screen.queryByText('Game 1')).not.toBeInTheDocument();
+  });
+
+  it('passes the correct props to GameCard', () => {
+    const gameList = [
+      { gameId: 1, gameName: 'Game 1', maxPlayers: 4, connectedPlayers: 2 },
+    ];
+
+    renderComponent({ gameList, searchGame: '' });
 
     expect(GameCard).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -53,15 +70,14 @@ describe('GameGrid', () => {
     );
   });
 
-  it('should call selectGame when the button is clicked', () => {
+  it('calls selectGame when the join button is clicked', () => {
     const gameList = [
       { gameId: 1, gameName: 'Game 1', maxPlayers: 4, connectedPlayers: 2 },
     ];
 
-    renderComponent({ gameList });
+    renderComponent({ gameList, searchGame: '' });
 
-    const button = screen.getByText('Unirme');
-    fireEvent.click(button);
+    fireEvent.click(screen.getByText('Unirme'));
     expect(mockSelectGame).toHaveBeenCalledWith(gameList[0]);
   });
 });
