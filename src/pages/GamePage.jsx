@@ -8,7 +8,7 @@ import { GameContext } from '../contexts/GameProvider';
 import PlayCardLogicProvider from '../contexts/PlayCardLogicProvider';
 
 const GamePage = () => {
-  const { listOfPlayers, board, winnerInfo } = useContext(GameContext);
+  const { listOfPlayers, board } = useContext(GameContext);
 
   return (
     <>
@@ -17,9 +17,7 @@ const GamePage = () => {
         <DisplayPlayers listOfPlayers={listOfPlayers} />
         <Board board={board} />
       </PlayCardLogicProvider>
-      {winnerInfo !== null && (
-        <WinnerMessage winnerName={winnerInfo.nameWinner} />
-      )}
+      <WinnerMessage />
       <LeaveButton />
     </>
   );
