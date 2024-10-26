@@ -6,16 +6,13 @@ vi.mock('react-toastify', async (importOriginal) => {
   const actual = await importOriginal();
   return {
     ...actual,
-    toast: Object.assign(
-      vi.fn(),
-      {
-        success: vi.fn(),
-        error: vi.fn(),
-        info: vi.fn(),
-        warn: vi.fn(),
-        default: vi.fn(),
-      }
-    ),
+    toast: Object.assign(vi.fn(), {
+      success: vi.fn(),
+      error: vi.fn(),
+      info: vi.fn(),
+      warn: vi.fn(),
+      default: vi.fn(),
+    }),
     Flip: actual.Flip,
   };
 });

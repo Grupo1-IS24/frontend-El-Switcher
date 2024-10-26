@@ -5,7 +5,7 @@ import { toast, Flip } from 'react-toastify';
  * @type {Object}
  */
 const defaultConfig = {
-  position: "bottom-right",
+  position: 'bottom-right',
   autoClose: 5000,
   hideProgressBar: false,
   newestOnTop: false,
@@ -14,8 +14,8 @@ const defaultConfig = {
   draggable: true,
   pauseOnFocusLoss: true,
   progress: undefined,
-  theme: "colored",
-  transition: Flip
+  theme: 'colored',
+  transition: Flip,
 };
 
 /**

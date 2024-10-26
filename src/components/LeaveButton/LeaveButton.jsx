@@ -19,7 +19,7 @@ const LeaveButton = ({ type }) => {
     }
 
     try {
-      await leaveGame(gameId, playerID); 
+      await leaveGame(gameId, playerID);
       redirectToHomePage();
     } catch (error) {
       showToast({

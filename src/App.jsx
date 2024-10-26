@@ -8,7 +8,7 @@ const App = () => {
   return (
     <PlayerProvider>
       <RouterProvider router={router} />
-      <ToastContainer/>
+      <ToastContainer />
     </PlayerProvider>
   );
 };
