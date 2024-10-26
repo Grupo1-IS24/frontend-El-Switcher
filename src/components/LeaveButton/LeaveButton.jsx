@@ -5,6 +5,7 @@ import { useContext } from 'react';
 import { PlayerContext } from '../../contexts/PlayerProvider';
 import { useParams } from 'react-router-dom';
 import useDisableButton from '../../hooks/useDisableButton';
+import showToast from '../../utils/toastUtil';
 
 const LeaveButton = ({ type }) => {
   const { redirectToHomePage } = useRouteNavigation();
@@ -18,10 +19,14 @@ const LeaveButton = ({ type }) => {
     }
 
     try {
-      await leaveGame(gameId, playerID); // service for leave lobby and a started game
+      await leaveGame(gameId, playerID); 
       redirectToHomePage();
     } catch (error) {
-      window.alert('Error al abandonar el juego. Intente nuevamente.');
+      showToast({
+        type: 'error',
+        message: 'Error al abandonar el juego. Intente nuevamente.',
+        autoClose: 3000,
+      });
       console.error('Error al abandonar el juego', error);
     }
   });
