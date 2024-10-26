@@ -4,6 +4,7 @@ import StartGameButton from './StartGameButton';
 import { useParams } from 'react-router-dom';
 import { startGame } from '../../service/StartGameService';
 import useRouteNavigation from '../../hooks/useRouteNavigation';
+import showToast from '../../utils/toastUtil';
 
 // Mock useParams
 vi.mock('react-router-dom', () => ({
@@ -20,6 +21,11 @@ vi.mock('../../hooks/useRouteNavigation', () => ({
   default: vi.fn(),
 }));
 
+// Mock showToast
+vi.mock('../../utils/toastUtil', () => ({
+  default: vi.fn(),
+}));
+
 describe('StartGameButton', () => {
   const mockRedirectToGamePage = vi.fn();
   const mockStartGame = vi.fn();
@@ -31,7 +37,6 @@ describe('StartGameButton', () => {
     useRouteNavigation.mockReturnValue({
       redirectToGamePage: mockRedirectToGamePage,
     });
-    vi.spyOn(window, 'alert').mockImplementation(() => {});
   });
 
   const renderComponent = (isDisabled = true) => {
@@ -91,9 +96,11 @@ describe('StartGameButton', () => {
     fireEvent.click(button);
     await waitFor(() => {
       expect(startGame).toHaveBeenCalledWith('1');
-      expect(window.alert).toHaveBeenCalledWith(
-        'Error al iniciar la partida. Intente nuevamente.'
-      );
+      expect(showToast).toHaveBeenCalledWith({
+        type: 'error',
+        message: 'Error al iniciar la partida. Intente nuevamente.',
+        autoClose: 3000,
+      });
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         'Error al iniciar la partida',
         expect.any(Error)
