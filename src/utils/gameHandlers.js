@@ -1,5 +1,6 @@
 import { createGame } from '../service/CreateGameService';
 import { joinGame } from '../service/JoinGameService';
+import showToast from './toastUtil';
 
 export const handleCreateGame = async (
   elements,
@@ -19,11 +20,19 @@ export const handleCreateGame = async (
       createPlayer(createdGame.ownerId, true);
       redirectToLobbyPage(createdGame.gameId);
     } else {
-      alert('Error al crear la partida');
+      showToast({
+        type: 'error',
+        message: 'Error al crear la partida',
+        autoClose: 3000,
+      });
     }
   } catch (error) {
     console.error('Error al crear la partida', error);
-    alert('Hubo un problema al crear el juego');
+    showToast({
+      type: 'error',
+      message: 'Hubo un problema al crear el juego',
+      autoClose: 3000,
+    });
   }
 };
 
@@ -46,9 +55,17 @@ export const handleJoinGame = async (
     redirectToLobbyPage(selectedGame.gameId);
   } catch (error) {
     if (error.message.includes('is full')) {
-      alert(`La partida '${selectedGame.gameName}' está llena`);
+      showToast({
+        type: 'error',
+        message: `La partida '${selectedGame.gameName}' está llena`,
+        autoClose: 3000,
+      });
     } else {
-      alert(error.message);
+      showToast({
+        type: 'error',
+        message: error.message,
+        autoClose: 3000,
+      });
     }
   }
 };
