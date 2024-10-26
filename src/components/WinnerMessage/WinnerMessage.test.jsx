@@ -31,11 +31,11 @@ describe('WinnerMessage', () => {
     render(<WinnerMessage />);
   };
 
-  const getHomeButton = () => screen.queryByText('Ir al inicio');
-
   afterEach(() => {
-    vi.clearAllMocks(); // Clear all mocks after each test.
+    vi.resetAllMocks();
   });
+
+  const getHomeButton = () => screen.queryByText('Ir al inicio');
 
   describe('when there is not a winner', () => {
     beforeEach(() => {

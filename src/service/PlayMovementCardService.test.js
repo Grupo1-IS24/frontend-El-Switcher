@@ -74,6 +74,32 @@ describe('playMovementCard Service', () => {
         detailMessage
       );
     });
+
+    it('should throw a generic error if the API response does not contain a detail message', async () => {
+      const axiosError = {
+        isAxiosError: true,
+        response: {
+          status: 400,
+          data: {},
+        },
+      };
+
+      apiService.post.mockRejectedValue(axiosError);
+
+      await expect(callPlayMovementCard(validArguments)).rejects.toThrow(
+        'Error desconocido en la respuesta del servidor'
+      );
+    });
+
+    it('should throw an unexpected error if a non-Axios error occurs', async () => {
+      const unexpectedError = new Error('Unexpected error');
+
+      apiService.post.mockRejectedValue(unexpectedError);
+
+      await expect(callPlayMovementCard(validArguments)).rejects.toThrow(
+        'Error inesperado jugando carta de movimiento'
+      );
+    });
   });
 
   describe('when called with invalid arguments', () => {
