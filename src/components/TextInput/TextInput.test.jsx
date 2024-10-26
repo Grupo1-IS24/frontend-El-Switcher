@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
 import TextInput from './TextInput';
 
 describe('TextInput', () => {
@@ -40,5 +40,35 @@ describe('TextInput', () => {
       'focus:ring-2',
       'focus:ring-amber-500'
     );
+  });
+
+  it('should render without a value when "value" is undefined', () => {
+    renderComponent({ name: 'test-input' });
+    const inputElement = screen.getByRole('textbox');
+    expect(inputElement).toHaveValue('');
+  });
+
+  it('should render with a specific value if "value" is provided', () => {
+    renderComponent({ name: 'test-input', value: 'Test Value' });
+    const inputElement = screen.getByRole('textbox');
+    expect(inputElement).toHaveValue('Test Value');
+  });
+
+  it('should call onChange handler when input value changes', () => {
+    const mockOnChange = vi.fn();
+    renderComponent({ name: 'test-input', onChange: mockOnChange });
+
+    const inputElement = screen.getByRole('textbox');
+    fireEvent.change(inputElement, { target: { value: 'New Value' } });
+
+    expect(mockOnChange).toHaveBeenCalledTimes(1);
+  });
+
+  it('should not call onChange if onChange is undefined', () => {
+    renderComponent({ name: 'test-input' });
+    const inputElement = screen.getByRole('textbox');
+
+    fireEvent.change(inputElement, { target: { value: 'New Value' } });
+    expect(inputElement).toHaveValue('New Value');
   });
 });
