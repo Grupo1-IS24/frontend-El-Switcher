@@ -2,11 +2,7 @@ import useFilterGameList from '../../hooks/useFilterGameList';
 import TextInput from '../TextInput/TextInput';
 
 const FilterGamePerName = () => {
-  const { searchGame, setSearchGame } = useFilterGameList();
-
-  const handleInputChange = (event) => {
-    setSearchGame(event.target.value);
-  };
+  const { searchGameName, handleSearchGameName } = useFilterGameList();
 
   return (
     <div className='flex justify-center'>
@@ -14,8 +10,8 @@ const FilterGamePerName = () => {
         <TextInput
           name='gameName'
           placeholder='Buscar partidas por su nombre'
-          value={searchGame}
-          onChange={handleInputChange}
+          value={searchGameName}
+          onChange={handleSearchGameName}
         />
       </div>
     </div>

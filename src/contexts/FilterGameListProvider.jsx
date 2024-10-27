@@ -3,15 +3,23 @@ import { createContext, useState } from 'react';
 export const FilterGameListContext = createContext();
 
 const FilterGameListProvider = ({ children }) => {
-  const [searchGame, setSearchGame] = useState('');
+  const [searchGameName, setSearchGameName] = useState('');
+  const [searchMinPlayers, setSearchMinPlayers] = useState(0);
+  const [searchMaxPlayers, setSearchMaxPlayers] = useState(4);
 
   const resetFilter = () => {
-    setSearchGame('');
+    setSearchGameName('');
+    setSearchMinPlayers(0);
+    setSearchMaxPlayers(4);
   };
 
   const providedState = {
-    searchGame,
-    setSearchGame,
+    searchGameName,
+    setSearchGameName,
+    searchMinPlayers,
+    setSearchMinPlayers,
+    searchMaxPlayers,
+    setSearchMaxPlayers,
     resetFilter,
   };
 
