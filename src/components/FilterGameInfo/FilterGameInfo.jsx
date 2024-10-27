@@ -8,15 +8,11 @@ const FilterGameInfo = () => {
 
   return (
     <div className='flex justify-center items-center p-4'>
-      <div className='grid grid-cols-4 gap-4 max-w-4xl w-full z-10 p-6'>
-        <FilterGamePerName />
+      <div className='grid grid-cols-4 gap-4 max-w-2xl w-full z-10 p-6'>
+        <FilterGamePerName style={'col-span-2'} />
         <FilterGamePerConnectedPlayers />
-        <Button
-          text='Limpiar filtros'
-          style='reset_filter'
-          onPress={resetFilter}
-        />
       </div>
+      <Button text='Reset filtro' style='reset_filter' onPress={resetFilter} />
     </div>
   );
 };
