@@ -1,25 +1,20 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { render, screen, fireEvent, cleanup } from '@testing-library/react';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import FilterGamePerName from './FilterGamePerName';
-import useFilterGameList from '../../hooks/useFilterGameList';
-
-// Mock del hook useFilterGameList
-vi.mock('../../hooks/useFilterGameList');
+import FilterGameListProvider from '../../contexts/FilterGameListProvider';
+import userEvent from '@testing-library/user-event';
 
 describe('FilterGamePerName', () => {
-  const mockSetSearchGame = vi.fn();
-
   beforeEach(() => {
-    useFilterGameList.mockReturnValue({
-      searchGame: '',
-      setSearchGame: mockSetSearchGame,
-    });
-
-    render(<FilterGamePerName />);
+    render(
+      <FilterGameListProvider>
+        <FilterGamePerName />
+      </FilterGameListProvider>
+    );
   });
 
   afterEach(() => {
-    vi.resetAllMocks();
+    cleanup();
   });
 
   it('should render the component', () => {
@@ -28,14 +23,12 @@ describe('FilterGamePerName', () => {
     expect(input).toHaveValue('');
   });
 
-  it('should call setSearchGame when input changes', () => {
+  it('should update the input value when changed', async () => {
     const input = screen.getByPlaceholderText('Buscar partidas por su nombre');
     const searchValue = 'Nuevo juego';
 
-    fireEvent.change(input, { target: { value: searchValue } });
+    await userEvent.type(input, searchValue);
 
-    expect(mockSetSearchGame).toHaveBeenCalledTimes(1);
-
-    expect(mockSetSearchGame).toHaveBeenCalledWith(searchValue);
+    expect(input).toHaveValue(searchValue);
   });
 });
