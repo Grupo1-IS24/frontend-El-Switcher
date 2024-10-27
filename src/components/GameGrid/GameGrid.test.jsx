@@ -45,7 +45,7 @@ describe('GameGrid', () => {
     renderComponent({ gameList });
 
     expect(
-      screen.getByText('No se encontró ninguna partida con ese nombre.')
+      screen.getByText('No se encontró ninguna partida.')
     ).toBeInTheDocument();
     expect(screen.queryByText('Game 1')).not.toBeInTheDocument();
   });

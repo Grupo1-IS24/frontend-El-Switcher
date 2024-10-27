@@ -11,7 +11,7 @@ const GameGrid = ({ gameList, selectGame }) => {
     return (
       <MessageCard
         type={'info'}
-        message='No se encontró ninguna partida con ese nombre.'
+        message='No se encontró ninguna partida.'
       />
     );
   }
