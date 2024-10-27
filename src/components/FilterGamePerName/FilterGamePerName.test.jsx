@@ -1,61 +1,41 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import FilterGamePerName from './FilterGamePerName';
-import TextInput from '../TextInput/TextInput';
+import useFilterGameList from '../../hooks/useFilterGameList';
 
-vi.mock('../TextInput/TextInput', () => ({
-  default: vi.fn(({ name, placeholder, value, onChange }) => (
-    <input
-      type='text'
-      name={name}
-      placeholder={placeholder}
-      value={value}
-      onChange={onChange}
-    />
-  )),
-}));
+// Mock del hook useFilterGameList
+vi.mock('../../hooks/useFilterGameList');
 
 describe('FilterGamePerName', () => {
-  const mockOnSearch = vi.fn();
-
-  const renderComponent = () =>
-    render(<FilterGamePerName onSearch={mockOnSearch} />);
+  const mockSetSearchGame = vi.fn();
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    useFilterGameList.mockReturnValue({
+      searchGame: '',
+      setSearchGame: mockSetSearchGame,
+    });
+
+    render(<FilterGamePerName />);
   });
 
-  it('renders the TextInput component with correct props', () => {
-    renderComponent();
+  afterEach(() => {
+    vi.resetAllMocks();
+  });
 
+  it('should render the component', () => {
     const input = screen.getByPlaceholderText('Buscar partidas por su nombre');
     expect(input).toBeInTheDocument();
     expect(input).toHaveValue('');
   });
 
-  it('updates the search state and calls onSearch when input changes', () => {
-    renderComponent();
-
+  it('should call setSearchGame when input changes', () => {
     const input = screen.getByPlaceholderText('Buscar partidas por su nombre');
     const searchValue = 'Nuevo juego';
 
     fireEvent.change(input, { target: { value: searchValue } });
 
-    expect(input).toHaveValue(searchValue);
-    expect(mockOnSearch).toHaveBeenCalledWith(searchValue);
-  });
+    expect(mockSetSearchGame).toHaveBeenCalledTimes(1);
 
-  it('calls the mock function TextInput with correct props', () => {
-    renderComponent();
-
-    expect(TextInput).toHaveBeenCalledWith(
-      expect.objectContaining({
-        name: 'gameName',
-        placeholder: 'Buscar partidas por su nombre',
-        value: '',
-        onChange: expect.any(Function),
-      }),
-      expect.anything()
-    );
+    expect(mockSetSearchGame).toHaveBeenCalledWith(searchValue);
   });
 });

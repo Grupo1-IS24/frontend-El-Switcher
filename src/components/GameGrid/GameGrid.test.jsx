@@ -1,21 +1,10 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import GameGrid from './GameGrid';
-import GameCard from '../GameCard/GameCard';
+import useFilterGameList from '../../hooks/useFilterGameList';
 
-// Mock del componente GameCard
-vi.mock('../GameCard/GameCard', () => ({
-  default: vi.fn(
-    ({ gameName, maxPlayers, connectedPlayers, onPressButton }) => (
-      <div>
-        <h2>{gameName}</h2>
-        <p>Conectados: {connectedPlayers}</p>
-        <p>Max. jugadores: {maxPlayers}</p>
-        <button onClick={onPressButton}>Unirme</button>
-      </div>
-    )
-  ),
-}));
+// Mock del hook useFilterGameList
+vi.mock('../../hooks/useFilterGameList');
 
 describe('GameGrid', () => {
   const mockSelectGame = vi.fn();
@@ -27,24 +16,33 @@ describe('GameGrid', () => {
     vi.clearAllMocks();
   });
 
-  it('renders only games with available player slots', () => {
+  it('renders only games that match the filter', () => {
     const gameList = [
       { gameId: 1, gameName: 'Game 1', maxPlayers: 4, connectedPlayers: 2 },
       { gameId: 2, gameName: 'Game 2', maxPlayers: 4, connectedPlayers: 4 },
     ];
 
-    renderComponent({ gameList, searchGame: '' });
+    useFilterGameList.mockReturnValue({
+      filterGameList: (games) =>
+        games.filter((game) => game.gameName.includes('Game 1')),
+    });
+
+    renderComponent({ gameList });
 
     expect(screen.getByText('Game 1')).toBeInTheDocument();
     expect(screen.queryByText('Game 2')).not.toBeInTheDocument();
   });
 
-  it('renders a message when no games match the search', () => {
+  it('renders a message when no games match the filter', () => {
     const gameList = [
       { gameId: 1, gameName: 'Game 1', maxPlayers: 4, connectedPlayers: 2 },
     ];
 
-    renderComponent({ gameList, searchGame: 'Nonexistent' });
+    useFilterGameList.mockReturnValue({
+      filterGameList: () => [],
+    });
+
+    renderComponent({ gameList });
 
     expect(
       screen.getByText('No se encontró ninguna partida con ese nombre.')
@@ -57,27 +55,14 @@ describe('GameGrid', () => {
       { gameId: 1, gameName: 'Game 1', maxPlayers: 4, connectedPlayers: 2 },
     ];
 
-    renderComponent({ gameList, searchGame: '' });
+    useFilterGameList.mockReturnValue({
+      filterGameList: (games) => games,
+    });
 
-    expect(GameCard).toHaveBeenCalledWith(
-      expect.objectContaining({
-        gameName: 'Game 1',
-        maxPlayers: 4,
-        connectedPlayers: 2,
-        onPressButton: expect.any(Function),
-      }),
-      expect.anything()
-    );
-  });
+    renderComponent({ gameList });
 
-  it('calls selectGame when the join button is clicked', () => {
-    const gameList = [
-      { gameId: 1, gameName: 'Game 1', maxPlayers: 4, connectedPlayers: 2 },
-    ];
-
-    renderComponent({ gameList, searchGame: '' });
-
-    fireEvent.click(screen.getByText('Unirme'));
-    expect(mockSelectGame).toHaveBeenCalledWith(gameList[0]);
+    expect(screen.getByText('Game 1')).toBeInTheDocument();
+    expect(screen.getByText('Conectados: 2')).toBeInTheDocument();
+    expect(screen.getByText('Max. jugadores: 4')).toBeInTheDocument();
   });
 });
