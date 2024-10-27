@@ -11,7 +11,6 @@ describe('FilterGameInfo', () => {
   const resetFilterMock = vi.fn();
 
   beforeEach(() => {
-    // Configurar el mock del hook para que devuelva la función mockeada
     useFilterGameList.mockReturnValue({ resetFilter: resetFilterMock });
 
     render(
