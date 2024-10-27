@@ -6,10 +6,17 @@ import GameForm from '../components/GameForm/GameForm';
 import useSelectedGame from '../hooks/useSelectedGame';
 import useWebsocketGameList from '../hooks/useWebsocketGameList';
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner';
+import FilterGamePerName from '../components/FilterGamePerName/FilterGamePerName';
+import { useState } from 'react';
 
 const GameListPage = () => {
   const { gameList, isLoading, error } = useWebsocketGameList();
   const { selectedGame, selectGame, clearSelectedGame } = useSelectedGame();
+  const [searchGame, setSearchGame] = useState('');
+
+  const handleSearch = (value) => {
+    setSearchGame(value);
+  };
 
   const renderContent = () => {
     if (isLoading) {
@@ -20,11 +27,7 @@ const GameListPage = () => {
       return <MessageCard type={'error'} message={error} />;
     }
 
-    const filteredGameList = gameList.filter(
-      (game) => game.connectedPlayers < game.maxPlayers
-    );
-
-    if (filteredGameList.length === 0) {
+    if (gameList.length === 0) {
       return (
         <MessageCard type={'info'} message='No hay partidas disponibles.' />
       );
@@ -32,7 +35,12 @@ const GameListPage = () => {
 
     return (
       <>
-        <GameGrid gameList={gameList} selectGame={selectGame} />
+        <FilterGamePerName onSearch={handleSearch} />
+        <GameGrid
+          gameList={gameList}
+          selectGame={selectGame}
+          searchGame={searchGame}
+        />
         <GameForm
           type='join'
           selectedGame={selectedGame}
