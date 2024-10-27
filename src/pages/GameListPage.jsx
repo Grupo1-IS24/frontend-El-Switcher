@@ -7,16 +7,11 @@ import useSelectedGame from '../hooks/useSelectedGame';
 import useWebsocketGameList from '../hooks/useWebsocketGameList';
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner';
 import FilterGamePerName from '../components/FilterGamePerName/FilterGamePerName';
-import { useState } from 'react';
+import FilterGameListProvider from '../contexts/FilterGameListProvider';
 
 const GameListPage = () => {
   const { gameList, isLoading, error } = useWebsocketGameList();
   const { selectedGame, selectGame, clearSelectedGame } = useSelectedGame();
-  const [searchGame, setSearchGame] = useState('');
-
-  const handleSearch = (value) => {
-    setSearchGame(value);
-  };
 
   const renderContent = () => {
     if (isLoading) {
@@ -35,12 +30,10 @@ const GameListPage = () => {
 
     return (
       <>
-        <FilterGamePerName onSearch={handleSearch} />
-        <GameGrid
-          gameList={gameList}
-          selectGame={selectGame}
-          searchGame={searchGame}
-        />
+        <FilterGameListProvider>
+          <FilterGamePerName />
+          <GameGrid gameList={gameList} selectGame={selectGame} />
+        </FilterGameListProvider>
         <GameForm
           type='join'
           selectedGame={selectedGame}

@@ -1,13 +1,11 @@
+import useFilterGameList from '../../hooks/useFilterGameList';
 import TextInput from '../TextInput/TextInput';
-import { useState } from 'react';
 
-const FilterGamePerName = ({ onSearch }) => {
-  const [search, setsearch] = useState('');
+const FilterGamePerName = () => {
+  const { searchGame, setSearchGame } = useFilterGameList();
 
-  const handleInputChange = (e) => {
-    const value = e.target.value;
-    setsearch(value);
-    onSearch(value);
+  const handleInputChange = (event) => {
+    setSearchGame(event.target.value);
   };
 
   return (
@@ -16,7 +14,7 @@ const FilterGamePerName = ({ onSearch }) => {
         <TextInput
           name='gameName'
           placeholder='Buscar partidas por su nombre'
-          value={search}
+          value={searchGame}
           onChange={handleInputChange}
         />
       </div>
