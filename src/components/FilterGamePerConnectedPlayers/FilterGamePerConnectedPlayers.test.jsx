@@ -7,7 +7,7 @@ import userEvent from '@testing-library/user-event';
 describe('FilterGamePerConnectedPlayers', () => {
   const getMinPlayersInput = () =>
     screen.getByPlaceholderText('Mín. conectados');
-  
+
   const getMaxPlayersInput = () =>
     screen.getByPlaceholderText('Máx. conectados');
 

@@ -9,10 +9,7 @@ const GameGrid = ({ gameList, selectGame }) => {
 
   if (filteredGameList.length === 0) {
     return (
-      <MessageCard
-        type={'info'}
-        message='No se encontró ninguna partida.'
-      />
+      <MessageCard type={'info'} message='No se encontró ninguna partida.' />
     );
   }
 
