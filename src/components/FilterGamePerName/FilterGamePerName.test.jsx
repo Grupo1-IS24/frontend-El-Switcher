@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, cleanup } from '@testing-library/react';
+import { render, screen, cleanup } from '@testing-library/react';
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import FilterGamePerName from './FilterGamePerName';
 import FilterGameListProvider from '../../contexts/FilterGameListProvider';
