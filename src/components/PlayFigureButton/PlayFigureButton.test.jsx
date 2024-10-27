@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import { playFigureCard } from '../../service/PlayFigureCardService';
 import { PlayerContext } from '../../contexts/PlayerProvider';
 import usePlayFigureLogic from '../../hooks/usePlayFigureLogic';
+import showToast from '../../utils/toastUtil';
 
 // Mock useParams
 vi.mock('react-router-dom', () => ({
@@ -18,6 +19,11 @@ vi.mock('../../service/PlayFigureCardService', () => ({
 
 // Mock usePlayFigureLogic
 vi.mock('../../hooks/usePlayFigureLogic', () => ({
+  default: vi.fn(),
+}));
+
+// Mock showToast
+vi.mock('../../utils/toastUtil', () => ({
   default: vi.fn(),
 }));
 
@@ -39,7 +45,6 @@ describe('PlayFigureButton', () => {
       ],
       resetFigureCards: mockResetFigureCards,
     });
-    vi.spyOn(window, 'alert').mockImplementation(() => {});
   });
 
   const renderComponent = () => {
@@ -89,9 +94,11 @@ describe('PlayFigureButton', () => {
         { color: 'red', row: 1, column: 1 },
         { color: 'blue', row: 2, column: 2 },
       ]);
-      expect(window.alert).toHaveBeenCalledWith(
-        `Error jugando carta de figura: ${errorMessage}`
-      );
+      expect(showToast).toHaveBeenCalledWith({
+        type: 'error',
+        message: `Error jugando carta de figura: ${errorMessage}`,
+        autoClose: 3000,
+      });
     });
   });
 });

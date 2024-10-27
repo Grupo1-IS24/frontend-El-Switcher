@@ -2,6 +2,7 @@ import { describe, it, expect, vi, afterEach } from 'vitest';
 import { handleCreateGame, handleJoinGame } from './gameHandlers';
 import { createGame } from '../service/CreateGameService';
 import { joinGame } from '../service/JoinGameService';
+import showToast from './toastUtil';
 
 vi.mock('../service/CreateGameService', () => ({
   createGame: vi.fn(),
@@ -9,6 +10,10 @@ vi.mock('../service/CreateGameService', () => ({
 
 vi.mock('../service/JoinGameService', () => ({
   joinGame: vi.fn(),
+}));
+
+vi.mock('./toastUtil', () => ({
+  default: vi.fn(),
 }));
 
 describe('gameHandlers', () => {
@@ -48,26 +53,28 @@ describe('gameHandlers', () => {
       expect(redirectToLobbyPage).toHaveBeenCalledWith(1);
     });
 
-    it('should alert on error when game creation fails', async () => {
-      const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => {});
+    it('should show toast on error when game creation fails', async () => {
       createGame.mockResolvedValue(null);
 
       await handleCreateGame(elements, createPlayer, redirectToLobbyPage);
 
-      expect(alertMock).toHaveBeenCalledWith('Error al crear la partida');
-      alertMock.mockRestore();
+      expect(showToast).toHaveBeenCalledWith({
+        type: 'error',
+        message: 'Error al crear la partida',
+        autoClose: 3000,
+      });
     });
 
-    it('should alert on error when an exception is thrown', async () => {
-      const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => {});
+    it('should show toast on error when an exception is thrown', async () => {
       createGame.mockRejectedValue(new Error('Network Error'));
 
       await handleCreateGame(elements, createPlayer, redirectToLobbyPage);
 
-      expect(alertMock).toHaveBeenCalledWith(
-        'Hubo un problema al crear el juego'
-      );
-      alertMock.mockRestore();
+      expect(showToast).toHaveBeenCalledWith({
+        type: 'error',
+        message: 'Hubo un problema al crear el juego',
+        autoClose: 3000,
+      });
     });
   });
 
@@ -106,8 +113,7 @@ describe('gameHandlers', () => {
       expect(redirectToLobbyPage).toHaveBeenCalledWith(1);
     });
 
-    it('should alert on error when game is full', async () => {
-      const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => {});
+    it('should show toast on error when game is full', async () => {
       joinGame.mockRejectedValue(new Error('Game is full'));
 
       await handleJoinGame(
@@ -117,12 +123,14 @@ describe('gameHandlers', () => {
         redirectToLobbyPage
       );
 
-      expect(alertMock).toHaveBeenCalledWith("La partida 'Game' está llena");
-      alertMock.mockRestore();
+      expect(showToast).toHaveBeenCalledWith({
+        type: 'error',
+        message: "La partida 'Game' está llena",
+        autoClose: 3000,
+      });
     });
 
-    it('should alert on other errors', async () => {
-      const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => {});
+    it('should show toast on other errors', async () => {
       joinGame.mockRejectedValue(new Error('Network Error'));
 
       await handleJoinGame(
@@ -132,8 +140,11 @@ describe('gameHandlers', () => {
         redirectToLobbyPage
       );
 
-      expect(alertMock).toHaveBeenCalledWith('Network Error');
-      alertMock.mockRestore();
+      expect(showToast).toHaveBeenCalledWith({
+        type: 'error',
+        message: 'Network Error',
+        autoClose: 3000,
+      });
     });
   });
 });

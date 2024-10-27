@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import { leaveGame } from '../../service/LeaveGame';
 import LeaveButton from './LeaveButton';
 import useRouteNavigation from '../../hooks/useRouteNavigation';
+import showToast from '../../utils/toastUtil';
 
 vi.mock('react-router-dom', () => ({
   useParams: vi.fn(),
@@ -18,6 +19,10 @@ vi.mock('../../hooks/useRouteNavigation', () => ({
 
 vi.mock('../../service/LeaveGame', () => ({
   leaveGame: vi.fn(),
+}));
+
+vi.mock('../../utils/toastUtil', () => ({
+  default: vi.fn(),
 }));
 
 describe('LeaveButton', () => {
@@ -72,16 +77,18 @@ describe('LeaveButton', () => {
 
   const handleLeaveGameError = async (text) => {
     console.error = vi.fn();
-    window.alert = vi.fn();
+    showToast.mockImplementation(() => {});
 
     leaveGame.mockRejectedValue(new Error('Error en el servidor'));
     renderLeaveButton(text === LOBBY_TEXT ? 'lobby' : 'game');
     fireEvent.click(screen.getByText(text));
 
     await waitFor(() => {
-      expect(window.alert).toHaveBeenCalledWith(
-        'Error al abandonar el juego. Intente nuevamente.'
-      );
+      expect(showToast).toHaveBeenCalledWith({
+        type: 'error',
+        message: 'Error al abandonar el juego. Intente nuevamente.',
+        autoClose: 3000,
+      });
       expect(console.error).toHaveBeenCalledWith(
         'Error al abandonar el juego',
         expect.any(Error)
@@ -117,11 +124,11 @@ describe('LeaveButton', () => {
     await logErrorAndWait(GAME_TEXT);
   });
 
-  it('should display an alert and log the error to the console if leaveGame fails when the type is "lobby"', async () => {
+  it('should display a toast and log the error to the console if leaveGame fails when the type is "lobby"', async () => {
     await handleLeaveGameError(LOBBY_TEXT);
   });
 
-  it('should display an alert and log the error to the console if leaveGame fails when the type is "game"', async () => {
+  it('should display a toast and log the error to the console if leaveGame fails when the type is "game"', async () => {
     await handleLeaveGameError(GAME_TEXT);
   });
 });

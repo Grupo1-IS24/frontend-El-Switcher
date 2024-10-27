@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import { playMovementCard } from '../../service/PlayMovementCardService';
 import { PlayerContext } from '../../contexts/PlayerProvider';
 import usePlayMovementLogic from '../../hooks/usePlayMovementLogic';
+import showToast from '../../utils/toastUtil';
 
 // Mock useParams
 vi.mock('react-router-dom', () => ({
@@ -18,6 +19,11 @@ vi.mock('../../service/PlayMovementCardService', () => ({
 
 // Mock usePlayMovementLogic
 vi.mock('../../hooks/usePlayMovementLogic', () => ({
+  default: vi.fn(),
+}));
+
+// Mock showToast
+vi.mock('../../utils/toastUtil', () => ({
   default: vi.fn(),
 }));
 
@@ -36,7 +42,6 @@ describe('PlayMovementButton', () => {
       selectedColorCards: [{ squarePieceId: 1 }, { squarePieceId: 2 }],
       resetMovementCards: mockResetMovementCards,
     });
-    vi.spyOn(window, 'alert').mockImplementation(() => {});
   });
 
   const renderComponent = () => {
@@ -80,9 +85,11 @@ describe('PlayMovementButton', () => {
     fireEvent.click(button);
     await waitFor(() => {
       expect(playMovementCard).toHaveBeenCalledWith('1', 1, 1, 1, 2);
-      expect(window.alert).toHaveBeenCalledWith(
-        `Error jugando carta de movimiento: ${errorMessage}`
-      );
+      expect(showToast).toHaveBeenCalledWith({
+        type: 'error',
+        message: `Error jugando carta de movimiento: ${errorMessage}`,
+        autoClose: 3000,
+      });
     });
   });
 });

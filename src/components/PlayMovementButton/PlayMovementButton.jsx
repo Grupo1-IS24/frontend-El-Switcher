@@ -4,6 +4,7 @@ import { playMovementCard } from '../../service/PlayMovementCardService';
 import { PlayerContext } from '../../contexts/PlayerProvider';
 import { useParams } from 'react-router-dom';
 import usePlayMovementLogic from '../../hooks/usePlayMovementLogic';
+import showToast from '../../utils/toastUtil';
 
 const PlayMovementButton = () => {
   const { gameId } = useParams();
@@ -27,7 +28,11 @@ const PlayMovementButton = () => {
 
       resetMovementCards();
     } catch (error) {
-      alert(`Error jugando carta de movimiento: ${error.message}`);
+      showToast({
+        type: 'error',
+        message: `Error jugando carta de movimiento: ${error.message}`,
+        autoClose: 3000,
+      });
     }
   };
 

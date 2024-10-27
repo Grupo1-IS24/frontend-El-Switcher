@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import usePlayerTurn from '../../hooks/usePlayerTurn';
 import useDisableButton from '../../hooks/useDisableButton';
 import { PlayCardLogicContext } from '../../contexts/PlayCardLogicProvider';
+import showToast from '../../utils/toastUtil';
 
 const EndTurnButton = () => {
   const { playerID } = useContext(PlayerContext);
@@ -18,7 +19,11 @@ const EndTurnButton = () => {
     try {
       await endTurn(gameId, playerID);
     } catch (error) {
-      window.alert('Error al terminar el turno. Intente nuevamente.');
+      showToast({
+        type: 'error',
+        message: 'Error al terminar el turno. Intente nuevamente.',
+        autoClose: 3000,
+      });
       console.error('Error al terminar el turno', error);
     }
   });
