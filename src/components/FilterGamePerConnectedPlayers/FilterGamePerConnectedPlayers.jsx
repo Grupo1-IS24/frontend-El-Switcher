@@ -15,7 +15,7 @@ const FilterGamePerConnectedPlayers = () => {
         name='minPlayers'
         min={1}
         max={4}
-        placeholder='Mínimo de jugadores conectados'
+        placeholder='Mín. conectados'
         value={searchMinPlayers}
         onChange={handleSearchMinPlayers}
       />
@@ -23,7 +23,7 @@ const FilterGamePerConnectedPlayers = () => {
         name='maxPlayers'
         min={1}
         max={4}
-        placeholder='Máximo de jugadores conectados'
+        placeholder='Máx. conectados'
         value={searchMaxPlayers}
         onChange={handleSearchMaxPlayers}
       />

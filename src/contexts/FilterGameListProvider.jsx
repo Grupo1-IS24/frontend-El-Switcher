@@ -4,13 +4,13 @@ export const FilterGameListContext = createContext();
 
 const FilterGameListProvider = ({ children }) => {
   const [searchGameName, setSearchGameName] = useState('');
-  const [searchMinPlayers, setSearchMinPlayers] = useState(1);
-  const [searchMaxPlayers, setSearchMaxPlayers] = useState(4);
+  const [searchMinPlayers, setSearchMinPlayers] = useState("");
+  const [searchMaxPlayers, setSearchMaxPlayers] = useState("");
 
   const resetFilter = () => {
     setSearchGameName('');
-    setSearchMinPlayers(1);
-    setSearchMaxPlayers(4);
+    setSearchMinPlayers("");
+    setSearchMaxPlayers("");
   };
 
   const providedState = {

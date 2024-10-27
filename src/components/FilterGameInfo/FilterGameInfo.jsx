@@ -8,7 +8,7 @@ const FilterGameInfo = () => {
 
   return (
     <div className='flex justify-center items-center p-4'>
-      <div className='grid grid-cols-4 gap-4 max-w-2xl w-full z-10 p-6'>
+      <div className='grid grid-cols-4 gap-4 max-w-3xl w-full z-10 p-6'>
         <FilterGamePerName style={'col-span-2'} />
         <FilterGamePerConnectedPlayers />
       </div>

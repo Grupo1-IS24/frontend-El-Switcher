@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { FilterGameListContext } from '../contexts/FilterGameListProvider';
+import showToast from '../utils/toastUtil';
 
 const useFilterGameList = () => {
   const {
@@ -19,12 +20,26 @@ const useFilterGameList = () => {
   const handleSearchMinPlayers = (event) => {
     const minPlayers = parseInt(event.target.value);
 
-    if (
-      isNaN(minPlayers) ||
-      minPlayers < 1 ||
-      minPlayers > 4 ||
-      minPlayers > searchMaxPlayers
-    ) {
+    if (isNaN(minPlayers)) {
+      setSearchMinPlayers('');
+      return;
+    }
+
+    if (minPlayers < 1 || minPlayers > 4) {
+      showToast({
+        type: 'error',
+        message:
+          'El número mínimo de jugadores conectados debe estar entre 1 y 4.',
+      });
+      return;
+    }
+
+    if (searchMaxPlayers !== '' && minPlayers > searchMaxPlayers) {
+      showToast({
+        type: 'error',
+        message:
+          'El número mínimo de jugadores conectados no puede ser mayor al máximo de jugadores conectados.',
+      });
       return;
     }
 
@@ -34,12 +49,26 @@ const useFilterGameList = () => {
   const handleSearchMaxPlayers = (event) => {
     const maxPlayers = parseInt(event.target.value);
 
-    if (
-      isNaN(maxPlayers) ||
-      maxPlayers < 1 ||
-      maxPlayers > 4 ||
-      maxPlayers < searchMinPlayers
-    ) {
+    if (isNaN(maxPlayers)) {
+      setSearchMaxPlayers('');
+      return;
+    }
+
+    if (maxPlayers < 1 || maxPlayers > 4) {
+      showToast({
+        type: 'error',
+        message:
+          'El número máximo de jugadores conectados debe estar entre 1 y 4.',
+      });
+      return;
+    }
+
+    if (searchMinPlayers !== '' && maxPlayers < searchMinPlayers) {
+      showToast({
+        type: 'error',
+        message:
+          'El número máximo de jugadores conectados no puede ser menor al mínimo de jugadores conectados.',
+      });
       return;
     }
 
@@ -47,12 +76,19 @@ const useFilterGameList = () => {
   };
 
   const filterGameList = (gameList) => {
-    return gameList.filter(
-      (game) =>
-        game.connectedPlayers >= searchMinPlayers &&
-        game.connectedPlayers <= searchMaxPlayers &&
-        game.gameName.toLowerCase().startsWith(searchGameName.toLowerCase())
-    );
+    return gameList.filter((game) => {
+      const minPlayersCondition =
+        searchMinPlayers === '' || game.connectedPlayers >= searchMinPlayers;
+
+      const maxPlayersCondition =
+        searchMaxPlayers === '' || game.connectedPlayers <= searchMaxPlayers;
+
+      const nameCondition = game.gameName
+        .toLowerCase()
+        .startsWith(searchGameName.toLowerCase());
+
+      return minPlayersCondition && maxPlayersCondition && nameCondition;
+    });
   };
 
   return {
