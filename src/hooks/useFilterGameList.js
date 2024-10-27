@@ -13,66 +13,58 @@ const useFilterGameList = () => {
     resetFilter,
   } = useContext(FilterGameListContext);
 
+  const handleByConnectedPlayers = (
+    event,
+    setFunction,
+    comparisonFn,
+    comparisonErrorMessage
+  ) => {
+    const value = parseInt(event.target.value);
+
+    if (isNaN(value)) {
+      setFunction('');
+      return;
+    }
+
+    if (value < 1 || value > 4) {
+      showToast({
+        type: 'error',
+        message: `El valor debe estar entre 1 y 4.`,
+      });
+      return;
+    }
+
+    if (comparisonFn(value)) {
+      showToast({
+        type: 'error',
+        message: comparisonErrorMessage,
+      });
+      return;
+    }
+
+    setFunction(value);
+  };
+
   const handleSearchGameName = (event) => {
     setSearchGameName(event.target.value);
   };
 
   const handleSearchMinPlayers = (event) => {
-    const minPlayers = parseInt(event.target.value);
-
-    if (isNaN(minPlayers)) {
-      setSearchMinPlayers('');
-      return;
-    }
-
-    if (minPlayers < 1 || minPlayers > 4) {
-      showToast({
-        type: 'error',
-        message:
-          'El número mínimo de jugadores conectados debe estar entre 1 y 4.',
-      });
-      return;
-    }
-
-    if (searchMaxPlayers !== '' && minPlayers > searchMaxPlayers) {
-      showToast({
-        type: 'error',
-        message:
-          'El número mínimo de jugadores conectados no puede ser mayor al máximo de jugadores conectados.',
-      });
-      return;
-    }
-
-    setSearchMinPlayers(minPlayers);
+    handleByConnectedPlayers(
+      event,
+      setSearchMinPlayers,
+      (value) => searchMaxPlayers !== '' && value > searchMaxPlayers,
+      'El número mínimo de jugadores conectados no puede ser mayor al máximo de jugadores conectados.'
+    );
   };
 
   const handleSearchMaxPlayers = (event) => {
-    const maxPlayers = parseInt(event.target.value);
-
-    if (isNaN(maxPlayers)) {
-      setSearchMaxPlayers('');
-      return;
-    }
-
-    if (maxPlayers < 1 || maxPlayers > 4) {
-      showToast({
-        type: 'error',
-        message:
-          'El número máximo de jugadores conectados debe estar entre 1 y 4.',
-      });
-      return;
-    }
-
-    if (searchMinPlayers !== '' && maxPlayers < searchMinPlayers) {
-      showToast({
-        type: 'error',
-        message:
-          'El número máximo de jugadores conectados no puede ser menor al mínimo de jugadores conectados.',
-      });
-      return;
-    }
-
-    setSearchMaxPlayers(maxPlayers);
+    handleByConnectedPlayers(
+      event,
+      setSearchMaxPlayers,
+      (value) => searchMinPlayers !== '' && value < searchMinPlayers,
+      'El número máximo de jugadores conectados no puede ser menor al mínimo de jugadores conectados.'
+    );
   };
 
   const filterGameList = (gameList) => {
