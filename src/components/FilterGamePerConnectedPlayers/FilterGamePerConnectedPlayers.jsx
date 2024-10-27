@@ -14,14 +14,14 @@ const FilterGamePerConnectedPlayers = () => {
       <NumberInput
         name='minPlayers'
         min={1}
-        max={4}
+        max={searchMaxPlayers || 4}
         placeholder='Mín. conectados'
         value={searchMinPlayers}
         onChange={handleSearchMinPlayers}
       />
       <NumberInput
         name='maxPlayers'
-        min={1}
+        min={searchMinPlayers || 1}
         max={4}
         placeholder='Máx. conectados'
         value={searchMaxPlayers}
