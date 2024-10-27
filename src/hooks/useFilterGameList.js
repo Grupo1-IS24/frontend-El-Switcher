@@ -2,6 +2,22 @@ import { useContext, useCallback } from 'react';
 import { FilterGameListContext } from '../contexts/FilterGameListProvider';
 import showToast from '../utils/toastUtil';
 
+/**
+ * Custom hook to manage game filtering logic by game name, minimum players, and maximum players.
+ * This hook utilizes the FilterGameListContext to control search parameters and provides
+ * handlers for interacting with those parameters.
+ *
+ * @returns {{
+ *  searchGameName: string,
+ *  searchMinPlayers: string | number,
+ *  searchMaxPlayers: string | number,
+ *  handleSearchGameName: function,
+ *  handleSearchMinPlayers: function,
+ *  handleSearchMaxPlayers: function,
+ *  filterGameList: function,
+ *  resetFilter: function,
+ * }}
+ */
 const useFilterGameList = () => {
   const {
     searchGameName,
@@ -13,6 +29,15 @@ const useFilterGameList = () => {
     resetFilter,
   } = useContext(FilterGameListContext);
 
+  /**
+   * Generalized handler for updating search parameters based on connected players.
+   *
+   * @param {Event} event - The event object from the input field.
+   * @param {function} setFunction - The function to update the search parameter.
+   * @param {function} comparisonFn - The function to compare the new value with the other connected players parameter.
+   * @param {string} comparisonErrorMessage - The error message to display if the comparison fails.
+   * @returns {void}
+   */
   const handleByConnectedPlayers = useCallback(
     (event, setFunction, comparisonFn, comparisonErrorMessage) => {
       const value = parseInt(event.target.value);
@@ -43,6 +68,12 @@ const useFilterGameList = () => {
     []
   );
 
+  /**
+   * Handler to update the search game name parameter.
+   *
+   * @param {Event} event - The event object from the input field.
+   * @returns {void}
+   */
   const handleSearchGameName = useCallback(
     (event) => {
       setSearchGameName(event.target.value);
@@ -50,6 +81,13 @@ const useFilterGameList = () => {
     [setSearchGameName]
   );
 
+  /**
+   * Handler to update the search minimum players parameter.
+   *
+   * @param {Event} event - The event object from the input field.
+   * @returns {void}
+   *
+   */
   const handleSearchMinPlayers = useCallback(
     (event) => {
       handleByConnectedPlayers(
@@ -62,6 +100,12 @@ const useFilterGameList = () => {
     [handleByConnectedPlayers, searchMaxPlayers, setSearchMinPlayers]
   );
 
+  /**
+   * Handler to update the search maximum players parameter.
+   *
+   * @param {Event} event - The event object from the input field.
+   * @returns {void}
+   */
   const handleSearchMaxPlayers = useCallback(
     (event) => {
       handleByConnectedPlayers(
@@ -74,6 +118,12 @@ const useFilterGameList = () => {
     [handleByConnectedPlayers, searchMinPlayers, setSearchMaxPlayers]
   );
 
+  /**
+   * Filters the game list based on the search parameters.
+   *
+   * @param {Array} gameList - The list of games to filter.
+   * @returns {Array} The filtered list of games.
+   */
   const filterGameList = useCallback(
     (gameList) => {
       return gameList.filter((game) => {
