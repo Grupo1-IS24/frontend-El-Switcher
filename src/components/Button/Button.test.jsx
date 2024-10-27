@@ -59,6 +59,10 @@ describe('Button', () => {
       class:
         'w-[16rem] h-[4.375rem] text-2xl border-2 border-[#ee6055] bg-[#ee6055] text-[#0c0c0c] hover:bg-transparent hover:text-[#ee6055]',
     },
+    {
+      style: 'reset_filter',
+      class: 'text-xl h-14 p-4 bg-white text-black hover:bg-black hover:text-white',
+    }
   ];
 
   it('should render a button with the text "Click me"', () => {
