@@ -108,6 +108,26 @@ describe('useFilterGameList', () => {
       expectToastError('El valor debe estar entre 1 y 4.');
       expect(result.current.searchMaxPlayers).toBe('');
     });
+
+    it('should set the minimum players to an empty string when the value is not a number', () => {
+      const { result } = renderUseFilterGameListHook();
+
+      act(() => {
+        result.current.handleSearchMinPlayers({ target: { value: 'abc' } });
+      });
+
+      expect(result.current.searchMinPlayers).toBe('');
+    });
+
+    it('should set the maximum players to an empty string when the value is not a number', () => {
+      const { result } = renderUseFilterGameListHook();
+
+      act(() => {
+        result.current.handleSearchMaxPlayers({ target: { value: 'def' } });
+      });
+
+      expect(result.current.searchMaxPlayers).toBe('');
+    });
   });
 
   describe('Filtering Game List', () => {
