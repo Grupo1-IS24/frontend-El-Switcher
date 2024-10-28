@@ -1,19 +1,15 @@
 import MessageCard from '../MessageCard/MessageCard';
 import GameCard from '../GameCard/GameCard';
+import useFilterGameList from '../../hooks/useFilterGameList';
 
-const GameGrid = ({ gameList, selectGame, searchGame }) => {
-  const filteredGameList = gameList
-    .filter((game) => game.connectedPlayers < game.maxPlayers)
-    .filter((game) =>
-      game.gameName.toLowerCase().startsWith(searchGame.toLowerCase())
-    );
+const GameGrid = ({ gameList, selectGame }) => {
+  const { filterGameList } = useFilterGameList();
+
+  const filteredGameList = filterGameList(gameList);
 
   if (filteredGameList.length === 0) {
     return (
-      <MessageCard
-        type={'info'}
-        message='No se encontró ninguna partida con ese nombre.'
-      />
+      <MessageCard type={'info'} message='No se encontró ninguna partida.' />
     );
   }
 
