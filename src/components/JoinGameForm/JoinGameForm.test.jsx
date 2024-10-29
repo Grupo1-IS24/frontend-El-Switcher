@@ -3,7 +3,8 @@ import { describe, it, expect } from 'vitest';
 import JoinGameForm from './JoinGameForm';
 
 describe('JoinGameForm', () => {
-  const renderComponent = (isPublic) => render(<JoinGameForm isPublic={isPublic} />);
+  const renderComponent = (isPublic) =>
+    render(<JoinGameForm isPublic={isPublic} />);
 
   it('should render the JoinGameForm component', () => {
     renderComponent(false);
@@ -39,7 +40,9 @@ describe('JoinGameForm', () => {
 
   it('should not render the password input when isPublic is false', () => {
     renderComponent(false);
-    const passwordInput = screen.queryByPlaceholderText('Ingresa la contraseña');
+    const passwordInput = screen.queryByPlaceholderText(
+      'Ingresa la contraseña'
+    );
     expect(passwordInput).not.toBeInTheDocument();
   });
 
