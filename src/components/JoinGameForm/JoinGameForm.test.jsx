@@ -38,16 +38,16 @@ describe('JoinGameForm', () => {
     );
   });
 
-  it('should not render the password input when isPublic is false', () => {
-    renderComponent(false);
+  it('should not render the password input when isPublic is true', () => {
+    renderComponent(true);
     const passwordInput = screen.queryByPlaceholderText(
       'Ingresa la contraseña'
     );
     expect(passwordInput).not.toBeInTheDocument();
   });
 
-  it('should render the password input when isPublic is true', () => {
-    renderComponent(true);
+  it('should render the password input when isPublic is false', () => {
+    renderComponent(false);
     const passwordInput = screen.getByPlaceholderText('Ingresa la contraseña');
     expect(passwordInput).toBeInTheDocument();
     expect(passwordInput).toHaveAttribute('name', 'gamePassword');
