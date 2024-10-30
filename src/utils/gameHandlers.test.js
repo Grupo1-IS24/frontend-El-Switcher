@@ -97,10 +97,7 @@ describe('gameHandlers', () => {
         redirectToLobbyPage
       );
 
-      expect(joinGame).toHaveBeenCalledWith(
-        { playerName: 'Player' },
-        1
-      );
+      expect(joinGame).toHaveBeenCalledWith({ playerName: 'Player' }, 1);
     });
 
     it('should call createPlayer and redirectToLobbyPage on success', async () => {
