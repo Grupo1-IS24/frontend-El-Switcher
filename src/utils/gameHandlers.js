@@ -2,6 +2,22 @@ import { createGame } from '../service/CreateGameService';
 import { joinGame } from '../service/JoinGameService';
 import showToast from './toastUtil';
 
+const showErrorToast = (message) => {
+  showToast({
+    type: 'error',
+    message,
+    autoClose: 3000,
+  });
+};
+
+const showWarningToast = (message) => {
+  showToast({
+    type: 'warning',
+    message,
+    autoClose: 3000,
+  });
+};
+
 export const handleCreateGame = async (
   elements,
   createPlayer,
@@ -20,19 +36,11 @@ export const handleCreateGame = async (
       createPlayer(createdGame.ownerId, true);
       redirectToLobbyPage(createdGame.gameId);
     } else {
-      showToast({
-        type: 'error',
-        message: 'Error al crear la partida',
-        autoClose: 3000,
-      });
+      showErrorToast('Error al crear la partida');
     }
   } catch (error) {
     console.error('Error al crear la partida', error);
-    showToast({
-      type: 'error',
-      message: 'Hubo un problema al crear el juego',
-      autoClose: 3000,
-    });
+    showErrorToast('Hubo un problema al crear el juego');
   }
 };
 
@@ -43,11 +51,7 @@ export const handleJoinGame = async (
   redirectToLobbyPage
 ) => {
   if (elements.playerName.value === '') {
-    showToast({
-      type: 'warning',
-      message: 'El nombre del jugador no puede estar vacío',
-      autoClose: 3000,
-    });
+    showWarningToast('El nombre del jugador no puede estar vacío');
     return;
   }
 
@@ -57,11 +61,7 @@ export const handleJoinGame = async (
 
   if (selectedGame.isPublic === false) {
     if (elements.gamePassword.value === '') {
-      showToast({
-        type: 'warning',
-        message: 'Ingresa la contraseña de la partida',
-        autoClose: 3000,
-      });
+      showWarningToast('Ingresa la contraseña de la partida');
       return;
     }
     playerJoinData.password = elements.gamePassword.value;
@@ -76,23 +76,11 @@ export const handleJoinGame = async (
     redirectToLobbyPage(selectedGame.gameId);
   } catch (error) {
     if (error.message.includes('Incorrect password.')) {
-      showToast({
-        type: 'error',
-        message: 'Contraseña incorrecta',
-        autoClose: 3000,
-      });
+      showErrorToast('Contraseña incorrecta');
     } else if (error.message.includes('is full')) {
-      showToast({
-        type: 'error',
-        message: `La partida '${selectedGame.gameName}' está llena`,
-        autoClose: 3000,
-      });
+      showErrorToast(`La partida '${selectedGame.gameName}' está llena`);
     } else {
-      showToast({
-        type: 'error',
-        message: error.message,
-        autoClose: 3000,
-      });
+      showErrorToast(error.message);
     }
   }
 };
