@@ -39,7 +39,11 @@ const GameForm = ({ type, selectedGame, onClose, setshowForm }) => {
             : `Unirse a "${selectedGame.gameName}"`}
         </h2>
         <form onSubmit={handleSubmit} className='space-y-4' role='form'>
-          {type === 'create' ? <CreateGameForm /> : <JoinGameForm />}
+          {type === 'create' ? (
+            <CreateGameForm />
+          ) : (
+            <JoinGameForm isPublic={selectedGame.isPublic} />
+          )}
           <div className='flex flex-row justify-between'>
             <Button
               type='submit'

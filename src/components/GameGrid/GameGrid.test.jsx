@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import GameGrid from './GameGrid';
 import useFilterGameList from '../../hooks/useFilterGameList';
@@ -64,5 +64,22 @@ describe('GameGrid', () => {
     expect(screen.getByText('Game 1')).toBeInTheDocument();
     expect(screen.getByText('Conectados: 2')).toBeInTheDocument();
     expect(screen.getByText('Max. jugadores: 4')).toBeInTheDocument();
+  });
+
+  it('calls selectGame with the correct game when the button is clicked', () => {
+    const gameList = [
+      { gameId: 1, gameName: 'Game 1', maxPlayers: 4, connectedPlayers: 2 },
+    ];
+
+    useFilterGameList.mockReturnValue({
+      filterGameList: (games) => games,
+    });
+
+    renderComponent({ gameList });
+
+    const button = screen.getByText('Unirme');
+    fireEvent.click(button);
+
+    expect(mockSelectGame).toHaveBeenCalledWith(gameList[0]);
   });
 });
