@@ -15,6 +15,7 @@ import { useParams } from 'react-router-dom';
  * - figureCards: An array of figure cards.
  * - movementCards: An array of movement cards.
  * - winnerInfo: Information about the winner of the game.
+ * - timer: The remaining time for the current turn.
  */
 const useWebsocketGame = () => {
   const { gameId } = useParams();
@@ -28,6 +29,7 @@ const useWebsocketGame = () => {
   const [winnerInfo, setWinnerInfo] = useState(null);
   const [opponentsTotalMovCards, setOpponentsTotalMovCards] = useState([]);
   const [foundFigures, setfoundFigures] = useState([]);
+  const [timer, setTimer] = useState(0);
 
   const handleSocketEvents = useCallback((socket) => {
     socket.on('player_list', (listOfPlayers) => {
@@ -67,6 +69,10 @@ const useWebsocketGame = () => {
       setfoundFigures(foundFigures);
     });
 
+    socket.on('timer', ({ time }) => {
+      setTimer(time);
+    });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -84,6 +90,7 @@ const useWebsocketGame = () => {
     winnerInfo,
     opponentsTotalMovCards,
     foundFigures,
+    timer,
   };
 };
 
