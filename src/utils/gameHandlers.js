@@ -42,9 +42,30 @@ export const handleJoinGame = async (
   createPlayer,
   redirectToLobbyPage
 ) => {
+  if (elements.playerName.value === '') {
+    showToast({
+      type: 'warning',
+      message: 'El nombre del jugador no puede estar vacío',
+      autoClose: 3000,
+    });
+    return;
+  }
+
   const playerJoinData = {
     playerName: elements.playerName.value,
   };
+
+  if (selectedGame.isPublic === false) {
+    if (elements.gamePassword.value === '') {
+      showToast({
+        type: 'warning',
+        message: 'Ingresa la contraseña de la partida',
+        autoClose: 3000,
+      });
+      return;
+    }
+    playerJoinData.password = elements.gamePassword.value;
+  }
 
   try {
     const playerResponseData = await joinGame(
@@ -54,7 +75,13 @@ export const handleJoinGame = async (
     createPlayer(playerResponseData.playerId);
     redirectToLobbyPage(selectedGame.gameId);
   } catch (error) {
-    if (error.message.includes('is full')) {
+    if (error.message.includes('Incorrect password.')) {
+      showToast({
+        type: 'error',
+        message: 'Contraseña incorrecta',
+        autoClose: 3000,
+      });
+    } else if (error.message.includes('is full')) {
       showToast({
         type: 'error',
         message: `La partida '${selectedGame.gameName}' está llena`,
