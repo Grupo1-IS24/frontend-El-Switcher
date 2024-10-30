@@ -5,6 +5,7 @@ const playerJoinDataSchema = z.object({
   playerName: z
     .string()
     .min(1, { message: 'El nombre del jugador no puede estar vacío' }),
+  password: z.string().optional(),
 });
 
 const playerResponseDataSchema = z.object({

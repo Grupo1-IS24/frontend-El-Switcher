@@ -81,8 +81,9 @@ describe('gameHandlers', () => {
   describe('handleJoinGame', () => {
     const elements = {
       playerName: { value: 'Player' },
+      gamePassword: { value: 'password' },
     };
-    const selectedGame = { gameId: 1, gameName: 'Game' };
+    const selectedGame = { gameId: 1, gameName: 'Game', isPublic: true };
     const createPlayer = vi.fn();
     const redirectToLobbyPage = vi.fn();
 
@@ -143,6 +144,119 @@ describe('gameHandlers', () => {
       expect(showToast).toHaveBeenCalledWith({
         type: 'error',
         message: 'Network Error',
+        autoClose: 3000,
+      });
+    });
+
+    it('should show warning toast if playerName is empty', async () => {
+      const emptyElements = {
+        playerName: { value: '' },
+      };
+
+      await handleJoinGame(
+        emptyElements,
+        selectedGame,
+        createPlayer,
+        redirectToLobbyPage
+      );
+
+      expect(showToast).toHaveBeenCalledWith({
+        type: 'warning',
+        message: 'El nombre del jugador no puede estar vacío',
+        autoClose: 3000,
+      });
+    });
+
+    it('should show warning toast if gamePassword is empty and game is not public', async () => {
+      const privateGame = { gameId: 1, gameName: 'Game', isPublic: false };
+      const elementsWithoutPassword = {
+        playerName: { value: 'Player' },
+        gamePassword: { value: '' },
+      };
+
+      await handleJoinGame(
+        elementsWithoutPassword,
+        privateGame,
+        createPlayer,
+        redirectToLobbyPage
+      );
+
+      expect(showToast).toHaveBeenCalledWith({
+        type: 'warning',
+        message: 'Ingresa la contraseña de la partida',
+        autoClose: 3000,
+      });
+    });
+
+    it('should include gamePassword in playerJoinData if game is not public', async () => {
+      const privateGame = { gameId: 1, gameName: 'Game', isPublic: false };
+      const elementsWithPassword = {
+        playerName: { value: 'Player' },
+        gamePassword: { value: 'password' },
+      };
+
+      joinGame.mockResolvedValue({ playerId: 1 });
+
+      await handleJoinGame(
+        elementsWithPassword,
+        privateGame,
+        createPlayer,
+        redirectToLobbyPage
+      );
+
+      expect(joinGame).toHaveBeenCalledWith(
+        { playerName: 'Player', password: 'password' },
+        1
+      );
+    });
+
+    it('should show error toast if joinGame throws an error with "Incorrect password."', async () => {
+      joinGame.mockRejectedValue(new Error('Incorrect password.'));
+
+      await handleJoinGame(
+        elements,
+        selectedGame,
+        createPlayer,
+        redirectToLobbyPage
+      );
+
+      expect(showToast).toHaveBeenCalledWith({
+        type: 'error',
+        message: 'Contraseña incorrecta',
+        autoClose: 3000,
+      });
+    });
+
+    it('should show error toast if joinGame throws an error with "is full"', async () => {
+      joinGame.mockRejectedValue(new Error('Game is full'));
+
+      await handleJoinGame(
+        elements,
+        selectedGame,
+        createPlayer,
+        redirectToLobbyPage
+      );
+
+      expect(showToast).toHaveBeenCalledWith({
+        type: 'error',
+        message: "La partida 'Game' está llena",
+        autoClose: 3000,
+      });
+    });
+
+    it('should show error toast if joinGame throws a generic error', async () => {
+      joinGame.mockRejectedValue(new Error('Some generic error'));
+
+      await handleJoinGame(
+        elements,
+        selectedGame,
+        createPlayer,
+        redirectToLobbyPage
+      );
+
+      expect(showToast).toHaveBeenCalledWith({
+        type: 'error',
+        message: 'Some generic error',
         autoClose: 3000,
       });
     });
