@@ -83,7 +83,7 @@ describe('GameForm', () => {
     it('should have the correct number and types of inputs and buttons', () => {
       renderForm('join');
       const inputs = screen.getAllByRole('textbox');
-      expect(inputs).toHaveLength(1);
+      expect(inputs).toHaveLength(2);
       expect(inputs[0]).toHaveAttribute('name', 'playerName');
 
       const buttons = screen.getAllByRole('button');
