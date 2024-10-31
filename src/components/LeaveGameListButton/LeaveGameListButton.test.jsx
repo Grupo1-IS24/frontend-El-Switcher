@@ -2,6 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { vi, describe, it, beforeEach, expect } from 'vitest';
 import LeaveGameListButton from './LeaveGameListButton';
 import useRouteNavigation from '../../hooks/useRouteNavigation';
+import { showToast } from '../../utils/toastUtil';
 
 vi.mock('../../hooks/useRouteNavigation', () => ({
   __esModule: true,
