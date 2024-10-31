@@ -19,12 +19,7 @@ const LeaveGameListButton = () => {
 
   return (
     <div className='absolute top-4 left-4'>
-      <Button
-        text={'⭠'}
-        style={'borderButton'}
-        onPress={handleLeaveClick}
-      />
-
+      <Button text={'⭠'} style={'borderButton'} onPress={handleLeaveClick} />
     </div>
   );
 };
