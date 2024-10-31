@@ -8,6 +8,7 @@ import useWebsocketGameList from '../hooks/useWebsocketGameList';
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner';
 import FilterGameListProvider from '../contexts/FilterGameListProvider';
 import FilterGameInfo from '../components/FilterGameInfo/FilterGameInfo';
+import LeaveGameListButton from '../components/LeaveGameListButton/LeaveGameListButton';
 
 const GameListPage = () => {
   const { gameList, isLoading, error } = useWebsocketGameList();
@@ -32,6 +33,7 @@ const GameListPage = () => {
       <>
         <FilterGameListProvider>
           <FilterGameInfo />
+          <LeaveGameListButton />
           <GameGrid gameList={gameList} selectGame={selectGame} />
         </FilterGameListProvider>
         <GameForm
