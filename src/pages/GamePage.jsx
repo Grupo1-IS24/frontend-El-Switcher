@@ -14,7 +14,7 @@ const GamePage = () => {
   return (
     <>
       <BgOverlay />
-      <Timer time={timer} />
+      { timer > 0 && <Timer time={timer} /> }
       <PlayCardLogicProvider>
         <DisplayPlayers listOfPlayers={listOfPlayers} />
         <Board board={board} />
