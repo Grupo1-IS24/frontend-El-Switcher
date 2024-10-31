@@ -11,7 +11,6 @@ vi.mock('../../hooks/useRouteNavigation', () => ({
 }));
 
 const showToast = vi.fn();
-global.showToast = showToast;
 
 describe('LeaveGameListButton', () => {
   let redirectToHomePage;
