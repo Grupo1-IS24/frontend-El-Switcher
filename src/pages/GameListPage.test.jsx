@@ -14,14 +14,6 @@ vi.mock('../components/MessageCard/MessageCard', () => ({
 vi.mock('../components/LoadingSpinner/LoadingSpinner', () => ({
   default: () => <div>LoadingSpinner</div>,
 }));
-vi.mock('../components/FilterGamePerName/FilterGamePerName', () => ({
-  default: vi.fn(({ onSearch }) => (
-    <input
-      placeholder='Buscar partidas por su nombre'
-      onChange={(e) => onSearch(e.target.value)}
-    />
-  )),
-}));
 vi.mock('../components/GameGrid/GameGrid', () => ({
   default: vi.fn(({ gameList }) => (
     <div>GameGrid: {gameList.length} juegos encontrados</div>
@@ -35,6 +27,12 @@ vi.mock('../components/TitleText/TitleText', () => ({
 }));
 vi.mock('../components/BgOverlay/BgOverlay', () => ({
   default: () => <div>BackgroundOverlay</div>,
+}));
+vi.mock('../components/FilterGameInfo/FilterGameInfo', () => ({
+  default: () => <div>FilterGameInfo</div>,
+}));
+vi.mock('../components/LeaveGameListButton/LeaveGameListButton', () => ({
+  default: () => <div>LeaveGameListButton</div>,
 }));
 
 vi.mock('../hooks/useWebsocketGameList', () => ({
@@ -114,9 +112,8 @@ describe('GameListPage', () => {
     });
 
     render(<GameListPage />);
-    expect(
-      screen.getByPlaceholderText('Buscar partidas por su nombre')
-    ).toBeInTheDocument();
+    expect(screen.getByText('FilterGameInfo')).toBeInTheDocument();
+    expect(screen.getByText('LeaveGameListButton')).toBeInTheDocument();
     expect(
       screen.getByText('GameGrid: 1 juegos encontrados')
     ).toBeInTheDocument();
