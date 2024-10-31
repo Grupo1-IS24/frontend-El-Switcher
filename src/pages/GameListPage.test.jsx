@@ -137,3 +137,4 @@ describe('GameListPage', () => {
     expect(screen.getByText('GameForm join')).toBeInTheDocument();
   });
 });
+
