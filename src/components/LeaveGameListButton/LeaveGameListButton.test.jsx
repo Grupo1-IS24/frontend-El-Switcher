@@ -41,7 +41,7 @@ describe('LeaveGameListButton', () => {
     });
 
     render(<LeaveGameListButton />);
-    
+
     const button = screen.getByText('⭠');
     await fireEvent.click(button);
 
@@ -50,7 +50,7 @@ describe('LeaveGameListButton', () => {
 
   it('does not show toast or call console.error if no error occurs', async () => {
     render(<LeaveGameListButton />);
-    
+
     const button = screen.getByText('⭠');
     await fireEvent.click(button);
 
