@@ -14,11 +14,8 @@ permissions:
   contents: write
 
 jobs:
-  format_and_test:
+  format_code:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        directory: [src/components, src/hooks, src/pages, src/service, src/utils]
 
     steps:
     # Verificar el repositorio y hacer checkout de la rama
@@ -74,6 +71,39 @@ jobs:
       run: git push origin HEAD:${{ github.head_ref || github.ref }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  test:
+    needs: format_code
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        directory: [src/components, src/hooks, src/pages, src/service, src/utils]
+
+    steps:
+    # Verificar el repositorio y hacer checkout de la rama
+    - name: Verificar repositorio
+      uses: actions/checkout@v3
+      with:
+        ref: ${{ github.head_ref || github.ref }}
+
+    # Restaurar caché de dependencias
+    - name: Restaurar caché de npm
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-npm-cache-
+
+    # Configurar Node.js
+    - name: Configurar Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    # Instalar dependencias
+    - name: Instalar dependencias
+      run: npm install
 
     # Ejecutar pruebas por directorio en paralelo
     - name: Ejecutar pruebas
