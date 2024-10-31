@@ -1,6 +1,6 @@
 import useRouteNavigation from '../../hooks/useRouteNavigation';
 import Button from '../Button/Button';
-import { showToast } from '../../utils/toastUtil';
+import showToast from '../../utils/toastUtil';
 
 const LeaveGameListButton = () => {
   const { redirectToHomePage } = useRouteNavigation();
@@ -11,10 +11,10 @@ const LeaveGameListButton = () => {
     } catch (error) {
       showToast({
         type: 'error',
-        message: 'Error al abandonar el juego. Intente nuevamente.',
+        message: 'Error al abandonar el listado de partidas. Intente nuevamente.',
         autoClose: 3000,
       });
-      console.error('Error al abandonar el juego', error);
+      console.error('Error al abandonar el listado de partidas', error);
     }
   };
 
