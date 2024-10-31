@@ -25,7 +25,10 @@ const GameListPage = () => {
 
     if (gameList.length === 0) {
       return (
-        <MessageCard type={'info'} message='No hay partidas disponibles.' />
+        <>
+          <LeaveGameListButton />
+          <MessageCard type={'info'} message='No hay partidas disponibles.' />
+        </>
       );
     }
 
@@ -57,4 +60,3 @@ const GameListPage = () => {
 };
 
 export default GameListPage;
-
