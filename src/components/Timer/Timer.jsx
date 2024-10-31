@@ -10,7 +10,7 @@ const Timer = ({ time }) => {
   }
 
   return (
-    <div className='w-screen h-screen absolute flex flex-col items-center top-[78px]'>
+    <div className='w-screen absolute flex flex-col items-center top-[78px]'>
       <div className='w-[616px] flex flex-col items-end'>
         <span
           className={`w-[124px] h-[50px] rounded-[8px] bg-[#0C0C0C] ${timeColorClass} text-[36px] font-semibold flex justify-center`}
