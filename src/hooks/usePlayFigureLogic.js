@@ -69,7 +69,6 @@ const usePlayFigureLogic = () => {
       } else {
         setSelectedFigureCard(figureCard);
       }
-      setSelectedFigureColorCards([]); // Deselect the color cards
       resetMovementCards(); // Reset the movement cards
     },
     [
