@@ -11,7 +11,8 @@ const LeaveGameListButton = () => {
     } catch (error) {
       showToast({
         type: 'error',
-        message: 'Error al abandonar el listado de partidas. Intente nuevamente.',
+        message:
+          'Error al abandonar el listado de partidas. Intente nuevamente.',
         autoClose: 3000,
       });
       console.error('Error al abandonar el listado de partidas', error);
