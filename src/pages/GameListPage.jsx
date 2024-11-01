@@ -8,6 +8,7 @@ import useWebsocketGameList from '../hooks/useWebsocketGameList';
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner';
 import FilterGameListProvider from '../contexts/FilterGameListProvider';
 import FilterGameInfo from '../components/FilterGameInfo/FilterGameInfo';
+import LeaveGameListButton from '../components/LeaveGameListButton/LeaveGameListButton';
 
 const GameListPage = () => {
   const { gameList, isLoading, error } = useWebsocketGameList();
@@ -24,7 +25,10 @@ const GameListPage = () => {
 
     if (gameList.length === 0) {
       return (
-        <MessageCard type={'info'} message='No hay partidas disponibles.' />
+        <>
+          <LeaveGameListButton />
+          <MessageCard type={'info'} message='No hay partidas disponibles.' />
+        </>
       );
     }
 
@@ -32,6 +36,7 @@ const GameListPage = () => {
       <>
         <FilterGameListProvider>
           <FilterGameInfo />
+          <LeaveGameListButton />
           <GameGrid gameList={gameList} selectGame={selectGame} />
         </FilterGameListProvider>
         <GameForm
