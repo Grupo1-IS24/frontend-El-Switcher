@@ -26,15 +26,15 @@ describe('LeaveGameListButton', () => {
     expect(button).toBeInTheDocument();
   });
 
-  it('calls redirectToHomePage on button click', async () => {
+  it('calls redirectToHomePage on button click', () => {
     render(<LeaveGameListButton />);
     const button = screen.getByText('⭠');
-    await fireEvent.click(button);
+    fireEvent.click(button);
 
     expect(redirectToHomePage);
   });
 
-  it('shows error toast on click if an error occurs', async () => {
+  it('shows error toast on click if an error occurs', () => {
     redirectToHomePage.mockImplementation(() => {
       throw new Error('Test error');
     });
@@ -42,16 +42,16 @@ describe('LeaveGameListButton', () => {
     render(<LeaveGameListButton />);
 
     const button = screen.getByText('⭠');
-    await fireEvent.click(button);
+    fireEvent.click(button);
 
     expect(showToast);
   });
 
-  it('does not show toast or call console.error if no error occurs', async () => {
+  it('does not show toast or call console.error if no error occurs', () => {
     render(<LeaveGameListButton />);
 
     const button = screen.getByText('⭠');
-    await fireEvent.click(button);
+    fireEvent.click(button);
 
     expect(showToast);
     expect(console.error);
