@@ -1,10 +1,18 @@
+import { useContext } from 'react';
+import { GameContext } from '../../contexts/GameProvider';
 import './ChatMessages.css';
 
 const ChatMessages = () => {
+  const { chatMessages } = useContext(GameContext);
+
   return (
     <div className='p-4'>
       <div className='chat-messages-container flex flex-col h-64 overflow-y-auto space-y-2 break-words'>
-        <p className='text-sm'>Mensaje de ejemplo.</p>
+        {chatMessages.map(({ writtenBy, message }, index) => (
+          <p key={index}>
+            {writtenBy}: {message}
+          </p>
+        ))}
       </div>
       <input
         type='text'
