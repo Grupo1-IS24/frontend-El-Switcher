@@ -10,7 +10,7 @@ import {
  * @returns {string} - The full image path for the blocked color card, or an empty string if no valid color is provided (e.g., if the input is not a string).
  */
 export const getBlockedCardImagePath = (blockedColor) => {
-  if (typeof blockedColor !== 'string') return '';
+  if (!blockedColor || typeof blockedColor !== 'string') return '';
 
   return `${BLOCKED_CARD_IMAGE_PREFIX}${blockedColor.toLowerCase()}${IMAGE_FILE_EXTENSION}`;
 };
