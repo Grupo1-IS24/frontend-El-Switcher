@@ -30,6 +30,7 @@ const useWebsocketGame = () => {
   const [opponentsTotalMovCards, setOpponentsTotalMovCards] = useState([]);
   const [foundFigures, setfoundFigures] = useState([]);
   const [timer, setTimer] = useState(0);
+  const [chatMessages, setChatMessages] = useState([]);
 
   const handleSocketEvents = useCallback((socket) => {
     socket.on('player_list', (listOfPlayers) => {
@@ -73,6 +74,14 @@ const useWebsocketGame = () => {
       setTimer(time);
     });
 
+    socket.on('chat_messages', ({ type, data }) => {
+      if (type === 'multipleMessages') {
+        setChatMessages(data);
+      } else {
+        setChatMessages((prev) => [...prev, data]);
+      }
+    });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -91,6 +100,7 @@ const useWebsocketGame = () => {
     opponentsTotalMovCards,
     foundFigures,
     timer,
+    chatMessages,
   };
 };
 
