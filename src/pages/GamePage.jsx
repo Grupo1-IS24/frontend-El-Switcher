@@ -7,6 +7,7 @@ import { useContext } from 'react';
 import { GameContext } from '../contexts/GameProvider';
 import PlayCardLogicProvider from '../contexts/PlayCardLogicProvider';
 import Timer from '../components/Timer/Timer';
+import ChatBox from '../components/ChatBox/ChatBox';
 
 const GamePage = () => {
   const { listOfPlayers, board, timer } = useContext(GameContext);
@@ -21,6 +22,7 @@ const GamePage = () => {
       </PlayCardLogicProvider>
       <WinnerMessage />
       <LeaveButton />
+      <ChatBox />
     </>
   );
 };
