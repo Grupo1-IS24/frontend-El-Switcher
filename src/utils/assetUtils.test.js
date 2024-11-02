@@ -3,7 +3,7 @@ import { getBlockedCardImagePath } from './assetUtils';
 import {
   BLOCKED_CARD_IMAGE_PREFIX,
   IMAGE_FILE_EXTENSION,
-} from '../constants/assetPaths';
+} from '../constants/assetConstants';
 
 describe('assetUtils', () => {
   it('should getBlockedCardImagePath return the correct image path for a valid color', () => {
@@ -36,5 +36,10 @@ describe('assetUtils', () => {
 
   it('should getBlockedCardImagePath return an empty string for a non-string input (object)', () => {
     expect(getBlockedCardImagePath({})).toBe('');
+  });
+
+  it('should getBlockedCardImagePath return an empty string for an invalid color', () => {
+    const blockedColor = 'purple';
+    expect(getBlockedCardImagePath(blockedColor)).toBe('');
   });
 });
