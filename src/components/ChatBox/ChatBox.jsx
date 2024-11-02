@@ -26,7 +26,7 @@ const ChatBox = () => {
             </button>
           </div>
           <div className='p-4'>
-            <div className='flex flex-col h-64 overflow-y-auto space-y-2'>
+            <div className='flex flex-col h-64 overflow-y-auto space-y-2 break-words'>
               <p className='text-sm'>Mensaje de ejemplo.</p>
             </div>
             <input
