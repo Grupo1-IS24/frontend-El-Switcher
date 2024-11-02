@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const useChat = () => {
+const useChatBox = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleChat = () => {
@@ -13,4 +13,4 @@ const useChat = () => {
   };
 };
 
-export default useChat;
+export default useChatBox;

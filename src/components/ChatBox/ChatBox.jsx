@@ -1,8 +1,8 @@
-import useChat from '../../hooks/useChat';
+import useChatBox from '../../hooks/useChatBox';
 import ChatMessages from '../ChatMessages/ChatMessages';
 
 const ChatBox = () => {
-  const { isOpen, toggleChat } = useChat();
+  const { isOpen, toggleChat } = useChatBox();
 
   return (
     <div className='fixed bottom-0 inset-x-0 mx-auto w-80 p-4 z-50'>
