@@ -1,4 +1,5 @@
 import useChat from '../../hooks/useChat';
+import './ChatBox.css';
 
 const ChatBox = () => {
   const { isOpen, toggleChat } = useChat();
@@ -26,7 +27,7 @@ const ChatBox = () => {
             </button>
           </div>
           <div className='p-4'>
-            <div className='flex flex-col h-64 overflow-y-auto space-y-2 break-words'>
+            <div className='chat-messages-container flex flex-col h-64 overflow-y-auto space-y-2 break-words'>
               <p className='text-sm'>Mensaje de ejemplo.</p>
             </div>
             <input
