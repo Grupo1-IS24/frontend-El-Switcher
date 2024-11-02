@@ -1,2 +1,3 @@
-export const ASSETS_PATH = '/src/assets';
-export const BLOCKED_CARDS_ASSETS_PATH = `${ASSETS_PATH}/BlockedCards`;
+export const BASE_ASSETS_PATH = '/src/assets';
+export const BLOCKED_CARD_IMAGE_PREFIX = `${BASE_ASSETS_PATH}/BlockedCards/blocked_card_`;
+export const IMAGE_FILE_EXTENSION = '.svg';

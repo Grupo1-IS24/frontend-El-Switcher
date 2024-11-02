@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { GameContext } from '../../contexts/GameProvider';
-import { BLOCKED_CARDS_ASSETS_PATH } from '../../constants/assetPaths';
+import { getBlockedCardImagePath } from '../../utils/assetUtils';
 
 const BlockedColor = () => {
   const { blockedColor } = useContext(GameContext);
@@ -12,7 +12,7 @@ const BlockedColor = () => {
       </p>
       {blockedColor && (
         <img
-          src={`${BLOCKED_CARDS_ASSETS_PATH}/blocked_card_${blockedColor.toLowerCase()}.svg`}
+          src={getBlockedCardImagePath(blockedColor)}
           className='w-[40px] h-[70px]'
           alt={`Color bloqueado es ${blockedColor}`}
         />
