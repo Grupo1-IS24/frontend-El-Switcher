@@ -2,25 +2,24 @@ import { useEffect } from 'react';
 import useRouteNavigation from '../../hooks/useRouteNavigation';
 import Button from '../Button/Button';
 import useWinnerPlayer from '../../hooks/useWinnerPlayer';
-import useSound from 'use-sound';
-import loser from '../../assets/Sounds/loser.mp3';
-import winner from '../../assets/Sounds/winner.mp3';
+import useGameSounds from '../../hooks/useGameSounds';
 
 const WinnerMessage = () => {
-  const [playLoser, { stop: stopLoser }] = useSound(loser);
-  const [playWinner, { stop: stopWinner }] = useSound(winner);
+  const { playSound, stopSound } = useGameSounds();
   const { redirectToHomePage } = useRouteNavigation();
   const { isCurrentPlayerWinner, thereIsWinner, winnerName } =
     useWinnerPlayer();
 
   const goHome = () => {
-    isCurrentPlayerWinner ? stopWinner() : stopLoser();
+    stopSound(isCurrentPlayerWinner);
     redirectToHomePage();
   };
 
   useEffect(() => {
-    thereIsWinner && (isCurrentPlayerWinner ? playWinner() : playLoser());
-  }, [isCurrentPlayerWinner, thereIsWinner, playLoser, playWinner]);
+    if (thereIsWinner) {
+      playSound(isCurrentPlayerWinner);
+    }
+  }, [isCurrentPlayerWinner, thereIsWinner, playSound]);
 
   return (
     <>
