@@ -1,6 +1,6 @@
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterAll, afterEach, describe, expect, it, vi } from 'vitest';
 import ChatBox from './ChatBox';
 import useChatBox from '../../hooks/useChatBox';
 import WebSocketGameProvider from '../../contexts/GameProvider';
@@ -35,6 +35,10 @@ describe('ChatBox component', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
+  });
+
+  afterAll(() => {
+    cleanup();
   });
 
   it('should show the button to open the chat when the chat is closed', () => {
