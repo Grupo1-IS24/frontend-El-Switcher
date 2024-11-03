@@ -19,7 +19,7 @@ const WinnerMessage = () => {
     if (thereIsWinner) {
       playSound(isCurrentPlayerWinner);
     }
-  }, [isCurrentPlayerWinner, thereIsWinner, playSound]);
+  }, [thereIsWinner]);
 
   return (
     <>
