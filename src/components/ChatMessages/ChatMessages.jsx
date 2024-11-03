@@ -23,6 +23,7 @@ const ChatMessages = () => {
         placeholder='Escribe un mensaje...'
         className='mt-2 w-full bg-gray-800 bg-opacity-50 text-white p-2 rounded-md focus:outline-none'
         onKeyUp={handleInputMessage}
+        autoFocus
       />
     </div>
   );
