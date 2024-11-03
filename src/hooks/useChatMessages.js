@@ -5,6 +5,13 @@ import { sendChatMessage } from '../service/SendChatMessage';
 import { useParams } from 'react-router-dom';
 import showToast from '../utils/toastUtil';
 
+/**
+ * Custom hook to handle chat messages in the game.
+ *
+ * @returns {Object} An object containing the following properties:
+ * - chatMessages: An array of chat messages.
+ * - handleInputMessage: A function to handle the input message.
+ */
 const useChatMessages = () => {
   const { chatMessages } = useContext(GameContext);
   const { playerID } = useContext(PlayerContext);

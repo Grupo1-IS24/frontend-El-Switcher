@@ -1,12 +1,17 @@
 import useChatMessages from '../../hooks/useChatMessages';
+import useScrollToBottom from '../../hooks/useScrollToBottom';
 import './ChatMessages.css';
 
 const ChatMessages = () => {
   const { chatMessages, handleInputMessage } = useChatMessages();
+  const messagesContainerRef = useScrollToBottom(chatMessages.length);
 
   return (
     <div className='p-4'>
-      <div className='chat-messages-scrollbar flex flex-col h-64 overflow-y-auto space-y-2 break-words'>
+      <div
+        ref={messagesContainerRef}
+        className='chat-messages-scrollbar flex flex-col h-64 overflow-y-auto space-y-2 break-words'
+      >
         {chatMessages.map(({ writtenBy, message }, index) => (
           <p key={index}>
             {writtenBy}: {message}
