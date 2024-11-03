@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import useRouteNavigation from '../../hooks/useRouteNavigation';
 import Button from '../Button/Button';
 import useWinnerPlayer from '../../hooks/useWinnerPlayer';
-import useGameSounds from '../../hooks/useGameSounds';
+import { useGameSounds } from '../../hooks/useGameSounds';
 
 const WinnerMessage = () => {
   const { playSound, stopSound } = useGameSounds();
