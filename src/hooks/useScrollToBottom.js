@@ -6,12 +6,19 @@ import { useEffect, useRef } from 'react';
  * @param {any} dependency The dependency to watch for changes.
  * @returns {Object} The reference to the container.
  */
-const useScrollToBottom = (dependency) => {
+const useScrollToBottom = (dependency, threshold = 240) => {
   const containerRef = useRef(null);
 
   useEffect(() => {
     if (containerRef.current) {
-      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+      const { offsetHeight, scrollHeight, scrollTop } = containerRef.current;
+
+      if (scrollHeight <= scrollTop + offsetHeight + threshold) {
+        containerRef.current.scrollTo({
+          top: scrollHeight,
+          behavior: 'smooth',
+        });
+      }
     }
   }, [dependency]);
 
