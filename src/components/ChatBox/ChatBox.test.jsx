@@ -37,27 +37,27 @@ describe('ChatBox component', () => {
     vi.clearAllMocks();
   });
 
-  it('must show the button to open the chat when the chat is closed', () => {
+  it('should show the button to open the chat when the chat is closed', () => {
     setup();
     expect(getOpenChatPrompt()).toBeInTheDocument();
     expect(getCloseChatButton()).not.toBeInTheDocument();
     expect(getChatText()).not.toBeInTheDocument();
   });
 
-  it('must open the chat when the open button is clicked', async () => {
+  it('should open the chat when the open button is clicked', async () => {
     setup();
     await userEvent.click(getOpenChatPrompt());
     expect(toggleChat).toHaveBeenCalledTimes(1);
   });
 
-  it('must display the chat info when is open', () => {
+  it('should display the chat info when is open', () => {
     setup(true);
     expect(getChatText()).toBeInTheDocument();
     expect(getCloseChatButton()).toBeInTheDocument();
     expect(getOpenChatPrompt()).not.toBeInTheDocument();
   });
 
-  it('must close the chat when the close button is clicked', async () => {
+  it('should close the chat when the close button is clicked', async () => {
     setup(true);
     await userEvent.click(getCloseChatButton());
     expect(toggleChat).toHaveBeenCalledTimes(1);
