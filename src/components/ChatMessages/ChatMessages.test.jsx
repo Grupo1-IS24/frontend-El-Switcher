@@ -1,5 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { render, screen, fireEvent, cleanup } from '@testing-library/react';
+import { afterAll, describe, expect, it, vi } from 'vitest';
 import ChatMessages from './ChatMessages';
 import useChatMessages from '../../hooks/useChatMessages';
 import useScrollToBottom from '../../hooks/useScrollToBottom';
@@ -28,6 +28,10 @@ describe('ChatMessages', () => {
 
     expect(messagesContainer.querySelectorAll('p')).toHaveLength(length);
   };
+
+  afterAll(() => {
+    cleanup();
+  });
 
   it('should render chat messages', () => {
     setup();

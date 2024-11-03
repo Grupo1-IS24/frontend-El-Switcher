@@ -1,5 +1,5 @@
-import { renderHook, act } from '@testing-library/react';
-import { describe, it, expect, vi, afterEach, beforeAll } from 'vitest';
+import { renderHook, act, cleanup } from '@testing-library/react';
+import { describe, it, expect, vi, afterEach, afterAll } from 'vitest';
 import { GameContext } from '../contexts/GameProvider';
 import { PlayerContext } from '../contexts/PlayerProvider';
 import { sendChatMessage } from '../service/SendChatMessage';
@@ -39,6 +39,10 @@ describe('useChatMessages', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
+  });
+
+  afterAll(() => {
+    cleanup();
   });
 
   it('should return chatMessages and handleInputMessage function', () => {
