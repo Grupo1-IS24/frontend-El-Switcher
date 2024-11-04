@@ -65,6 +65,7 @@ describe('useWebsocketGame Hook', () => {
       expect(result.current.winnerInfo).toBe(null);
       expect(result.current.opponentsTotalMovCards).toEqual([]);
       expect(result.current.foundFigures).toEqual([]);
+      expect(result.current.timer).toBe(0);
     });
 
     it('should handle player_list event correctly', () => {
@@ -175,6 +176,19 @@ describe('useWebsocketGame Hook', () => {
       });
 
       expect(result.current.foundFigures).toEqual([{ figureId: 1 }]);
+    });
+
+    it('should handle timer event correctly', () => {
+      const { result } = renderUseWebsocketGameHook();
+
+      act(() => {
+        const timerCallback = getCallbackForEvent('timer');
+        if (timerCallback) {
+          timerCallback({ time: 30 });
+        }
+      });
+
+      expect(result.current.timer).toBe(30);
     });
   });
 
