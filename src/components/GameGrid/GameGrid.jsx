@@ -22,6 +22,7 @@ const GameGrid = ({ gameList, selectGame }) => {
             maxPlayers={game.maxPlayers}
             connectedPlayers={game.connectedPlayers}
             onPressButton={() => selectGame(game)}
+            isPublic={game.isPublic}
           />
         </div>
       ))}
