@@ -27,7 +27,9 @@ describe('EndTurnButton', () => {
 
   beforeEach(() => {
     useParams.mockReturnValue({ gameId: mockGameID });
-    usePlayerTurn.mockReturnValue({ isCurrentPlayerTurn: mockIsCurrentPlayerTurn });
+    usePlayerTurn.mockReturnValue({
+      isCurrentPlayerTurn: mockIsCurrentPlayerTurn,
+    });
     useDisableButton.mockImplementation((asyncFunction) => {
       const handleClick = async () => {
         await asyncFunction();
@@ -45,19 +47,21 @@ describe('EndTurnButton', () => {
   const renderComponent = () =>
     render(
       <PlayerContext.Provider value={{ playerID: mockPlayerID }}>
-        <PlayCardLogicContext.Provider value={{ resetAllCards: mockResetAllCards }}>
+        <PlayCardLogicContext.Provider
+          value={{ resetAllCards: mockResetAllCards }}
+        >
           <EndTurnButton />
         </PlayCardLogicContext.Provider>
       </PlayerContext.Provider>
     );
 
-  it('should render the button when it is the current player\'s turn', () => {
+  it("should render the button when it is the current player's turn", () => {
     mockIsCurrentPlayerTurn.mockReturnValue(true);
     renderComponent();
     expect(screen.getByText('Pasar turno')).toBeInTheDocument();
   });
 
-  it('should not render the button when it is not the current player\'s turn', () => {
+  it("should not render the button when it is not the current player's turn", () => {
     mockIsCurrentPlayerTurn.mockReturnValue(false);
     renderComponent();
     expect(screen.queryByText('Pasar turno')).not.toBeInTheDocument();
@@ -84,7 +88,10 @@ describe('EndTurnButton', () => {
         message: 'Error al terminar el turno. Intente nuevamente.',
         autoClose: 3000,
       });
-      expect(console.error).toHaveBeenCalledWith('Error al terminar el turno', expect.any(Error));
+      expect(console.error).toHaveBeenCalledWith(
+        'Error al terminar el turno',
+        expect.any(Error)
+      );
     });
   });
 });
