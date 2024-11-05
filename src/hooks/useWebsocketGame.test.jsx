@@ -65,6 +65,7 @@ describe('useWebsocketGame Hook', () => {
       expect(result.current.winnerInfo).toBe(null);
       expect(result.current.opponentsTotalMovCards).toEqual([]);
       expect(result.current.foundFigures).toEqual([]);
+      expect(result.current.blockedColor).toEqual(null);
     });
 
     it('should handle player_list event correctly', () => {
@@ -176,6 +177,20 @@ describe('useWebsocketGame Hook', () => {
 
       expect(result.current.foundFigures).toEqual([{ figureId: 1 }]);
     });
+  });
+
+  it('should handle blocked_color event correctly', () => {
+    const { result } = renderUseWebsocketGameHook();
+    const blockedColor = 'red';
+
+    act(() => {
+      const blockedColorCallback = getCallbackForEvent('blocked_color');
+      if (blockedColorCallback) {
+        blockedColorCallback({ blockedColor });
+      }
+    });
+
+    expect(result.current.blockedColor).toBe(blockedColor);
   });
 
   // Test cleanup on unmount
