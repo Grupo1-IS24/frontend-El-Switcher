@@ -1,11 +1,25 @@
+import { useEffect } from 'react';
 import useRouteNavigation from '../../hooks/useRouteNavigation';
 import Button from '../Button/Button';
 import useWinnerPlayer from '../../hooks/useWinnerPlayer';
+import { useGameSounds } from '../../hooks/useGameSounds';
 
 const WinnerMessage = () => {
+  const { playSound, stopSound } = useGameSounds();
   const { redirectToHomePage } = useRouteNavigation();
   const { isCurrentPlayerWinner, thereIsWinner, winnerName } =
     useWinnerPlayer();
+
+  const goHome = () => {
+    stopSound(isCurrentPlayerWinner);
+    redirectToHomePage();
+  };
+
+  useEffect(() => {
+    if (thereIsWinner) {
+      playSound(isCurrentPlayerWinner);
+    }
+  }, [thereIsWinner, isCurrentPlayerWinner, playSound]);
 
   return (
     <>
@@ -22,11 +36,7 @@ const WinnerMessage = () => {
                 {isCurrentPlayerWinner ? '🏆' : '😞'}
               </span>
             </div>
-            <Button
-              text='Ir al inicio'
-              style='homeButton'
-              onPress={redirectToHomePage}
-            />
+            <Button text='Ir al inicio' style='homeButton' onPress={goHome} />
           </div>
         </div>
       )}
