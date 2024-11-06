@@ -20,15 +20,9 @@ const useFigureCards = () => {
     [currentPlayerID, getFigureCardsByPlayerId]
   );
 
-  const isFigureCardBlocked = useCallback(
-    (figureCard) => figureCard.isBlocked,
-    []
-  );
-
   return {
     currentPlayerFigureCards,
     getFigureCardsByPlayerId,
-    isFigureCardBlocked,
   };
 };
 
