@@ -36,6 +36,7 @@ const areAnyEmpty = (values) => {
  * @param {string} ownerName - Name of the game host.
  * @param {number} minPlayers - Minimum number of players.
  * @param {number} maxPlayers - Maximum number of players.
+ * @param {string} gamePassword - Password for the game.
  * @throws {Error} - Throws an error if validation fails.
  **/
 const validateGameData = ({
