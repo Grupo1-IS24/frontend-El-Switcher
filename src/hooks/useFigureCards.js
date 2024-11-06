@@ -20,9 +20,19 @@ const useFigureCards = () => {
     [currentPlayerID, getFigureCardsByPlayerId]
   );
 
+  const isCurrentPlayerOwnerFigureCard = useCallback(
+    (figureCardToCheck) =>
+      currentPlayerFigureCards.some(
+        (figureCard) =>
+          figureCard.figureCardId === figureCardToCheck.figureCardId
+      ),
+    [currentPlayerFigureCards]
+  );
+
   return {
     currentPlayerFigureCards,
     getFigureCardsByPlayerId,
+    isCurrentPlayerOwnerFigureCard,
   };
 };
 

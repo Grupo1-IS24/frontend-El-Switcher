@@ -5,10 +5,12 @@ import { playFigureCard } from '../../service/PlayFigureCardService';
 import usePlayFigureLogic from '../../hooks/usePlayFigureLogic';
 import Button from '../Button/Button';
 import showToast from '../../utils/toastUtil';
+import useFigureCards from '../../hooks/useFigureCards';
 
 const PlayFigureButton = () => {
   const { gameId } = useParams();
   const { playerID } = useContext(PlayerContext);
+  const { isCurrentPlayerOwnerFigureCard } = useFigureCards();
   const {
     selectedFigureCard,
     selectedFigureColorCards,
@@ -39,7 +41,11 @@ const PlayFigureButton = () => {
     <>
       {canPlayFigure() && (
         <Button
-          text={'Jugar figura'}
+          text={
+            isCurrentPlayerOwnerFigureCard(selectedFigureCard)
+              ? 'Jugar figura'
+              : 'Bloquear figura'
+          }
           style={'gameButton_play'}
           onPress={handleOnPress}
         />
