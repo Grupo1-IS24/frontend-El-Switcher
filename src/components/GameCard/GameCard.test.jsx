@@ -18,6 +18,7 @@ describe('GameCard', () => {
     gameName: 'Test Game',
     maxPlayers: 4,
     connectedPlayers: 2,
+    isPublic: true,
   };
 
   const renderComponent = (props = {}) =>
@@ -51,5 +52,24 @@ describe('GameCard', () => {
     const button = screen.getByText('Unirme');
     fireEvent.click(button);
     expect(mockOnPressButton).toHaveBeenCalledTimes(1);
+  });
+
+  it('should render the unlocked icon when the game is public', () => {
+    renderComponent({ isPublic: true });
+
+    const icon = screen.getByAltText('Icono de candado');
+    expect(icon).toBeInTheDocument();
+    expect(icon).toHaveAttribute(
+      'src',
+      '/src/assets/Icons/padlock-unlocked.svg'
+    );
+  });
+
+  it('should render the locked icon when the game is private', () => {
+    renderComponent({ isPublic: false });
+
+    const icon = screen.getByAltText('Icono de candado');
+    expect(icon).toBeInTheDocument();
+    expect(icon).toHaveAttribute('src', '/src/assets/Icons/padlock-locked.svg');
   });
 });

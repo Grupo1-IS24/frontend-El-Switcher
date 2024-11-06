@@ -31,6 +31,7 @@ const useWebsocketGame = () => {
   const [foundFigures, setfoundFigures] = useState([]);
   const [timer, setTimer] = useState(0);
   const [chatMessages, setChatMessages] = useState([]);
+  const [blockedColor, setBlockedColor] = useState(null);
 
   const handleSocketEvents = useCallback((socket) => {
     socket.on('player_list', (listOfPlayers) => {
@@ -81,6 +82,10 @@ const useWebsocketGame = () => {
         setChatMessages((prev) => [...prev, data]);
       }
     });
+    
+    socket.on('blocked_color', ({ blockedColor = null }) => {
+      setBlockedColor(blockedColor);
+    });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -101,6 +106,7 @@ const useWebsocketGame = () => {
     foundFigures,
     timer,
     chatMessages,
+    blockedColor,
   };
 };
 
