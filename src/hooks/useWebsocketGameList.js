@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import useWebsocket from './useWebsocket';
+import logSocketEvent from '../utils/logSocketEvent';
 
 /**
  * Custom hook to handle websocket events for the game list.
@@ -16,12 +17,14 @@ const useWebsocketGameList = () => {
 
   const handleSocketEvents = useCallback((socket) => {
     socket.on('game_list', (gameList = []) => {
+      logSocketEvent('game_list', gameList);
       setGameList(gameList);
       setIsLoading(false); // Set loading to false after receiving the game list.
       setError(null); // Clear the error if there is a successful connection.
     });
 
     socket.on('connect_error', () => {
+      logSocketEvent('connect_error', 'Failed to connect to the server.');
       setError('Failed to connect to the server.');
       setIsLoading(false); // Set loading to false if there is a connection error.
     });
