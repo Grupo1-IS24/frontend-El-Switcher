@@ -1,59 +1,55 @@
+import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { vi, describe, it, beforeEach, expect } from 'vitest';
 import LeaveGameListButton from './LeaveGameListButton';
 import useRouteNavigation from '../../hooks/useRouteNavigation';
+import showToast from '../../utils/toastUtil';
 
-vi.mock('../../hooks/useRouteNavigation', () => ({
-  __esModule: true,
-  default: () => ({
-    redirectToHomePage: vi.fn(),
-  }),
-}));
-
-const showToast = vi.fn();
+vi.mock('../../hooks/useRouteNavigation');
+vi.mock('../../utils/toastUtil');
 
 describe('LeaveGameListButton', () => {
-  let redirectToHomePage;
+  const mockRedirectToHomePage = vi.fn();
+  let consoleErrorSpy;
 
   beforeEach(() => {
-    redirectToHomePage = useRouteNavigation().redirectToHomePage;
-    vi.clearAllMocks();
+    useRouteNavigation.mockReturnValue({
+      redirectToHomePage: mockRedirectToHomePage,
+    });
+    consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
-  it('renders the button with correct text', () => {
+  afterEach(() => {
+    vi.resetAllMocks();
+    consoleErrorSpy.mockRestore();
+  });
+
+  it('should render the button with the correct text', () => {
     render(<LeaveGameListButton />);
-    const button = screen.getByText('⭠');
-    expect(button).toBeInTheDocument();
+    expect(screen.getByText('⭠')).toBeInTheDocument();
   });
 
-  it('calls redirectToHomePage on button click', () => {
+  it('should call redirectToHomePage when the button is clicked', () => {
     render(<LeaveGameListButton />);
-    const button = screen.getByText('⭠');
-    fireEvent.click(button);
-
-    expect(redirectToHomePage);
+    fireEvent.click(screen.getByText('⭠'));
+    expect(mockRedirectToHomePage).toHaveBeenCalledTimes(1);
   });
 
-  it('shows error toast on click if an error occurs', () => {
-    redirectToHomePage.mockImplementation(() => {
+  it('should call showToast with correct parameters when an error occurs', async () => {
+    mockRedirectToHomePage.mockImplementation(() => {
       throw new Error('Test error');
     });
 
     render(<LeaveGameListButton />);
+    fireEvent.click(screen.getByText('⭠'));
 
-    const button = screen.getByText('⭠');
-    fireEvent.click(button);
-
-    expect(showToast);
-  });
-
-  it('does not show toast or call console.error if no error occurs', () => {
-    render(<LeaveGameListButton />);
-
-    const button = screen.getByText('⭠');
-    fireEvent.click(button);
-
-    expect(showToast);
-    expect(console.error);
+    expect(showToast).toHaveBeenCalledWith({
+      type: 'error',
+      message: 'Error al abandonar el listado de partidas. Intente nuevamente.',
+      autoClose: 3000,
+    });
+    expect(console.error).toHaveBeenCalledWith(
+      'Error al abandonar el listado de partidas',
+      expect.any(Error)
+    );
   });
 });
