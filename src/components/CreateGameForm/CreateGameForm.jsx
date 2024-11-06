@@ -10,7 +10,7 @@ const CreateGameForm = ({
   gamePassword,
 }) => {
   const handleLockToggle = (e) => {
-    e.preventDefault(); // Previene el envío del formulario
+    e.preventDefault();
     setIsLocked(!isLocked);
     if (isLocked) {
       setGamePassword('');
@@ -19,10 +19,10 @@ const CreateGameForm = ({
 
   return (
     <>
-      <TextInput name={'ownerName'} placeholder={'Ingresa tu nombre'} />
+      <TextInput name='ownerName' placeholder='Ingresa tu nombre' />
       <TextInput
-        name={'gameName'}
-        placeholder={'Ingresa el nombre de la partida'}
+        name='gameName'
+        placeholder='Ingresa el nombre de la partida'
       />
       <div className='flex w-full justify-evenly'>
         <TextInput
@@ -44,16 +44,16 @@ const CreateGameForm = ({
       </div>
       <div className='mb-4 flex space-x-4'>
         <NumberInput
-          name={'minPlayers'}
-          min={'2'}
-          max={'4'}
-          placeholder={'Cant. min. jugadores'}
+          name='minPlayers'
+          min='2'
+          max='4'
+          placeholder='Cant. min. jugadores'
         />
         <NumberInput
-          name={'maxPlayers'}
-          min={'2'}
-          max={'4'}
-          placeholder={'Cant. max. jugadores'}
+          name='maxPlayers'
+          min='2'
+          max='4'
+          placeholder='Cant. max. jugadores'
         />
       </div>
     </>

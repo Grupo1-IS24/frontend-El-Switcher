@@ -42,8 +42,8 @@ const GameForm = ({ type, selectedGame, onClose, setshowForm }) => {
   };
 
   return (
-    <div className={`${styles[type]}`}>
-      <div className={type === 'join' ? styles['joinSub'] : undefined}>
+    <div className={styles[type]}>
+      <div className={type === 'join' ? styles.joinSub : undefined}>
         <h2 className='text-2xl font-bold text-white mb-6 text-center'>
           {type === 'create'
             ? 'Crear Partida'
@@ -64,12 +64,12 @@ const GameForm = ({ type, selectedGame, onClose, setshowForm }) => {
             <Button
               type='submit'
               text={type === 'create' ? 'Crear partida' : 'Unirse'}
-              style={'formButton'}
+              style='formButton'
             />
             <Button
-              text={'x'}
+              text='x'
               onPress={type === 'create' ? () => setshowForm(false) : onClose}
-              style={'formButton'}
+              style='formButton'
             />
           </div>
         </form>
