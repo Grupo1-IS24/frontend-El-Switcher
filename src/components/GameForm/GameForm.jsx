@@ -18,6 +18,14 @@ const GameForm = ({ type, selectedGame, onClose, setshowForm }) => {
     const elements = e.target.elements;
 
     if (type === 'create') {
+      if (!elements.ownerName.value || !elements.gameName.value || !elements.minPlayers.value || !elements.maxPlayers.value) {
+        showToast({
+          type: 'warning',
+          message: 'Todos los campos son obligatorios',
+          autoClose: 3000,
+        });
+        return;
+      }
       if (isLocked && !elements.gamePassword.value) {
         showToast({
           type: 'warning',
