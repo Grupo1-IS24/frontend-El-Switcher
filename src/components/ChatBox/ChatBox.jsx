@@ -1,21 +1,20 @@
 import useChatBox from '../../hooks/useChatBox';
 import ChatMessages from '../ChatMessages/ChatMessages';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useCallback } from 'react';
 import { GameContext } from '../../contexts/GameProvider';
 
 const ChatBox = () => {
   const { isOpen, toggleChat } = useChatBox();
-  const { hasNewMessages, setHasNewMessages, setIsChatOpen } =
-    useContext(GameContext);
+  const { hasNewMessages, setHasNewMessages, setIsChatOpen } = useContext(GameContext);
 
   useEffect(() => {
     setIsChatOpen(isOpen);
   }, [isOpen, setIsChatOpen]);
 
-  const handleToggleChat = () => {
+  const handleToggleChat = useCallback(() => {
     setHasNewMessages(false);
     toggleChat();
-  };
+  }, [setHasNewMessages, toggleChat]);
 
   useEffect(() => {
     if (isOpen) {
