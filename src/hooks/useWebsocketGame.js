@@ -4,6 +4,7 @@ import { sortListOfPlayers } from '../utils/sortListOfPlayers';
 import { PlayerContext } from '../contexts/PlayerProvider';
 import { sortBoardColorCards } from '../utils/sortBoardColorCards';
 import { useParams } from 'react-router-dom';
+import logSocketEvent from '../utils/logSocketEvent';
 
 /**
  * Custom hook to handle websocket events for the game.
@@ -46,24 +47,29 @@ const useWebsocketGame = () => {
   const handleSocketEvents = useCallback(
     (socket) => {
       socket.on('player_list', (listOfPlayers) => {
+        logSocketEvent('player_list', listOfPlayers);
         const sortedListOfPlayers = sortListOfPlayers(listOfPlayers, playerID);
         setListOfPlayers(sortedListOfPlayers);
       });
 
       socket.on('turn', ({ playerTurnId }) => {
+        logSocketEvent('turn', { playerTurnId });
         setPlayerTurnId(playerTurnId);
       });
 
       socket.on('board', (board) => {
+        logSocketEvent('board', board);
         const sortedBoard = sortBoardColorCards(board);
         setBoard(sortedBoard);
       });
 
       socket.on('figure_cards', (figureCards) => {
+        logSocketEvent('figure_cards', figureCards);
         setFigureCards(figureCards);
       });
 
       socket.on('movement_cards', (movementCards) => {
+        logSocketEvent('movement_cards', movementCards);
         movementCards = movementCards.sort(
           (a, b) => a.movementcardId - b.movementcardId
         );
@@ -71,22 +77,27 @@ const useWebsocketGame = () => {
       });
 
       socket.on('winner', (winnerInfo) => {
+        logSocketEvent('winner', winnerInfo);
         setWinnerInfo(winnerInfo);
       });
 
       socket.on('opponents_total_mov_cards', (opponentsTotalMovCards) => {
+        logSocketEvent('opponents_total_mov_cards', opponentsTotalMovCards);
         setOpponentsTotalMovCards(opponentsTotalMovCards);
       });
 
       socket.on('found_figures', (foundFigures) => {
+        logSocketEvent('found_figures', foundFigures);
         setfoundFigures(foundFigures);
       });
 
       socket.on('timer', ({ time }) => {
+        logSocketEvent('timer', { time });
         setTimer(time);
       });
 
       socket.on('chat_messages', ({ type, data }) => {
+        logSocketEvent('chat_messages', { type, data });
         if (type === 'multipleMessages') {
           setChatMessages(data);
         } else {
@@ -98,6 +109,7 @@ const useWebsocketGame = () => {
       });
 
       socket.on('blocked_color', ({ blockedColor = null }) => {
+        logSocketEvent('blocked_color', { blockedColor });
         setBlockedColor(blockedColor);
       });
     },
