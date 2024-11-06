@@ -82,7 +82,7 @@ const useWebsocketGame = () => {
         setChatMessages((prev) => [...prev, data]);
       }
     });
-    
+
     socket.on('blocked_color', ({ blockedColor = null }) => {
       setBlockedColor(blockedColor);
     });
