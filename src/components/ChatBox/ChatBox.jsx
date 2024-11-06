@@ -5,7 +5,8 @@ import { GameContext } from '../../contexts/GameProvider';
 
 const ChatBox = () => {
   const { isOpen, toggleChat } = useChatBox();
-  const { hasNewMessages, setHasNewMessages, setIsChatOpen } = useContext(GameContext);
+  const { hasNewMessages, setHasNewMessages, setIsChatOpen } =
+    useContext(GameContext);
 
   useEffect(() => {
     setIsChatOpen(isOpen);
@@ -31,7 +32,10 @@ const ChatBox = () => {
         >
           <p>Hacer clic para abrir el chat</p>
           {hasNewMessages && (
-            <span className='absolute top-[-5px] right-[-5px] w-5 h-5 bg-orange-500 rounded-full animate-pulse'></span>
+            <span
+              className='absolute top-[-5px] right-[-5px] w-5 h-5 bg-orange-500 rounded-full animate-pulse'
+              data-testid='new-message-indicator'
+            ></span>
           )}
         </div>
       )}
