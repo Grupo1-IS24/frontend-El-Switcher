@@ -15,7 +15,15 @@ import { useParams } from 'react-router-dom';
  * - figureCards: An array of figure cards.
  * - movementCards: An array of movement cards.
  * - winnerInfo: Information about the winner of the game.
+ * - opponentsTotalMovCards: An array of total movement cards of opponents.
+ * - foundFigures: An array of found figures.
  * - timer: The remaining time for the current turn.
+ * - chatMessages: An array of chat messages.
+ * - blockedColor: The color that is currently blocked.
+ * - hasNewMessages: A boolean indicating if there are new chat messages.
+ * - setHasNewMessages: Function to set the hasNewMessages state.
+ * - isChatOpen: A boolean indicating if the chat is open.
+ * - setIsChatOpen: Function to set the isChatOpen state.
  */
 const useWebsocketGame = () => {
   const { gameId } = useParams();
