@@ -14,7 +14,7 @@ import { PlayerContext } from '../contexts/PlayerProvider';
 const useWebsocketLobby = () => {
   const { gameId } = useParams();
   const { playerID } = useContext(PlayerContext);
-  const { redirectToGamePage } = useRouteNavigation();
+  const { redirectToGamePage, redirectToHomePage } = useRouteNavigation();
 
   const [listOfPlayers, setListOfPlayers] = useState([]);
   const [canStartGame, setCanStartGame] = useState(false);
@@ -34,6 +34,13 @@ const useWebsocketLobby = () => {
 
       redirectToGamePage(gameId);
     });
+
+    socket.on('cancel_game', ({ gameCanceled }) => {
+      if (gameCanceled) {
+        redirectToHomePage();
+      }
+    });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
