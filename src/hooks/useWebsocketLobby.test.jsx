@@ -28,6 +28,7 @@ vi.mock('react-router-dom', async () => {
 describe('useWebsocketLobby Hook', () => {
   let socket;
   let mockRedirectToGamePage;
+  const mockRedirectToHomePage = vi.fn();
 
   beforeEach(() => {
     socket = {
@@ -40,6 +41,7 @@ describe('useWebsocketLobby Hook', () => {
     mockRedirectToGamePage = vi.fn();
     useRouteNavigation.mockReturnValue({
       redirectToGamePage: mockRedirectToGamePage,
+      redirectToHomePage: mockRedirectToHomePage,
     });
 
     useParams.mockReturnValue({ gameId: '1' });
@@ -133,6 +135,19 @@ describe('useWebsocketLobby Hook', () => {
 
       expect(mockRedirectToGamePage).not.toHaveBeenCalled();
     });
+  });
+
+  it('should handle cancel_game event correctly', () => {
+    renderUseWebsocketLobbyHook();
+
+    act(() => {
+      const cancelGameCallback = getCallbackForEvent('cancel_game');
+      if (cancelGameCallback) {
+        cancelGameCallback({ gameCanceled: true });
+      }
+    });
+
+    expect(mockRedirectToHomePage).toHaveBeenCalled();
   });
 
   // Test cleanup on unmount
