@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { io } from 'socket.io-client';
 import useWebsocketLobby from './useWebsocketLobby';
 import { PlayerContext } from '../contexts/PlayerProvider';
-import { redirect, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import useRouteNavigation from './useRouteNavigation';
 
 // Mock socket.io-client
