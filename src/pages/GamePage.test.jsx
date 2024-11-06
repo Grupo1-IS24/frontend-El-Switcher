@@ -6,35 +6,35 @@ import { PlayerContext } from '../contexts/PlayerProvider';
 
 // Mock components
 vi.mock('../components/DisplayPlayers/DisplayPlayers', () => ({
-  default: () => <div data-testid="display-players">DisplayPlayers</div>,
+  default: () => <div data-testid='display-players'>DisplayPlayers</div>,
 }));
 
 vi.mock('../components/Board/Board', () => ({
-  default: () => <div data-testid="board">Board</div>,
+  default: () => <div data-testid='board'>Board</div>,
 }));
 
 vi.mock('../components/WinnerMessage/WinnerMessage', () => ({
-  default: () => <div data-testid="winner-message">WinnerMessage</div>,
+  default: () => <div data-testid='winner-message'>WinnerMessage</div>,
 }));
 
 vi.mock('../components/BgOverlay/BgOverlay', () => ({
-  default: () => <div data-testid="bg-overlay">BgOverlay</div>,
+  default: () => <div data-testid='bg-overlay'>BgOverlay</div>,
 }));
 
 vi.mock('../components/LeaveButton/LeaveButton', () => ({
-  default: () => <div data-testid="leave-button">LeaveButton</div>,
+  default: () => <div data-testid='leave-button'>LeaveButton</div>,
 }));
 
 vi.mock('../components/Timer/Timer', () => ({
-  default: ({ time }) => <div data-testid="timer">Timer: {time}</div>,
+  default: ({ time }) => <div data-testid='timer'>Timer: {time}</div>,
 }));
 
 vi.mock('../components/ChatBox/ChatBox', () => ({
-  default: () => <div data-testid="chat-box">ChatBox</div>,
+  default: () => <div data-testid='chat-box'>ChatBox</div>,
 }));
 
 vi.mock('../components/BlockedColor/BlockedColor', () => ({
-  default: () => <div data-testid="blocked-color">BlockedColor</div>,
+  default: () => <div data-testid='blocked-color'>BlockedColor</div>,
 }));
 
 describe('GamePage', () => {
