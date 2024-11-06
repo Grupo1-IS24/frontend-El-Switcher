@@ -35,7 +35,7 @@ const useWebsocketLobby = () => {
       redirectToGamePage(gameId);
     });
 
-    socket.on('cancel_game', ({ gameCanceled }) => {
+    socket.on('cancel_game', ({ gameCanceled = false }) => {
       if (gameCanceled) {
         redirectToHomePage();
       }
