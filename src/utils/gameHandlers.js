@@ -30,6 +30,10 @@ export const handleCreateGame = async (
     maxPlayers: elements.maxPlayers.value,
   };
 
+  if (elements.gamePassword.value) {
+    gameInfo.password = elements.gamePassword.value;
+  }
+
   try {
     const createdGame = await createGame(gameInfo);
     if (createdGame && createdGame.gameId) {
