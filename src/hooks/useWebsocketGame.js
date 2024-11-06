@@ -30,6 +30,7 @@ const useWebsocketGame = () => {
   const [opponentsTotalMovCards, setOpponentsTotalMovCards] = useState([]);
   const [foundFigures, setfoundFigures] = useState([]);
   const [timer, setTimer] = useState(0);
+  const [chatMessages, setChatMessages] = useState([]);
   const [blockedColor, setBlockedColor] = useState(null);
 
   const handleSocketEvents = useCallback((socket) => {
@@ -74,6 +75,14 @@ const useWebsocketGame = () => {
       setTimer(time);
     });
 
+    socket.on('chat_messages', ({ type, data }) => {
+      if (type === 'multipleMessages') {
+        setChatMessages(data);
+      } else {
+        setChatMessages((prev) => [...prev, data]);
+      }
+    });
+
     socket.on('blocked_color', ({ blockedColor = null }) => {
       setBlockedColor(blockedColor);
     });
@@ -96,6 +105,7 @@ const useWebsocketGame = () => {
     opponentsTotalMovCards,
     foundFigures,
     timer,
+    chatMessages,
     blockedColor,
   };
 };

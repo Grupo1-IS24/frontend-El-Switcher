@@ -65,6 +65,7 @@ describe('useWebsocketGame Hook', () => {
       expect(result.current.winnerInfo).toBe(null);
       expect(result.current.opponentsTotalMovCards).toEqual([]);
       expect(result.current.foundFigures).toEqual([]);
+      expect(result.current.chatMessages).toEqual([]);
       expect(result.current.timer).toBe(0);
       expect(result.current.blockedColor).toEqual(null);
     });
@@ -205,6 +206,57 @@ describe('useWebsocketGame Hook', () => {
     });
 
     expect(result.current.blockedColor).toBe(blockedColor);
+  });
+
+  it('should handle chat multiple messages correctly', () => {
+    const { result } = renderUseWebsocketGameHook();
+    const data = [
+      { writtenBy: 'Heber', message: 'Hello' },
+      { writtenBy: 'John', message: 'Hi' },
+    ];
+
+    act(() => {
+      const chatMessagesCallback = getCallbackForEvent('chat_messages');
+      if (chatMessagesCallback) {
+        chatMessagesCallback({
+          type: 'multipleMessages',
+          data,
+        });
+      }
+    });
+
+    expect(result.current.chatMessages).toEqual(data);
+  });
+
+  it('should handle chat single message correctly', () => {
+    const { result } = renderUseWebsocketGameHook();
+    const firstData = { writtenBy: 'Heber', message: 'Hello' };
+
+    act(() => {
+      const chatMessagesCallback = getCallbackForEvent('chat_messages');
+      if (chatMessagesCallback) {
+        chatMessagesCallback({
+          type: 'singleMessage',
+          data: firstData,
+        });
+      }
+    });
+
+    expect(result.current.chatMessages).toEqual([firstData]);
+
+    const secondData = { writtenBy: 'John', message: 'Hi' };
+
+    act(() => {
+      const chatMessagesCallback = getCallbackForEvent('chat_messages');
+      if (chatMessagesCallback) {
+        chatMessagesCallback({
+          type: 'singleMessage',
+          data: secondData,
+        });
+      }
+    });
+
+    expect(result.current.chatMessages).toEqual([firstData, secondData]);
   });
 
   // Test cleanup on unmount
