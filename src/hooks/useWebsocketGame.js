@@ -15,7 +15,15 @@ import { useParams } from 'react-router-dom';
  * - figureCards: An array of figure cards.
  * - movementCards: An array of movement cards.
  * - winnerInfo: Information about the winner of the game.
+ * - opponentsTotalMovCards: An array of total movement cards of opponents.
+ * - foundFigures: An array of found figures.
  * - timer: The remaining time for the current turn.
+ * - chatMessages: An array of chat messages.
+ * - blockedColor: The color that is currently blocked.
+ * - hasNewMessages: A boolean indicating if there are new chat messages.
+ * - setHasNewMessages: Function to set the hasNewMessages state.
+ * - isChatOpen: A boolean indicating if the chat is open.
+ * - setIsChatOpen: Function to set the isChatOpen state.
  */
 const useWebsocketGame = () => {
   const { gameId } = useParams();
@@ -32,63 +40,70 @@ const useWebsocketGame = () => {
   const [timer, setTimer] = useState(0);
   const [chatMessages, setChatMessages] = useState([]);
   const [blockedColor, setBlockedColor] = useState(null);
+  const [hasNewMessages, setHasNewMessages] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
-  const handleSocketEvents = useCallback((socket) => {
-    socket.on('player_list', (listOfPlayers) => {
-      const sortedListOfPlayers = sortListOfPlayers(listOfPlayers, playerID);
-      setListOfPlayers(sortedListOfPlayers);
-    });
+  const handleSocketEvents = useCallback(
+    (socket) => {
+      socket.on('player_list', (listOfPlayers) => {
+        const sortedListOfPlayers = sortListOfPlayers(listOfPlayers, playerID);
+        setListOfPlayers(sortedListOfPlayers);
+      });
 
-    socket.on('turn', ({ playerTurnId }) => {
-      setPlayerTurnId(playerTurnId);
-    });
+      socket.on('turn', ({ playerTurnId }) => {
+        setPlayerTurnId(playerTurnId);
+      });
 
-    socket.on('board', (board) => {
-      const sortedBoard = sortBoardColorCards(board);
-      setBoard(sortedBoard);
-    });
+      socket.on('board', (board) => {
+        const sortedBoard = sortBoardColorCards(board);
+        setBoard(sortedBoard);
+      });
 
-    socket.on('figure_cards', (figureCards) => {
-      setFigureCards(figureCards);
-    });
+      socket.on('figure_cards', (figureCards) => {
+        setFigureCards(figureCards);
+      });
 
-    socket.on('movement_cards', (movementCards) => {
-      movementCards = movementCards.sort(
-        (a, b) => a.movementcardId - b.movementcardId
-      );
-      setMovementCards(movementCards);
-    });
+      socket.on('movement_cards', (movementCards) => {
+        movementCards = movementCards.sort(
+          (a, b) => a.movementcardId - b.movementcardId
+        );
+        setMovementCards(movementCards);
+      });
 
-    socket.on('winner', (winnerInfo) => {
-      setWinnerInfo(winnerInfo);
-    });
+      socket.on('winner', (winnerInfo) => {
+        setWinnerInfo(winnerInfo);
+      });
 
-    socket.on('opponents_total_mov_cards', (opponentsTotalMovCards) => {
-      setOpponentsTotalMovCards(opponentsTotalMovCards);
-    });
+      socket.on('opponents_total_mov_cards', (opponentsTotalMovCards) => {
+        setOpponentsTotalMovCards(opponentsTotalMovCards);
+      });
 
-    socket.on('found_figures', (foundFigures) => {
-      setfoundFigures(foundFigures);
-    });
+      socket.on('found_figures', (foundFigures) => {
+        setfoundFigures(foundFigures);
+      });
 
-    socket.on('timer', ({ time }) => {
-      setTimer(time);
-    });
+      socket.on('timer', ({ time }) => {
+        setTimer(time);
+      });
 
-    socket.on('chat_messages', ({ type, data }) => {
-      if (type === 'multipleMessages') {
-        setChatMessages(data);
-      } else {
-        setChatMessages((prev) => [...prev, data]);
-      }
-    });
+      socket.on('chat_messages', ({ type, data }) => {
+        if (type === 'multipleMessages') {
+          setChatMessages(data);
+        } else {
+          setChatMessages((prev) => [...prev, data]);
+        }
+        if (!isChatOpen) {
+          setHasNewMessages(true);
+        }
+      });
 
-    socket.on('blocked_color', ({ blockedColor = null }) => {
-      setBlockedColor(blockedColor);
-    });
-
+      socket.on('blocked_color', ({ blockedColor = null }) => {
+        setBlockedColor(blockedColor);
+      });
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    [isChatOpen]
+  );
 
   useWebsocket('/game/ws', handleSocketEvents, {
     playerId: playerID,
@@ -107,6 +122,10 @@ const useWebsocketGame = () => {
     timer,
     chatMessages,
     blockedColor,
+    hasNewMessages,
+    setHasNewMessages,
+    isChatOpen,
+    setIsChatOpen,
   };
 };
 
