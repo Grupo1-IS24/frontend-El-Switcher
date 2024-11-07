@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import useRouteNavigation from './useRouteNavigation';
 import useWebsocket from './useWebsocket';
 import { PlayerContext } from '../contexts/PlayerProvider';
+import logSocketEvent from '../utils/logSocketEvent';
 
 /**
  * Custom hook to handle websocket events for the lobby.
@@ -21,21 +22,25 @@ const useWebsocketLobby = () => {
 
   const handleSocketEvents = useCallback((socket) => {
     socket.on('player_list', (listOfPlayers) => {
+      logSocketEvent('player_list', listOfPlayers);
       setListOfPlayers(listOfPlayers);
     });
 
     // This event is triggered only for the owner of the game.
     socket.on('start_game', ({ canStart }) => {
+      logSocketEvent('start_game', { canStart });
       setCanStartGame(canStart);
     });
 
     socket.on('game_started', ({ gameStarted = false }) => {
+      logSocketEvent('game_started', { gameStarted });
       if (!gameStarted) return;
 
       redirectToGamePage(gameId);
     });
 
     socket.on('cancel_game', ({ gameCanceled = false }) => {
+      logSocketEvent('cancel_game', { gameCanceled });
       if (gameCanceled) {
         redirectToHomePage();
       }
