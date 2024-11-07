@@ -1,108 +1,141 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import WinnerMessage from './WinnerMessage';
+import useRouteNavigation from '../../hooks/useRouteNavigation';
 import useWinnerPlayer from '../../hooks/useWinnerPlayer';
+import { useGameSounds } from '../../hooks/useGameSounds';
+import { leaveGame } from '../../service/LeaveGame';
+import { useParams } from 'react-router-dom';
+import { PlayerContext } from '../../contexts/PlayerProvider';
 
-const mockRedirectToHomePage = vi.fn();
-
-// Mock useRouteNavigation.
-vi.mock('../../hooks/useRouteNavigation', () => ({
-  default: () => ({
-    redirectToHomePage: mockRedirectToHomePage,
-  }),
+// Mock de los hooks y funciones
+vi.mock('../../hooks/useRouteNavigation');
+vi.mock('../../hooks/useWinnerPlayer');
+vi.mock('../../hooks/useGameSounds');
+vi.mock('../../service/LeaveGame');
+vi.mock('react-router-dom', () => ({
+  useParams: vi.fn(),
 }));
 
-// Mock useWinnerPlayer.
-vi.mock('../../hooks/useWinnerPlayer');
-
 describe('WinnerMessage', () => {
-  const setup = (
-    thereIsWinner = true,
-    isCurrentPlayerWinner = true,
-    winnerName = ''
-  ) => {
+  const mockPlaySound = vi.fn();
+  const mockStopSound = vi.fn();
+  const mockRedirectToHomePage = vi.fn();
+  const mockLeaveGame = vi.fn();
+
+  beforeEach(() => {
+    useRouteNavigation.mockReturnValue({
+      redirectToHomePage: mockRedirectToHomePage,
+    });
     useWinnerPlayer.mockReturnValue({
-      isCurrentPlayerWinner,
-      thereIsWinner,
-      winnerName,
+      isCurrentPlayerWinner: false,
+      thereIsWinner: false,
+      winnerName: '',
     });
-
-    render(<WinnerMessage />);
-  };
-
-  afterEach(() => {
-    vi.resetAllMocks();
+    useGameSounds.mockReturnValue({
+      playSound: mockPlaySound,
+      stopSound: mockStopSound,
+    });
+    leaveGame.mockImplementation(mockLeaveGame);
+    useParams.mockReturnValue({ gameId: '123' });
   });
 
-  const getHomeButton = () => screen.queryByText('Ir al inicio');
+  const renderWithPlayerContext = (playerID) =>
+    render(
+      <PlayerContext.Provider value={{ playerID }}>
+        <WinnerMessage />
+      </PlayerContext.Provider>
+    );
 
-  describe('when there is not a winner', () => {
-    beforeEach(() => {
-      setup(false, false);
+  it('should not render anything if there is no winner', () => {
+    renderWithPlayerContext(1);
+    expect(screen.queryByText(/¡Felicidades, ganaste!/)).toBeNull();
+    expect(screen.queryByText(/¡Perdiste ante/)).toBeNull();
+  });
+
+  it('should render winner message if current player is the winner', () => {
+    useWinnerPlayer.mockReturnValue({
+      isCurrentPlayerWinner: true,
+      thereIsWinner: true,
+      winnerName: 'Player 1',
     });
 
-    it('should not render the winner message', () => {
-      expect(
-        screen.queryByText('¡Felicidades, ganaste!')
-      ).not.toBeInTheDocument();
+    renderWithPlayerContext(1);
+    expect(screen.getByText('¡Felicidades, ganaste!')).toBeInTheDocument();
+    expect(screen.getByText('🏆')).toBeInTheDocument();
+  });
 
-      expect(screen.queryByText('¡Perdiste ante !')).not.toBeInTheDocument();
+  it('should render loser message if current player is not the winner', () => {
+    useWinnerPlayer.mockReturnValue({
+      isCurrentPlayerWinner: false,
+      thereIsWinner: true,
+      winnerName: 'Player 2',
+    });
 
-      expect(screen.queryByText('🏆')).not.toBeInTheDocument();
+    renderWithPlayerContext(1);
+    expect(screen.getByText('¡Perdiste ante Player 2!')).toBeInTheDocument();
+    expect(screen.getByText('😞')).toBeInTheDocument();
+  });
 
-      expect(screen.queryByText('😞')).not.toBeInTheDocument();
+  it('should play winner sound if current player is the winner', () => {
+    useWinnerPlayer.mockReturnValue({
+      isCurrentPlayerWinner: true,
+      thereIsWinner: true,
+      winnerName: 'Player 1',
+    });
 
-      expect(getHomeButton()).not.toBeInTheDocument();
+    renderWithPlayerContext(1);
+    expect(mockPlaySound).toHaveBeenCalledWith(true);
+  });
+
+  it('should play loser sound if current player is not the winner', () => {
+    useWinnerPlayer.mockReturnValue({
+      isCurrentPlayerWinner: false,
+      thereIsWinner: true,
+      winnerName: 'Player 2',
+    });
+
+    renderWithPlayerContext(1);
+    expect(mockPlaySound).toHaveBeenCalledWith(false);
+  });
+
+  it('should call goHome function when button is clicked', async () => {
+    useWinnerPlayer.mockReturnValue({
+      isCurrentPlayerWinner: false,
+      thereIsWinner: true,
+      winnerName: 'Player 2',
+    });
+
+    renderWithPlayerContext(1);
+    fireEvent.click(screen.getByText('Ir al inicio'));
+
+    await waitFor(() => {
+      expect(mockStopSound).toHaveBeenCalledWith(false);
+      expect(mockLeaveGame).toHaveBeenCalledWith('123', 1);
+      expect(mockRedirectToHomePage).toHaveBeenCalled();
     });
   });
 
-  describe('when there is a winner and it is the current player', () => {
-    beforeEach(() => {
-      setup();
+  it('should handle error when leaveGame fails', async () => {
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    useWinnerPlayer.mockReturnValue({
+      isCurrentPlayerWinner: false,
+      thereIsWinner: true,
+      winnerName: 'Player 2',
+    });
+    leaveGame.mockRejectedValue(new Error('Error al abandonar el juego'));
+
+    renderWithPlayerContext(1);
+    fireEvent.click(screen.getByText('Ir al inicio'));
+
+    await waitFor(() => {
+      expect(mockStopSound).toHaveBeenCalledWith(false);
+      expect(mockLeaveGame).toHaveBeenCalledWith('123', 1);
+      expect(consoleErrorSpy).toHaveBeenCalledWith('Error al abandonar el juego', expect.any(Error));
+      expect(mockRedirectToHomePage).toHaveBeenCalled();
     });
 
-    it('should render the winner message', () => {
-      expect(screen.queryByText('¡Felicidades, ganaste!')).toBeInTheDocument();
-      expect(screen.queryByText('🏆')).toBeInTheDocument();
-
-      expect(screen.queryByText('¡Perdiste ante !')).not.toBeInTheDocument();
-      expect(screen.queryByText('😞')).not.toBeInTheDocument();
-    });
-  });
-
-  describe('when there is a winner and it is not the current player', () => {
-    beforeEach(() => {
-      setup(true, false, 'Edward Elric');
-    });
-
-    it('should renders the winner message', () => {
-      expect(
-        screen.queryByText('¡Felicidades, ganaste!')
-      ).not.toBeInTheDocument();
-
-      expect(
-        screen.queryByText('¡Perdiste ante Edward Elric!')
-      ).toBeInTheDocument();
-
-      expect(screen.queryByText('🏆')).not.toBeInTheDocument();
-
-      expect(screen.queryByText('😞')).toBeInTheDocument();
-    });
-  });
-
-  describe('Button functionality', () => {
-    beforeEach(() => {
-      setup();
-    });
-
-    it('should render the "Ir al inicio" button when there is a winner', () => {
-      expect(getHomeButton()).toBeInTheDocument();
-    });
-
-    it('should call redirectToHomePage when the "Ir al inicio" button is clicked', async () => {
-      await userEvent.click(getHomeButton());
-      expect(mockRedirectToHomePage).toHaveBeenCalledTimes(1);
-    });
+    consoleErrorSpy.mockRestore();
   });
 });
