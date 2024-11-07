@@ -11,19 +11,20 @@ import { PlayerContext } from '../../contexts/PlayerProvider';
 const WinnerMessage = () => {
   const { playSound, stopSound } = useGameSounds();
   const { redirectToHomePage } = useRouteNavigation();
-  const { isCurrentPlayerWinner, thereIsWinner, winnerName } = useWinnerPlayer();
+  const { isCurrentPlayerWinner, thereIsWinner, winnerName } =
+    useWinnerPlayer();
   const { playerID } = useContext(PlayerContext);
   const { gameId } = useParams();
 
-    const goHome = async () => {
-      stopSound(isCurrentPlayerWinner);
-      try {
-        await leaveGame(gameId, playerID);
-      } catch (error) {
-        console.error('Error al abandonar el juego', error);
-      }
-      redirectToHomePage();
-    };
+  const goHome = async () => {
+    stopSound(isCurrentPlayerWinner);
+    try {
+      await leaveGame(gameId, playerID);
+    } catch (error) {
+      console.error('Error al abandonar el juego', error);
+    }
+    redirectToHomePage();
+  };
 
   useEffect(() => {
     if (thereIsWinner) {

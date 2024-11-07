@@ -1,4 +1,3 @@
-
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import WinnerMessage from './WinnerMessage';
@@ -118,7 +117,9 @@ describe('WinnerMessage', () => {
   });
 
   it('should handle error when leaveGame fails', async () => {
-    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
     useWinnerPlayer.mockReturnValue({
       isCurrentPlayerWinner: false,
       thereIsWinner: true,
@@ -132,7 +133,10 @@ describe('WinnerMessage', () => {
     await waitFor(() => {
       expect(mockStopSound).toHaveBeenCalledWith(false);
       expect(mockLeaveGame).toHaveBeenCalledWith('123', 1);
-      expect(consoleErrorSpy).toHaveBeenCalledWith('Error al abandonar el juego', expect.any(Error));
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Error al abandonar el juego',
+        expect.any(Error)
+      );
       expect(mockRedirectToHomePage).toHaveBeenCalled();
     });
 
