@@ -6,6 +6,7 @@ import { PlayCardLogicContext } from '../contexts/PlayCardLogicProvider';
 import usePlayerTurn from './usePlayerTurn';
 import useFoundFigures from './useFoundFigures';
 import { isEqualColorCard } from '../utils/isEqualColorCard';
+import { isFigureCardBlocked } from '../utils/figureCardUtils';
 
 // Mock useContext to return custom values for PlayCardLogicContext
 vi.mock('react', async () => {
@@ -26,6 +27,10 @@ vi.mock('./useFoundFigures', () => ({
 
 vi.mock('../utils/isEqualColorCard', () => ({
   isEqualColorCard: vi.fn(),
+}));
+
+vi.mock('../utils/figureCardUtils', () => ({
+  isFigureCardBlocked: vi.fn(),
 }));
 
 describe('usePlayFigureLogic', () => {
@@ -78,6 +83,7 @@ describe('usePlayFigureLogic', () => {
 
   it('should return true if the player can select a figure card', () => {
     mockUsePlayerTurn.isCurrentPlayerTurn.mockReturnValue(true);
+    isFigureCardBlocked.mockReturnValue(false);
     const { result } = renderHook(() => usePlayFigureLogic());
     expect(result.current.canSelectFigureCard()).toBe(true);
   });

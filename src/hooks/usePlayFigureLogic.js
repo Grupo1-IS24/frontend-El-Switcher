@@ -3,6 +3,7 @@ import { PlayCardLogicContext } from '../contexts/PlayCardLogicProvider';
 import usePlayerTurn from './usePlayerTurn';
 import { isEqualColorCard } from '../utils/isEqualColorCard';
 import useFoundFigures from './useFoundFigures';
+import { isFigureCardBlocked } from '../utils/figureCardUtils';
 
 /**
  * Custom hook for managing the selection and play of figure cards and their associated color cards.
@@ -50,7 +51,7 @@ const usePlayFigureLogic = () => {
    * @returns {boolean} True if the player can select a figure card, otherwise false.
    */
   const canSelectFigureCard = useCallback(
-    () => isCurrentPlayerTurn(),
+    (figureCard) => isCurrentPlayerTurn() && !isFigureCardBlocked(figureCard),
     [isCurrentPlayerTurn]
   );
 
