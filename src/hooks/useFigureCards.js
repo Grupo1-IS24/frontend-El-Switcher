@@ -29,10 +29,19 @@ const useFigureCards = () => {
     [currentPlayerFigureCards]
   );
 
+  const hasBlockedFigureCardByPlayerId = useCallback(
+    (playerId) => {
+      const figureCards = getFigureCardsByPlayerId(playerId);
+      return figureCards.some((figureCard) => figureCard.isBlocked);
+    },
+    [getFigureCardsByPlayerId]
+  );
+
   return {
     currentPlayerFigureCards,
     getFigureCardsByPlayerId,
     isCurrentPlayerOwnerFigureCard,
+    hasBlockedFigureCardByPlayerId,
   };
 };
 
