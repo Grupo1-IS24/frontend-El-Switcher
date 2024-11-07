@@ -4,6 +4,7 @@ import GameForm from './GameForm';
 import { PlayerContext } from '../../contexts/PlayerProvider';
 import useRouteNavigation from '../../hooks/useRouteNavigation';
 import { handleCreateGame, handleJoinGame } from '../../utils/gameHandlers';
+import showToast from '../../utils/toastUtil';
 
 vi.mock('../../hooks/useRouteNavigation', () => ({
   default: vi.fn(),
@@ -16,6 +17,10 @@ vi.mock('../../service/JoinGameService', () => ({
 vi.mock('../../utils/gameHandlers', () => ({
   handleCreateGame: vi.fn(),
   handleJoinGame: vi.fn(),
+}));
+
+vi.mock('../../utils/toastUtil', () => ({
+  default: vi.fn(),
 }));
 
 describe('GameForm', () => {
@@ -129,9 +134,10 @@ describe('GameForm', () => {
     it('should have the correct number and types of inputs and buttons', () => {
       renderForm('create');
       const textInputs = screen.getAllByRole('textbox');
-      expect(textInputs).toHaveLength(2);
+      expect(textInputs).toHaveLength(3);
       expect(textInputs[0]).toHaveAttribute('name', 'ownerName');
       expect(textInputs[1]).toHaveAttribute('name', 'gameName');
+      expect(textInputs[2]).toHaveAttribute('name', 'gamePassword');
 
       const numberInputs = screen.getAllByRole('spinbutton');
       expect(numberInputs).toHaveLength(2);
@@ -139,9 +145,9 @@ describe('GameForm', () => {
       expect(numberInputs[1]).toHaveAttribute('name', 'maxPlayers');
 
       const buttons = screen.getAllByRole('button');
-      expect(buttons).toHaveLength(2);
-      expect(buttons[0]).toHaveTextContent('Crear partida');
-      expect(buttons[1]).toHaveTextContent('x');
+      expect(buttons).toHaveLength(3);
+      expect(screen.getByText('Crear partida')).toBeInTheDocument();
+      expect(screen.getByText('x')).toBeInTheDocument();
     });
 
     it('should call handleCreateGame with the correct arguments when the form is submitted', () => {
@@ -167,6 +173,50 @@ describe('GameForm', () => {
         mockCreatePlayer,
         mockRedirectToLobbyPage
       );
+    });
+
+    it('should show a warning toast if mandatory fields are missing', () => {
+      renderForm('create');
+
+      fireEvent.submit(screen.getByRole('form'));
+
+      expect(showToast).toHaveBeenCalledWith({
+        type: 'warning',
+        message: 'Todos los campos son obligatorios',
+        autoClose: 3000,
+      });
+    });
+
+    it('should show a warning toast if game is locked and no password is provided', () => {
+      renderForm('create');
+
+      fireEvent.change(screen.getByPlaceholderText('Ingresa tu nombre'), {
+        target: { value: 'Host' },
+      });
+      fireEvent.change(
+        screen.getByPlaceholderText('Ingresa el nombre de la partida'),
+        {
+          target: { value: 'Test Game' },
+        }
+      );
+      fireEvent.change(screen.getByPlaceholderText('Cant. min. jugadores'), {
+        target: { value: '2' },
+      });
+      fireEvent.change(screen.getByPlaceholderText('Cant. max. jugadores'), {
+        target: { value: '4' },
+      });
+      const lockButton = screen.getByRole('button', {
+        name: 'Icono de candado',
+      });
+      fireEvent.click(lockButton);
+
+      fireEvent.submit(screen.getByRole('form'));
+
+      expect(showToast).toHaveBeenCalledWith({
+        type: 'warning',
+        message: 'Ingrese una contraseña o pongala pública',
+        autoClose: 3000,
+      });
     });
   });
 

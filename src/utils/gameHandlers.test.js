@@ -76,6 +76,28 @@ describe('gameHandlers', () => {
         autoClose: 3000,
       });
     });
+
+    it('should include password in gameInfo if gamePassword is defined', async () => {
+      const elementsWithPassword = {
+        ...elements,
+        gamePassword: { value: 'secret' },
+      };
+      createGame.mockResolvedValue({ ownerId: 1, gameId: 1 });
+
+      await handleCreateGame(
+        elementsWithPassword,
+        createPlayer,
+        redirectToLobbyPage
+      );
+
+      expect(createGame).toHaveBeenCalledWith({
+        ownerName: 'Owner',
+        gameName: 'Game',
+        minPlayers: 2,
+        maxPlayers: 4,
+        password: 'secret',
+      });
+    });
   });
 
   describe('handleJoinGame', () => {

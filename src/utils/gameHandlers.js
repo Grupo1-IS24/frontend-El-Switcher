@@ -30,17 +30,29 @@ export const handleCreateGame = async (
     maxPlayers: elements.maxPlayers.value,
   };
 
+  if (elements.gamePassword && elements.gamePassword.value) {
+    gameInfo.password = elements.gamePassword.value;
+  }
+
   try {
     const createdGame = await createGame(gameInfo);
     if (createdGame && createdGame.gameId) {
       createPlayer(createdGame.ownerId, true);
       redirectToLobbyPage(createdGame.gameId);
     } else {
-      showErrorToast('Error al crear la partida');
+      showToast({
+        type: 'error',
+        message: 'Error al crear la partida',
+        autoClose: 3000,
+      });
     }
   } catch (error) {
-    console.error('Error al crear la partida', error);
-    showErrorToast('Hubo un problema al crear el juego');
+    showToast({
+      type: 'error',
+      message: 'Hubo un problema al crear el juego',
+      autoClose: 3000,
+    });
+    console.error(error.message);
   }
 };
 

@@ -1,9 +1,9 @@
-import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
 import CreateGameForm from './CreateGameForm';
 
 describe('CreateGameForm', () => {
-  const renderComponent = () => render(<CreateGameForm />);
+  const renderComponent = (props = {}) => render(<CreateGameForm {...props} />);
 
   it('should render the CreateGameForm component', () => {
     renderComponent();
@@ -44,5 +44,80 @@ describe('CreateGameForm', () => {
     expect(maxPlayersInput).toHaveAttribute('name', 'maxPlayers');
     expect(maxPlayersInput).toHaveAttribute('min', '2');
     expect(maxPlayersInput).toHaveAttribute('max', '4');
+  });
+
+  it('should toggle isLocked state when lock button is clicked', () => {
+    const setIsLocked = vi.fn();
+    const setGamePassword = vi.fn();
+    const isLocked = false;
+
+    renderComponent({
+      setIsLocked,
+      setGamePassword,
+      isLocked,
+      gamePassword: '',
+    });
+
+    const lockButton = screen.getByRole('button');
+    fireEvent.click(lockButton);
+
+    expect(setIsLocked).toHaveBeenCalledWith(true);
+  });
+
+  it('should clear gamePassword when unlocking the form', () => {
+    const setIsLocked = vi.fn();
+    const setGamePassword = vi.fn();
+    const isLocked = true;
+
+    renderComponent({
+      setIsLocked,
+      setGamePassword,
+      isLocked,
+      gamePassword: 'secret',
+    });
+
+    const lockButton = screen.getByRole('button');
+    fireEvent.click(lockButton);
+
+    expect(setIsLocked).toHaveBeenCalledWith(false);
+    expect(setGamePassword).toHaveBeenCalledWith('');
+  });
+
+  it('should enable gamePassword input when isLocked is true', () => {
+    const setGamePassword = vi.fn();
+    const isLocked = true;
+
+    renderComponent({ setGamePassword, isLocked, gamePassword: '' });
+
+    const gamePasswordInput = screen.getByPlaceholderText(
+      'Ingresa la contraseña'
+    );
+    expect(gamePasswordInput).not.toBeDisabled();
+  });
+
+  it('should disable gamePassword input when isLocked is false', () => {
+    const setGamePassword = vi.fn();
+    const isLocked = false;
+
+    renderComponent({ setGamePassword, isLocked, gamePassword: '' });
+
+    const gamePasswordInput = screen.getByPlaceholderText(
+      'La partida es pública'
+    );
+    expect(gamePasswordInput).toBeDisabled();
+  });
+
+  it('should update gamePassword value on change', () => {
+    const setGamePassword = vi.fn();
+    const isLocked = true;
+
+    renderComponent({ setGamePassword, isLocked, gamePassword: '' });
+
+    const gamePasswordInput = screen.getByPlaceholderText(
+      'Ingresa la contraseña'
+    );
+    fireEvent.change(gamePasswordInput, { target: { value: 'newpassword' } });
+
+    expect(setGamePassword).toHaveBeenCalledWith('newpassword');
   });
 });
