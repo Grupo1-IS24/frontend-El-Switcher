@@ -1,46 +1,47 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import CreateGameButton from './CreateGameButton';
-import GameForm from '../GameForm/GameForm';
+import CreateGameForm from '../CreateGameForm/CreateGameForm';
 
-// Mock GameForm
-vi.mock('../GameForm/GameForm', () => ({
-  default: vi.fn(() => <div data-testid='game-form'>Game Form</div>),
+vi.mock('../CreateGameForm/CreateGameForm', () => ({
+  default: vi.fn(() => <div>CreateGameForm</div>),
 }));
 
 describe('CreateGameButton', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   const renderComponent = () => render(<CreateGameButton />);
 
-  it('should render the CreateGameButton component', () => {
+  it('renders the "Crear partida" button initially', () => {
     renderComponent();
-    const button = screen.getByText('Crear partida');
-    expect(button).toBeInTheDocument();
+    expect(screen.getByText('Crear partida')).toBeInTheDocument();
   });
 
-  it('should have the correct text', () => {
+  it('renders the CreateGameForm when the button is clicked', () => {
     renderComponent();
-    const button = screen.getByText('Crear partida');
-    expect(button).toHaveTextContent('Crear partida');
+    fireEvent.click(screen.getByText('Crear partida'));
+    expect(screen.getByText('CreateGameForm')).toBeInTheDocument();
   });
 
-  it('should show the GameForm when the button is clicked', () => {
+  it('hides the "Crear partida" button when the form is shown', () => {
     renderComponent();
-    const button = screen.getByText('Crear partida');
-    fireEvent.click(button);
-    const form = screen.getByTestId('game-form');
-    expect(form).toBeInTheDocument();
+    fireEvent.click(screen.getByText('Crear partida'));
+    expect(screen.queryByText('Crear partida')).not.toBeInTheDocument();
   });
 
-  it('should render the GameForm component when showForm is true', () => {
+  it('shows the "Crear partida" button when the form is closed', () => {
+    CreateGameForm.mockImplementation(({ setShowForm }) => (
+      <div>
+        CreateGameForm
+        <button onClick={() => setShowForm(false)}>Close Form</button>
+      </div>
+    ));
+
     renderComponent();
-    const button = screen.getByText('Crear partida');
-    fireEvent.click(button);
-    expect(GameForm).toHaveBeenCalledWith(
-      expect.objectContaining({
-        type: 'create',
-        setshowForm: expect.any(Function),
-      }),
-      {}
-    );
+    fireEvent.click(screen.getByText('Crear partida'));
+    fireEvent.click(screen.getByText('Close Form'));
+    expect(screen.getByText('Crear partida')).toBeInTheDocument();
   });
 });

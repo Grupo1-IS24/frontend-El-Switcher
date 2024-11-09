@@ -1,9 +1,12 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { MemoryRouter } from 'react-router-dom'; // Importamos MemoryRouter
 import GameListPage from './GameListPage';
 import useWebsocketGameList from '../hooks/useWebsocketGameList';
 import useSelectedGame from '../hooks/useSelectedGame';
+import useRouteNavigation from '../hooks/useRouteNavigation'; // Importamos el hook para mockearlo
 
+// Mockeamos los componentes hijos y las dependencias
 vi.mock('../components/MessageCard/MessageCard', () => ({
   default: vi.fn(({ type, message }) => (
     <div>
@@ -19,8 +22,8 @@ vi.mock('../components/GameGrid/GameGrid', () => ({
     <div>GameGrid: {gameList.length} juegos encontrados</div>
   )),
 }));
-vi.mock('../components/GameForm/GameForm', () => ({
-  default: vi.fn(({ type }) => <div>GameForm {type}</div>),
+vi.mock('../components/JoinGameForm/JoinGameForm', () => ({
+  default: () => <div>JoinGameForm</div>,
 }));
 vi.mock('../components/TitleText/TitleText', () => ({
   default: () => <div>TitleText</div>,
@@ -41,6 +44,9 @@ vi.mock('../hooks/useWebsocketGameList', () => ({
 vi.mock('../hooks/useSelectedGame', () => ({
   default: vi.fn(),
 }));
+vi.mock('../hooks/useRouteNavigation', () => ({
+  default: vi.fn(),
+}));
 
 describe('GameListPage', () => {
   beforeEach(() => {
@@ -59,7 +65,11 @@ describe('GameListPage', () => {
       clearSelectedGame: vi.fn(),
     });
 
-    render(<GameListPage />);
+    render(
+      <MemoryRouter>
+        <GameListPage />
+      </MemoryRouter>
+    );
     expect(screen.getByText('LoadingSpinner')).toBeInTheDocument();
   });
 
@@ -75,7 +85,11 @@ describe('GameListPage', () => {
       clearSelectedGame: vi.fn(),
     });
 
-    render(<GameListPage />);
+    render(
+      <MemoryRouter>
+        <GameListPage />
+      </MemoryRouter>
+    );
     expect(screen.getByText('error: Error loading games')).toBeInTheDocument();
   });
 
@@ -91,7 +105,11 @@ describe('GameListPage', () => {
       clearSelectedGame: vi.fn(),
     });
 
-    render(<GameListPage />);
+    render(
+      <MemoryRouter>
+        <GameListPage />
+      </MemoryRouter>
+    );
     expect(
       screen.getByText('info: No hay partidas disponibles.')
     ).toBeInTheDocument();
@@ -111,7 +129,11 @@ describe('GameListPage', () => {
       clearSelectedGame: vi.fn(),
     });
 
-    render(<GameListPage />);
+    render(
+      <MemoryRouter>
+        <GameListPage />
+      </MemoryRouter>
+    );
     expect(screen.getByText('FilterGameInfo')).toBeInTheDocument();
     expect(screen.getByText('LeaveGameListButton')).toBeInTheDocument();
     expect(
@@ -119,7 +141,7 @@ describe('GameListPage', () => {
     ).toBeInTheDocument();
   });
 
-  it('renders GameForm when a game is selected', () => {
+  it('renders JoinGameForm when a game is selected', () => {
     useWebsocketGameList.mockReturnValue({
       gameList: [
         { gameId: 1, gameName: 'Game 1', connectedPlayers: 2, maxPlayers: 4 },
@@ -128,12 +150,22 @@ describe('GameListPage', () => {
       error: null,
     });
     useSelectedGame.mockReturnValue({
-      selectedGame: { gameId: 1, gameName: 'Game 1' },
+      selectedGame: { gameId: 1, gameName: 'Game 1', isPublic: true },
       selectGame: vi.fn(),
       clearSelectedGame: vi.fn(),
     });
 
-    render(<GameListPage />);
-    expect(screen.getByText('GameForm join')).toBeInTheDocument();
+    // Mockeamos useRouteNavigation si es utilizado por JoinGameForm
+    useRouteNavigation.mockReturnValue({
+      redirectToLobbyPage: vi.fn(),
+    });
+
+    render(
+      <MemoryRouter>
+        <GameListPage />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('JoinGameForm')).toBeInTheDocument();
   });
 });
