@@ -4,7 +4,7 @@ import StartGameButton from '../StartGameButton/StartGameButton';
 import { PlayerContext } from '../../contexts/PlayerProvider';
 import { useContext } from 'react';
 import useGetGame from '../../hooks/useGetGame';
-import { useParams } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
 import LoadingLobby from '../LoadingLobby/LoadingLobby';
 
 const ConnectedPlayersInfo = ({ listOfPlayers }) => (
@@ -49,7 +49,11 @@ const LobbyCard = () => {
   const { gameId } = useParams();
   const { listOfPlayers, canStartGame } = useWebsocketLobby();
   const { isOwner } = useContext(PlayerContext);
-  const { game } = useGetGame(gameId);
+  const { game, gameError } = useGetGame(gameId);
+
+  if (!!gameError || (!!game && game.status === 'Ingame')) {
+    return <Navigate to='/*' />;
+  }
 
   if (!game) {
     return <LoadingLobby />;
