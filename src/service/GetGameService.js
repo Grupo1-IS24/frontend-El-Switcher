@@ -7,7 +7,9 @@ const gameSchema = z.object({
   gameName: z.string(), // must be a string.
   maxPlayers: z.number().int(), // must be an integer.
   minPlayers: z.number().int(), // must be an integer.
-  status: z.string().refine((value) => ['Lobby', 'Ingame', 'Finished'].includes(value)), // must be one of the specified strings.
+  status: z
+    .string()
+    .refine((value) => ['Lobby', 'Ingame', 'Finished'].includes(value)), // must be one of the specified strings.
 });
 
 /**
