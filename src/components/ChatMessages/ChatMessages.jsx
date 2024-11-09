@@ -1,6 +1,6 @@
 import useChatMessages from '../../hooks/useChatMessages';
 import useScrollToBottom from '../../hooks/useScrollToBottom';
-import './ChatMessages.css';
+import MessageList from '../MessageList/MessageList';
 
 const ChatMessages = () => {
   const { chatMessages, handleInputMessage } = useChatMessages();
@@ -8,16 +8,15 @@ const ChatMessages = () => {
 
   return (
     <div className='p-4'>
-      <div
+      <MessageList
         ref={messagesContainerRef}
-        className='chat-messages-scrollbar flex flex-col h-64 overflow-y-auto space-y-2 break-words'
-      >
-        {chatMessages.map(({ writtenBy, message }, index) => (
+        messages={chatMessages}
+        renderMessage={({ writtenBy, message }, index) => (
           <p key={index}>
             {writtenBy}: {message}
           </p>
-        ))}
-      </div>
+        )}
+      />
       <input
         type='text'
         placeholder='Escribe un mensaje...'

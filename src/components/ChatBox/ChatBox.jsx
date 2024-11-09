@@ -1,10 +1,24 @@
 import useChatBox from '../../hooks/useChatBox';
 import ChatMessages from '../ChatMessages/ChatMessages';
-import { useContext, useEffect, useCallback } from 'react';
+import { useContext, useEffect, useCallback, useState } from 'react';
 import { GameContext } from '../../contexts/GameProvider';
+import { CHAT_MESSAGES, CHAT_LOGS } from '../../constants/typeOfChats';
+import ChatLogs from '../ChatLogs/ChatLogs';
+
+const TabButton = ({ label, isActive, onClick }) => (
+  <button
+    onClick={onClick}
+    className={`flex-1 text-center p-2 mx-1 rounded-lg hover:text-orange-500 focus:outline-none transition-colors duration-150 transform hover:scale-105 active:scale-95 ${
+      isActive ? 'text-orange-500' : ''
+    }`}
+  >
+    {label}
+  </button>
+);
 
 const ChatBox = () => {
   const { isOpen, toggleChat } = useChatBox();
+  const [activeTab, setActiveTab] = useState(CHAT_MESSAGES);
   const { hasNewMessages, setHasNewMessages, setIsChatOpen } =
     useContext(GameContext);
 
@@ -43,15 +57,25 @@ const ChatBox = () => {
       {isOpen && (
         <div className='bg-black bg-opacity-85 text-white rounded-lg shadow-lg transition-all ease-in-out'>
           <div className='flex justify-between items-center px-4 py-2'>
-            <span className='text-lg font-bold'>Chat</span>
+            <TabButton
+              label='Chat'
+              isActive={activeTab === CHAT_MESSAGES}
+              onClick={() => setActiveTab(CHAT_MESSAGES)}
+            />
+            <TabButton
+              label='Logs'
+              isActive={activeTab === CHAT_LOGS}
+              onClick={() => setActiveTab(CHAT_LOGS)}
+            />
             <button
               onClick={handleToggleChat}
-              className='text-red-500 text-xl font-bold focus:outline-none'
+              className='text-red-500 text-xl font-bold focus:outline-none transition-transform duration-150 hover:scale-110 active:scale-95'
             >
               ✕
             </button>
           </div>
-          <ChatMessages />
+          {activeTab === CHAT_MESSAGES && <ChatMessages />}
+          {activeTab === CHAT_LOGS && <ChatLogs />}
         </div>
       )}
     </div>
