@@ -18,6 +18,7 @@ describe('getGame', () => {
       gameName: 'Game 1',
       maxPlayers: 4,
       minPlayers: 2,
+      status: 'Lobby',
     };
     apiService.get.mockResolvedValue({ data: validData });
 
@@ -33,6 +34,7 @@ describe('getGame', () => {
       gameName: 'Game 1',
       maxPlayers: 4,
       minPlayers: 2,
+      status: 'Lobby',
     };
 
     apiService.get.mockResolvedValue({ data: validData });
@@ -63,6 +65,7 @@ describe('getGame', () => {
       gameName: 'Game 1',
       maxPlayers: 4,
       minPlayers: 2,
+      status: 'Lobby',
     };
 
     apiService.get.mockResolvedValue({ data: invalidData });
