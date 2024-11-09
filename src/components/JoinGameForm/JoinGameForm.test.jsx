@@ -51,7 +51,9 @@ describe('JoinGameForm', () => {
     expect(
       screen.getByText(`Unirse a "${publicGame.gameName}"`)
     ).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Ingresa tu nombre')).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText('Ingresa tu nombre')
+    ).toBeInTheDocument();
   });
 
   it('shows the password field if the game is not public', () => {

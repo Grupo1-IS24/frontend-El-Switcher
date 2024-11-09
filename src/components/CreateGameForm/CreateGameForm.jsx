@@ -58,7 +58,10 @@ const CreateGameForm = ({ setShowForm }) => {
       </h2>
       <form onSubmit={handleSubmit} className='space-y-4' role='form'>
         <TextInput name='ownerName' placeholder='Ingresa tu nombre' />
-        <TextInput name='gameName' placeholder='Ingresa el nombre de la partida' />
+        <TextInput
+          name='gameName'
+          placeholder='Ingresa el nombre de la partida'
+        />
         <div className='flex w-full justify-evenly'>
           <TextInput
             name='gamePassword'

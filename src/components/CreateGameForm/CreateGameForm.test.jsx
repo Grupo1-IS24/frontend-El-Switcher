@@ -39,7 +39,9 @@ describe('CreateGameForm', () => {
   it('renders the form correctly', () => {
     renderComponent();
     expect(screen.getByText('Crear Partida')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Ingresa tu nombre')).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText('Ingresa tu nombre')
+    ).toBeInTheDocument();
     expect(
       screen.getByPlaceholderText('Ingresa el nombre de la partida')
     ).toBeInTheDocument();
@@ -67,32 +69,45 @@ describe('CreateGameForm', () => {
 
   it('handles lock and unlock state correctly', () => {
     renderComponent();
-    const lockButton = screen.getByRole('button', { name: /Icono de candado/i });
+    const lockButton = screen.getByRole('button', {
+      name: /Icono de candado/i,
+    });
     const passwordInput = screen.getByPlaceholderText('La partida es pública');
 
     expect(passwordInput).toBeDisabled();
 
     fireEvent.click(lockButton);
     expect(passwordInput).not.toBeDisabled();
-    expect(passwordInput).toHaveAttribute('placeholder', 'Ingresa la contraseña');
+    expect(passwordInput).toHaveAttribute(
+      'placeholder',
+      'Ingresa la contraseña'
+    );
 
     fireEvent.click(lockButton);
     expect(passwordInput).toBeDisabled();
-    expect(passwordInput).toHaveAttribute('placeholder', 'La partida es pública');
+    expect(passwordInput).toHaveAttribute(
+      'placeholder',
+      'La partida es pública'
+    );
   });
 
   it('shows a warning message if the game is private but no password is provided', () => {
     renderComponent();
-    const lockButton = screen.getByRole('button', { name: /Icono de candado/i });
+    const lockButton = screen.getByRole('button', {
+      name: /Icono de candado/i,
+    });
 
     fireEvent.click(lockButton);
 
     fireEvent.change(screen.getByPlaceholderText('Ingresa tu nombre'), {
       target: { value: 'Jugador 1' },
     });
-    fireEvent.change(screen.getByPlaceholderText('Ingresa el nombre de la partida'), {
-      target: { value: 'Partida Privada' },
-    });
+    fireEvent.change(
+      screen.getByPlaceholderText('Ingresa el nombre de la partida'),
+      {
+        target: { value: 'Partida Privada' },
+      }
+    );
     fireEvent.change(screen.getByPlaceholderText('Cant. min. jugadores'), {
       target: { value: '2' },
     });
@@ -116,9 +131,12 @@ describe('CreateGameForm', () => {
     fireEvent.change(screen.getByPlaceholderText('Ingresa tu nombre'), {
       target: { value: 'Jugador 1' },
     });
-    fireEvent.change(screen.getByPlaceholderText('Ingresa el nombre de la partida'), {
-      target: { value: 'Partida Pública' },
-    });
+    fireEvent.change(
+      screen.getByPlaceholderText('Ingresa el nombre de la partida'),
+      {
+        target: { value: 'Partida Pública' },
+      }
+    );
     fireEvent.change(screen.getByPlaceholderText('Cant. min. jugadores'), {
       target: { value: '2' },
     });
@@ -143,16 +161,21 @@ describe('CreateGameForm', () => {
 
   it('submits the form correctly when the game is private', () => {
     renderComponent();
-    const lockButton = screen.getByRole('button', { name: /Icono de candado/i });
+    const lockButton = screen.getByRole('button', {
+      name: /Icono de candado/i,
+    });
 
     fireEvent.click(lockButton);
 
     fireEvent.change(screen.getByPlaceholderText('Ingresa tu nombre'), {
       target: { value: 'Jugador 1' },
     });
-    fireEvent.change(screen.getByPlaceholderText('Ingresa el nombre de la partida'), {
-      target: { value: 'Partida Privada' },
-    });
+    fireEvent.change(
+      screen.getByPlaceholderText('Ingresa el nombre de la partida'),
+      {
+        target: { value: 'Partida Privada' },
+      }
+    );
     fireEvent.change(screen.getByPlaceholderText('Ingresa la contraseña'), {
       target: { value: 'contraseña123' },
     });
@@ -174,7 +197,9 @@ describe('CreateGameForm', () => {
 
   it('updates the gamePassword value correctly', () => {
     renderComponent();
-    const lockButton = screen.getByRole('button', { name: /Icono de candado/i });
+    const lockButton = screen.getByRole('button', {
+      name: /Icono de candado/i,
+    });
 
     fireEvent.click(lockButton);
 
@@ -206,9 +231,12 @@ describe('CreateGameForm', () => {
     fireEvent.change(screen.getByPlaceholderText('Ingresa tu nombre'), {
       target: { value: 'Jugador 1' },
     });
-    fireEvent.change(screen.getByPlaceholderText('Ingresa el nombre de la partida'), {
-      target: { value: 'Partida Pública' },
-    });
+    fireEvent.change(
+      screen.getByPlaceholderText('Ingresa el nombre de la partida'),
+      {
+        target: { value: 'Partida Pública' },
+      }
+    );
     fireEvent.change(screen.getByPlaceholderText('Cant. min. jugadores'), {
       target: { value: '2' },
     });
