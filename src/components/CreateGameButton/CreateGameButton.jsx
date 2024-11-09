@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import Button from '../Button/Button';
-import GameForm from '../GameForm/GameForm';
+import CreateGameForm from '../CreateGameForm/CreateGameForm';
 
 const CreateGameButton = () => {
-  const [showForm, setshowForm] = useState(false);
+  const [showForm, setShowForm] = useState(false);
 
   return (
     <>
       {showForm ? (
-        <GameForm type='create' setshowForm={setshowForm} />
+        <CreateGameForm setShowForm={setShowForm} />
       ) : (
         <Button
           text='Crear partida'
-          onPress={() => setshowForm(true)}
+          onPress={() => setShowForm(true)}
           style='homeButton'
         />
       )}
