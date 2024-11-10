@@ -102,6 +102,7 @@ const useWebsocketGame = () => {
 
       socket.on('chat_messages', ({ type, data }) => {
         logSocketEvent('chat_messages', { type, data });
+        
         if (type === 'multipleMessages') {
           setChatMessages(data);
         } else {
@@ -114,6 +115,8 @@ const useWebsocketGame = () => {
       });
 
       socket.on('game_logs', ({ type, data }) => {
+        logSocketEvent('game_logs', { type, data });
+
         if (type === 'multipleLogs') {
           setLogMessages(data);
         } else {
