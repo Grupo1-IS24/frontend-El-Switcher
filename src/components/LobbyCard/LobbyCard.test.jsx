@@ -4,6 +4,7 @@ import { PlayerContext } from '../../contexts/PlayerProvider';
 import LobbyCard from './LobbyCard';
 import useWebsocketLobby from '../../hooks/useWebsocketLobby';
 import useGetGame from '../../hooks/useGetGame';
+import { MemoryRouter } from 'react-router-dom';
 
 // mock hooks
 vi.mock('../../hooks/useWebsocketLobby');
@@ -15,7 +16,12 @@ vi.mock('../../hooks/useRouteNavigation', () => ({
 }));
 
 describe('LobbyCard', () => {
-  const mockGameInfo = { gameName: 'Test Game', minPlayers: 2, maxPlayers: 4 };
+  const mockGameInfo = {
+    gameName: 'Test Game',
+    minPlayers: 2,
+    maxPlayers: 4,
+    status: 'Lobby',
+  };
   const mockListOfPlayers = [
     { playerName: 'Player 1' },
     { playerName: 'Player 2' },
@@ -24,17 +30,20 @@ describe('LobbyCard', () => {
 
   const setupMocks = ({
     game = null,
+    gameError = null,
     listOfPlayers = [],
     canStartGame = false,
   } = {}) => {
     useWebsocketLobby.mockReturnValue({ listOfPlayers, canStartGame });
-    useGetGame.mockReturnValue({ game });
+    useGetGame.mockReturnValue({ game, gameError });
   };
 
   const renderLobbyCard = (isOwner = false) => {
     return render(
       <PlayerContext.Provider value={{ isOwner }}>
-        <LobbyCard />
+        <MemoryRouter>
+          <LobbyCard />
+        </MemoryRouter>
       </PlayerContext.Provider>
     );
   };
@@ -126,8 +135,9 @@ describe('LobbyCard', () => {
   describe('Render owner actions when the game cannot be started', () => {
     beforeEach(() => {
       setupMocks({
-        game: [{ playerName: 'player 1' }],
-        listOfPlayers: mockListOfPlayers,
+        game: mockGameInfo,
+        listOfPlayers: mockListOfPlayers.slice(0, 1),
+        canStartGame: false,
       });
       renderLobbyCard(true);
     });
@@ -161,6 +171,34 @@ describe('LobbyCard', () => {
       const leaveButton = getLeaveButton();
       expect(leaveButton).toBeInTheDocument();
       expect(leaveButton).toBeEnabled();
+    });
+  });
+
+  describe('Handle navigation when there is a game error', () => {
+    beforeEach(() => {
+      setupMocks({
+        game: null,
+        gameError: true,
+      });
+      renderLobbyCard();
+    });
+
+    it('should navigate to not found page when there is a game error', () => {
+      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Handle navigation when game status is Ingame', () => {
+    beforeEach(() => {
+      setupMocks({
+        game: { ...mockGameInfo, status: 'Ingame' },
+        gameError: null,
+      });
+      renderLobbyCard();
+    });
+
+    it('should navigate to not found page when game status is Ingame', () => {
+      expect(screen.queryByText(mockGameInfo.gameName)).not.toBeInTheDocument();
     });
   });
 });
