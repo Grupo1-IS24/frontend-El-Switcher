@@ -20,9 +20,9 @@ const useChatBox = () => {
   const { hasNewMessages, setHasNewMessages, setIsChatOpen } =
     useContext(GameContext);
 
-  const toggleChat = () => {
+  const toggleChat = useCallback(() => {
     setIsOpen(!isOpen);
-  };
+  }, [isOpen, setIsOpen]);
 
   const activeTabChatMessages = () => {
     setActiveTab(CHAT_MESSAGES);

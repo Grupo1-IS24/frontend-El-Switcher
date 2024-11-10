@@ -1,4 +1,3 @@
-// components/MessageList.js
 import { forwardRef } from 'react';
 
 const MessageList = forwardRef(({ messages, renderMessage }, ref) => {
@@ -11,5 +10,7 @@ const MessageList = forwardRef(({ messages, renderMessage }, ref) => {
     </div>
   );
 });
+
+MessageList.displayName = 'MessageList';
 
 export default MessageList;
