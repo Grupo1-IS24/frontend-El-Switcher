@@ -26,7 +26,7 @@ describe('useChatBox', () => {
     const { result } = setupHook();
 
     expect(result.current.isOpen).toBe(false);
-    expect(result.current.isChatMessageActive).toBe(true);  // Default tab should be 'Chat Messages'
+    expect(result.current.isChatMessageActive).toBe(true); // Default tab should be 'Chat Messages'
     expect(result.current.isChatLogsActive).toBe(false);
   });
 
@@ -38,7 +38,7 @@ describe('useChatBox', () => {
     });
 
     expect(result.current.isOpen).toBe(true);
-    expect(mockSetIsChatOpen).toHaveBeenCalledWith(true);  // Ensure the context function is called
+    expect(mockSetIsChatOpen).toHaveBeenCalledWith(true); // Ensure the context function is called
   });
 
   it('should close the chat when handleToggleChat is called twice', () => {
@@ -55,7 +55,7 @@ describe('useChatBox', () => {
     });
 
     expect(result.current.isOpen).toBe(false);
-    expect(mockSetIsChatOpen).toHaveBeenCalledWith(false);  // Ensure the context function is called
+    expect(mockSetIsChatOpen).toHaveBeenCalledWith(false); // Ensure the context function is called
   });
 
   it('should set the active tab to "Chat Messages" when activeTabChatMessages is called', () => {
