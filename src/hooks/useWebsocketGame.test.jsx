@@ -68,6 +68,9 @@ describe('useWebsocketGame Hook', () => {
       expect(result.current.chatMessages).toEqual([]);
       expect(result.current.timer).toBe(0);
       expect(result.current.blockedColor).toEqual(null);
+      expect(result.current.hasNewMessages).toBe(false);
+      expect(result.current.isChatOpen).toBe(false);
+      expect(result.current.logMessages).toEqual([]);
     });
 
     it('should handle player_list event correctly', () => {
@@ -257,6 +260,57 @@ describe('useWebsocketGame Hook', () => {
     });
 
     expect(result.current.chatMessages).toEqual([firstData, secondData]);
+  });
+
+  it('should handle game_logs multiple logs correctly', () => {
+    const { result } = renderUseWebsocketGameHook();
+    const data = [
+      { message: 'Player 1 played one cards' },
+      { message: 'Player 2 has 3 cards' },
+    ];
+
+    act(() => {
+      const gameLogsCallback = getCallbackForEvent('game_logs');
+      if (gameLogsCallback) {
+        gameLogsCallback({
+          type: 'multipleLogs',
+          data,
+        });
+      }
+    });
+
+    expect(result.current.logMessages).toEqual(data);
+  });
+
+  it('should handle game_logs single log correctly', () => {
+    const { result } = renderUseWebsocketGameHook();
+    const firstData = { message: 'Player 1 played one cards' };
+
+    act(() => {
+      const gameLogsCallback = getCallbackForEvent('game_logs');
+      if (gameLogsCallback) {
+        gameLogsCallback({
+          type: 'singleLog',
+          data: firstData,
+        });
+      }
+    });
+
+    expect(result.current.logMessages).toEqual([firstData]);
+
+    const secondData = { message: 'Player 2 has 3 cards' };
+
+    act(() => {
+      const gameLogsCallback = getCallbackForEvent('game_logs');
+      if (gameLogsCallback) {
+        gameLogsCallback({
+          type: 'singleLog',
+          data: secondData,
+        });
+      }
+    });
+
+    expect(result.current.logMessages).toEqual([firstData, secondData]);
   });
 
   // Test cleanup on unmount

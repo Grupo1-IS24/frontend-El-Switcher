@@ -44,6 +44,7 @@ const useWebsocketGame = () => {
   const [blockedColor, setBlockedColor] = useState(null);
   const [hasNewMessages, setHasNewMessages] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [logMessages, setLogMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const handleSocketEvents = useCallback(
@@ -101,11 +102,27 @@ const useWebsocketGame = () => {
 
       socket.on('chat_messages', ({ type, data }) => {
         logSocketEvent('chat_messages', { type, data });
+
         if (type === 'multipleMessages') {
           setChatMessages(data);
         } else {
           setChatMessages((prev) => [...prev, data]);
         }
+
+        if (!isChatOpen) {
+          setHasNewMessages(true);
+        }
+      });
+
+      socket.on('game_logs', ({ type, data }) => {
+        logSocketEvent('game_logs', { type, data });
+
+        if (type === 'multipleLogs') {
+          setLogMessages(data);
+        } else {
+          setLogMessages((prev) => [...prev, data]);
+        }
+
         if (!isChatOpen) {
           setHasNewMessages(true);
         }
@@ -141,6 +158,7 @@ const useWebsocketGame = () => {
     setHasNewMessages,
     isChatOpen,
     setIsChatOpen,
+    logMessages,
     isLoading,
   };
 };
