@@ -1,8 +1,5 @@
 import useChatBox from '../../hooks/useChatBox';
 import ChatMessages from '../ChatMessages/ChatMessages';
-import { useContext, useEffect, useCallback, useState } from 'react';
-import { GameContext } from '../../contexts/GameProvider';
-import { CHAT_MESSAGES, CHAT_LOGS } from '../../constants/typeOfChats';
 import ChatLogs from '../ChatLogs/ChatLogs';
 
 const TabButton = ({ label, isActive, onClick }) => (
@@ -17,25 +14,15 @@ const TabButton = ({ label, isActive, onClick }) => (
 );
 
 const ChatBox = () => {
-  const { isOpen, toggleChat } = useChatBox();
-  const [activeTab, setActiveTab] = useState(CHAT_MESSAGES);
-  const { hasNewMessages, setHasNewMessages, setIsChatOpen } =
-    useContext(GameContext);
-
-  useEffect(() => {
-    setIsChatOpen(isOpen);
-  }, [isOpen, setIsChatOpen]);
-
-  const handleToggleChat = useCallback(() => {
-    setHasNewMessages(false);
-    toggleChat();
-  }, [setHasNewMessages, toggleChat]);
-
-  useEffect(() => {
-    if (isOpen) {
-      setHasNewMessages(false);
-    }
-  }, [isOpen, setHasNewMessages]);
+  const {
+    isOpen,
+    isChatMessageActive,
+    isChatLogsActive,
+    activeTabChatMessages,
+    activeTabChatLogs,
+    handleToggleChat,
+    hasNewMessages,
+  } = useChatBox();
 
   return (
     <div className='fixed bottom-0 inset-x-0 mx-auto w-80 p-4 z-50'>
@@ -59,13 +46,13 @@ const ChatBox = () => {
           <div className='flex justify-between items-center px-4 py-2'>
             <TabButton
               label='Chat'
-              isActive={activeTab === CHAT_MESSAGES}
-              onClick={() => setActiveTab(CHAT_MESSAGES)}
+              isActive={isChatMessageActive}
+              onClick={activeTabChatMessages}
             />
             <TabButton
               label='Logs'
-              isActive={activeTab === CHAT_LOGS}
-              onClick={() => setActiveTab(CHAT_LOGS)}
+              isActive={isChatLogsActive}
+              onClick={activeTabChatLogs}
             />
             <button
               onClick={handleToggleChat}
@@ -74,8 +61,8 @@ const ChatBox = () => {
               ✕
             </button>
           </div>
-          {activeTab === CHAT_MESSAGES && <ChatMessages />}
-          {activeTab === CHAT_LOGS && <ChatLogs />}
+          {isChatMessageActive && <ChatMessages />}
+          {isChatLogsActive && <ChatLogs />}
         </div>
       )}
     </div>
