@@ -16,6 +16,11 @@ describe('FigureCard', () => {
     expect(button).toHaveClass(className);
   };
 
+  const checkImageClass = (className) => {
+    const img = screen.getByRole('img');
+    expect(img).toHaveClass(className);
+  };
+
   describe('Image rendering', () => {
     it('should render the FigureCard component with the correct image path and alt text for valid inputs', () => {
       renderComponent({ figure: 3, difficulty: 'easy' });
@@ -32,6 +37,14 @@ describe('FigureCard', () => {
         'Figura de espaldas'
       );
     });
+
+    it('should render the default image path and alt text when no props are provided', () => {
+      renderComponent({});
+      checkImageAttributes(
+        '/src/assets/FigureCards/back-fig.svg',
+        'Figura de espaldas'
+      );
+    });
   });
 
   describe('Button class application', () => {
@@ -43,6 +56,13 @@ describe('FigureCard', () => {
     it('should apply the "cursor-not-allowed" class when the button is disabled', () => {
       renderComponent({ disabled: true });
       checkButtonClass('cursor-not-allowed');
+    });
+
+    it('should not apply any special class when the button is not selected and not disabled', () => {
+      renderComponent({ isSelected: false, disabled: false });
+      const button = screen.getByRole('button');
+      expect(button).not.toHaveClass('translate-y-[-20px]');
+      expect(button).not.toHaveClass('cursor-not-allowed');
     });
   });
 
@@ -65,6 +85,25 @@ describe('FigureCard', () => {
       const button = screen.getByRole('button');
       fireEvent.click(button);
       expect(mockOnClick).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Image class application', () => {
+    it('should apply the "grayscale" class when the image is blocked', () => {
+      renderComponent({ isBlocked: true });
+      checkImageClass('grayscale');
+    });
+
+    it('should not apply the "grayscale" class when the image is not blocked', () => {
+      renderComponent({ isBlocked: false });
+      const img = screen.getByRole('img');
+      expect(img).not.toHaveClass('grayscale');
+    });
+
+    it('should not apply the "grayscale" class when no props are provided', () => {
+      renderComponent({});
+      const img = screen.getByRole('img');
+      expect(img).not.toHaveClass('grayscale');
     });
   });
 });

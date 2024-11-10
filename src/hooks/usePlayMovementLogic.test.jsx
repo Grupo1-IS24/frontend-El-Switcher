@@ -1,272 +1,321 @@
-import React from 'react';
 import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { useContext } from 'react';
 import usePlayMovementLogic from './usePlayMovementLogic';
-import usePlayedMovCards from './usePlayedMovCards';
-import usePlayerTurn from './usePlayerTurn';
 import { PlayCardLogicContext } from '../contexts/PlayCardLogicProvider';
+import usePlayerTurn from './usePlayerTurn';
+import usePlayedMovCards from './usePlayedMovCards';
+import { isEqualColorCard } from '../utils/isEqualColorCard';
 
-vi.mock('./usePlayedMovCards');
-vi.mock('./usePlayerTurn');
+// Mock all dependencies
+vi.mock('react', async () => {
+  const actual = await vi.importActual('react');
+  return {
+    ...actual,
+    useContext: vi.fn(),
+  };
+});
+
+vi.mock('./usePlayerTurn', () => ({
+  default: vi.fn(),
+}));
+
+vi.mock('./usePlayedMovCards', () => ({
+  default: vi.fn(),
+}));
+
 vi.mock('../utils/isEqualColorCard', () => ({
   isEqualColorCard: vi.fn(),
 }));
 
 describe('usePlayMovementLogic', () => {
-  const mockIsCurrentPlayerTurn = vi.fn();
-  const mockIsMovementCardPlayed = vi.fn();
-  const mockHasAnyMovementCardPlayed = vi.fn();
-  const mockAreAllMovementCardsPlayed = vi.fn();
-  const mockSetSelectedMovementCard = vi.fn();
-  const mockSetSelectedColorCards = vi.fn();
-  const mockResetMovementCards = vi.fn();
-  const mockResetFigureCards = vi.fn();
-  const mockIsEqualColorCard = vi.fn();
-
   const mockPlayCardLogicContext = {
     selectedMovementCard: null,
     selectedColorCards: [],
-    setSelectedMovementCard: mockSetSelectedMovementCard,
-    setSelectedColorCards: mockSetSelectedColorCards,
-    resetMovementCards: mockResetMovementCards,
-    resetFigureCards: mockResetFigureCards,
+    setSelectedMovementCard: vi.fn(),
+    setSelectedColorCards: vi.fn(),
+    resetMovementCards: vi.fn(),
+    resetFigureCards: vi.fn(),
+  };
+
+  const mockUsePlayerTurn = {
+    isCurrentPlayerTurn: vi.fn(),
+  };
+
+  const mockUsePlayedMovCards = {
+    isMovementCardPlayed: vi.fn(),
+    hasAnyMovementCardPlayed: vi.fn(),
+    areAllMovementCardsPlayed: vi.fn(),
   };
 
   beforeEach(() => {
-    usePlayedMovCards.mockReturnValue({
-      isMovementCardPlayed: mockIsMovementCardPlayed,
-      hasAnyMovementCardPlayed: mockHasAnyMovementCardPlayed,
-      areAllMovementCardsPlayed: mockAreAllMovementCardsPlayed,
-    });
-
-    usePlayerTurn.mockReturnValue({
-      isCurrentPlayerTurn: mockIsCurrentPlayerTurn,
-    });
-
-    vi.spyOn(React, 'useContext').mockImplementation((context) => {
+    useContext.mockImplementation((context) => {
       if (context === PlayCardLogicContext) {
         return mockPlayCardLogicContext;
       }
-      return null;
     });
+
+    usePlayerTurn.mockReturnValue(mockUsePlayerTurn);
+    usePlayedMovCards.mockReturnValue(mockUsePlayedMovCards);
   });
 
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  describe('Movement Card Selection', () => {
-    it('should determine if a movement card is selected', () => {
-      const { result } = renderHook(() => usePlayMovementLogic(), {
-        wrapper: ({ children }) => (
-          <PlayCardLogicContext.Provider value={mockPlayCardLogicContext}>
-            {children}
-          </PlayCardLogicContext.Provider>
-        ),
-      });
+  describe('isSelectedMovementCard', () => {
+    it('should return true when movement card is selected', () => {
       const movementCard = { movementcardId: 1 };
-      expect(result.current.isSelectedMovementCard(movementCard)).toBe(false);
+      mockPlayCardLogicContext.selectedMovementCard = movementCard;
+      const { result } = renderHook(() => usePlayMovementLogic());
+
+      expect(result.current.isSelectedMovementCard(movementCard)).toBe(true);
     });
 
-    it('should select a movement card', () => {
-      const { result } = renderHook(() => usePlayMovementLogic(), {
-        wrapper: ({ children }) => (
-          <PlayCardLogicContext.Provider value={mockPlayCardLogicContext}>
-            {children}
-          </PlayCardLogicContext.Provider>
-        ),
-      });
-      const movementCard = { movementcardId: 1 };
-      act(() => {
-        result.current.selectMovementCard(movementCard);
-      });
-      expect(mockSetSelectedMovementCard).toHaveBeenCalledWith(movementCard);
-      expect(mockSetSelectedColorCards).toHaveBeenCalledWith([]);
-      expect(mockResetFigureCards).toHaveBeenCalled();
-    });
-
-    it('should deselect a movement card', () => {
+    it('should return false when movement card is not selected', () => {
       mockPlayCardLogicContext.selectedMovementCard = { movementcardId: 1 };
-      const { result } = renderHook(() => usePlayMovementLogic(), {
-        wrapper: ({ children }) => (
-          <PlayCardLogicContext.Provider value={mockPlayCardLogicContext}>
-            {children}
-          </PlayCardLogicContext.Provider>
-        ),
-      });
-      const movementCard = { movementcardId: 1 };
-      act(() => {
-        result.current.selectMovementCard(movementCard);
-      });
-      expect(mockSetSelectedMovementCard).toHaveBeenCalledWith(null);
-      expect(mockSetSelectedColorCards).toHaveBeenCalledWith([]);
-      expect(mockResetFigureCards).toHaveBeenCalled();
-    });
+      const { result } = renderHook(() => usePlayMovementLogic());
 
-    it('should determine if a movement card can be selected', () => {
-      const { result } = renderHook(() => usePlayMovementLogic(), {
-        wrapper: ({ children }) => (
-          <PlayCardLogicContext.Provider value={mockPlayCardLogicContext}>
-            {children}
-          </PlayCardLogicContext.Provider>
-        ),
-      });
-      const movementCard = { movementcardId: 1 };
-      act(() => {
-        mockIsCurrentPlayerTurn.mockReturnValue(true);
-        mockIsMovementCardPlayed.mockReturnValue(false);
-      });
-      expect(result.current.canSelectMovementCard(movementCard)).toBe(true);
+      expect(result.current.isSelectedMovementCard({ movementcardId: 2 })).toBe(
+        false
+      );
     });
   });
 
-  describe('Color Card Selection', () => {
-    it('should select a color card', () => {
-      const { result } = renderHook(() => usePlayMovementLogic(), {
-        wrapper: ({ children }) => (
-          <PlayCardLogicContext.Provider value={mockPlayCardLogicContext}>
-            {children}
-          </PlayCardLogicContext.Provider>
-        ),
+  describe('canSelectMovementCard', () => {
+    it('should return true when conditions are met', () => {
+      mockUsePlayerTurn.isCurrentPlayerTurn.mockReturnValue(true);
+      mockUsePlayedMovCards.isMovementCardPlayed.mockReturnValue(false);
+      const { result } = renderHook(() => usePlayMovementLogic());
+
+      expect(result.current.canSelectMovementCard({})).toBe(true);
+    });
+
+    it('should return false when not player turn', () => {
+      mockUsePlayerTurn.isCurrentPlayerTurn.mockReturnValue(false);
+      const { result } = renderHook(() => usePlayMovementLogic());
+
+      expect(result.current.canSelectMovementCard({})).toBe(false);
+    });
+  });
+
+  describe('selectMovementCard', () => {
+    it('should deselect card if already selected', () => {
+      const movementCard = { movementcardId: 1 };
+      mockPlayCardLogicContext.selectedMovementCard = movementCard;
+      const { result } = renderHook(() => usePlayMovementLogic());
+
+      act(() => {
+        result.current.selectMovementCard(movementCard);
       });
-      const colorCard = { row: 1, column: 1, color: 'BLUE' };
+
+      expect(
+        mockPlayCardLogicContext.setSelectedMovementCard
+      ).toHaveBeenCalledWith(null);
+      expect(
+        mockPlayCardLogicContext.setSelectedColorCards
+      ).toHaveBeenCalledWith([]);
+      expect(mockPlayCardLogicContext.resetFigureCards).toHaveBeenCalled();
+    });
+
+    it('should select new card if none was selected', () => {
+      const movementCard = { movementcardId: 1 };
+      mockPlayCardLogicContext.selectedMovementCard = null;
+      const { result } = renderHook(() => usePlayMovementLogic());
+
+      act(() => {
+        result.current.selectMovementCard(movementCard);
+      });
+
+      expect(
+        mockPlayCardLogicContext.setSelectedMovementCard
+      ).toHaveBeenCalledWith(movementCard);
+      expect(
+        mockPlayCardLogicContext.setSelectedColorCards
+      ).toHaveBeenCalledWith([]);
+      expect(mockPlayCardLogicContext.resetFigureCards).toHaveBeenCalled();
+    });
+
+    it('should select different card if another was selected', () => {
+      const oldCard = { movementcardId: 1 };
+      const newCard = { movementcardId: 2 };
+      mockPlayCardLogicContext.selectedMovementCard = oldCard;
+      const { result } = renderHook(() => usePlayMovementLogic());
+
+      act(() => {
+        result.current.selectMovementCard(newCard);
+      });
+
+      expect(
+        mockPlayCardLogicContext.setSelectedMovementCard
+      ).toHaveBeenCalledWith(newCard);
+      expect(
+        mockPlayCardLogicContext.setSelectedColorCards
+      ).toHaveBeenCalledWith([]);
+      expect(mockPlayCardLogicContext.resetFigureCards).toHaveBeenCalled();
+    });
+  });
+
+  describe('isSelectedColorCard', () => {
+    it('should return true when color card is selected', () => {
+      const colorCard = { row: 1, column: 1, color: 'red' };
+      mockPlayCardLogicContext.selectedColorCards = [colorCard];
+      isEqualColorCard.mockReturnValue(true);
+      const { result } = renderHook(() => usePlayMovementLogic());
+
+      expect(result.current.isSelectedColorCard(colorCard)).toBe(true);
+    });
+
+    it('should return false when color card is not selected', () => {
+      isEqualColorCard.mockReturnValue(false);
+      const { result } = renderHook(() => usePlayMovementLogic());
+
+      expect(
+        result.current.isSelectedColorCard({ row: 1, column: 1, color: 'red' })
+      ).toBe(false);
+    });
+  });
+
+  describe('canSelectColorCard', () => {
+    it('should return true when all conditions are met', () => {
+      mockUsePlayerTurn.isCurrentPlayerTurn.mockReturnValue(true);
+      mockUsePlayedMovCards.areAllMovementCardsPlayed.mockReturnValue(false);
+      mockPlayCardLogicContext.selectedMovementCard = { movementcardId: 1 };
+      mockPlayCardLogicContext.selectedColorCards = [{ color: 'red' }];
+      const { result } = renderHook(() => usePlayMovementLogic());
+
+      expect(result.current.canSelectColorCard({})).toBe(true);
+    });
+
+    it('should return false when not player turn', () => {
+      mockUsePlayerTurn.isCurrentPlayerTurn.mockReturnValue(false);
+      const { result } = renderHook(() => usePlayMovementLogic());
+
+      expect(result.current.canSelectColorCard({})).toBe(false);
+    });
+
+    it('should return true when trying to select an already selected card even if two cards are selected', () => {
+      const selectedCard = { row: 1, column: 1, color: 'red' };
+      mockUsePlayerTurn.isCurrentPlayerTurn.mockReturnValue(true);
+      mockUsePlayedMovCards.areAllMovementCardsPlayed.mockReturnValue(false);
+      mockPlayCardLogicContext.selectedMovementCard = { movementcardId: 1 };
+      mockPlayCardLogicContext.selectedColorCards = [
+        selectedCard,
+        { row: 2, column: 2, color: 'blue' },
+      ];
+      isEqualColorCard.mockReturnValue(true);
+
+      const { result } = renderHook(() => usePlayMovementLogic());
+
+      expect(result.current.canSelectColorCard(selectedCard)).toBe(true);
+    });
+  });
+
+  describe('selectColorCard', () => {
+    it('should deselect card if already selected', () => {
+      const colorCard = { row: 1, column: 1, color: 'red' };
+      mockPlayCardLogicContext.selectedColorCards = [colorCard];
+      isEqualColorCard.mockReturnValue(true);
+      const { result } = renderHook(() => usePlayMovementLogic());
+
       act(() => {
         result.current.selectColorCard(colorCard);
       });
-      expect(mockSetSelectedColorCards).toHaveBeenCalledWith(
-        expect.any(Function)
-      );
-      act(() => {
-        const updateFn = mockSetSelectedColorCards.mock.calls[0][0];
-        expect(updateFn([])).toEqual([colorCard]);
-      });
+      const updateFunction =
+        mockPlayCardLogicContext.setSelectedColorCards.mock.calls[0][0];
+      const newState = updateFunction([colorCard]);
+      expect(newState).toEqual([]);
     });
 
-    it('should determine if a color card is not selected', () => {
-      const { result } = renderHook(() => usePlayMovementLogic(), {
-        wrapper: ({ children }) => (
-          <PlayCardLogicContext.Provider value={mockPlayCardLogicContext}>
-            {children}
-          </PlayCardLogicContext.Provider>
-        ),
+    it('should select first card when none selected', () => {
+      const colorCard = { row: 1, column: 1, color: 'red' };
+      mockPlayCardLogicContext.selectedColorCards = [];
+      isEqualColorCard.mockReturnValue(false);
+      const { result } = renderHook(() => usePlayMovementLogic());
+
+      act(() => {
+        result.current.selectColorCard(colorCard);
       });
-      const colorCard = { row: 1, column: 1, color: 'BLUE' };
-      mockIsEqualColorCard.mockReturnValue(false);
-      expect(result.current.isSelectedColorCard(colorCard)).toBe(false);
+
+      expect(mockPlayCardLogicContext.setSelectedColorCards).toHaveBeenCalled();
+      const setterCallback =
+        mockPlayCardLogicContext.setSelectedColorCards.mock.calls[0][0];
+      const newState = setterCallback([]);
+      expect(newState).toEqual([colorCard]);
     });
 
-    it('should determine if a color card cannot be selected', () => {
-      const { result } = renderHook(() => usePlayMovementLogic(), {
-        wrapper: ({ children }) => (
-          <PlayCardLogicContext.Provider value={mockPlayCardLogicContext}>
-            {children}
-          </PlayCardLogicContext.Provider>
-        ),
-      });
-      const colorCard = { row: 1, column: 1, color: 'BLUE' };
+    it('should select second card when one is selected', () => {
+      const colorCard1 = { row: 1, column: 1, color: 'red' };
+      const colorCard2 = { row: 2, column: 2, color: 'blue' };
+      mockPlayCardLogicContext.selectedColorCards = [colorCard1];
+      isEqualColorCard.mockReturnValue(false);
+      const { result } = renderHook(() => usePlayMovementLogic());
+
       act(() => {
-        mockIsCurrentPlayerTurn.mockReturnValue(false);
-        mockAreAllMovementCardsPlayed.mockReturnValue(true);
+        result.current.selectColorCard(colorCard2);
       });
-      expect(result.current.canSelectColorCard(colorCard)).toBe(false);
+
+      expect(mockPlayCardLogicContext.setSelectedColorCards).toHaveBeenCalled();
+      const setterCallback =
+        mockPlayCardLogicContext.setSelectedColorCards.mock.calls[0][0];
+      const newState = setterCallback([colorCard1]);
+      expect(newState).toEqual([colorCard1, colorCard2]);
+    });
+
+    it('should not select card when two cards are already selected', () => {
+      const colorCard1 = { row: 1, column: 1, color: 'red' };
+      const colorCard2 = { row: 2, column: 2, color: 'blue' };
+      const colorCard3 = { row: 3, column: 3, color: 'green' };
+      mockPlayCardLogicContext.selectedColorCards = [colorCard1, colorCard2];
+      isEqualColorCard.mockReturnValue(false);
+      const { result } = renderHook(() => usePlayMovementLogic());
+
+      act(() => {
+        result.current.selectColorCard(colorCard3);
+      });
+
+      expect(
+        mockPlayCardLogicContext.setSelectedColorCards
+      ).not.toHaveBeenCalled();
     });
   });
 
-  describe('Movement Logic', () => {
-    it('should determine if a movement can be canceled', () => {
-      const { result } = renderHook(() => usePlayMovementLogic(), {
-        wrapper: ({ children }) => (
-          <PlayCardLogicContext.Provider value={mockPlayCardLogicContext}>
-            {children}
-          </PlayCardLogicContext.Provider>
-        ),
-      });
-      act(() => {
-        mockIsCurrentPlayerTurn.mockReturnValue(true);
-        mockHasAnyMovementCardPlayed.mockReturnValue(true);
-      });
-      expect(result.current.canCancelMovement()).toBe(true);
-    });
-
-    it('should reset movement cards', () => {
-      const { result } = renderHook(() => usePlayMovementLogic(), {
-        wrapper: ({ children }) => (
-          <PlayCardLogicContext.Provider value={mockPlayCardLogicContext}>
-            {children}
-          </PlayCardLogicContext.Provider>
-        ),
-      });
-      act(() => {
-        result.current.resetMovementCards();
-      });
-      expect(mockResetMovementCards).toHaveBeenCalled();
-    });
-
-    it('should determine if a movement can be played', () => {
+  describe('canPlayMovement', () => {
+    it('should return true when all conditions are met', () => {
+      mockUsePlayerTurn.isCurrentPlayerTurn.mockReturnValue(true);
+      mockUsePlayedMovCards.areAllMovementCardsPlayed.mockReturnValue(false);
       mockPlayCardLogicContext.selectedMovementCard = { movementcardId: 1 };
-      mockPlayCardLogicContext.selectedColorCards = [{}, {}];
-      const { result } = renderHook(() => usePlayMovementLogic(), {
-        wrapper: ({ children }) => (
-          <PlayCardLogicContext.Provider value={mockPlayCardLogicContext}>
-            {children}
-          </PlayCardLogicContext.Provider>
-        ),
-      });
-      act(() => {
-        mockIsCurrentPlayerTurn.mockReturnValue(true);
-        mockAreAllMovementCardsPlayed.mockReturnValue(false);
-      });
+      mockPlayCardLogicContext.selectedColorCards = [
+        { color: 'red' },
+        { color: 'blue' },
+      ];
+      const { result } = renderHook(() => usePlayMovementLogic());
 
       expect(result.current.canPlayMovement()).toBe(true);
     });
 
-    it('should determine if a movement cannot be played', () => {
-      const { result } = renderHook(() => usePlayMovementLogic(), {
-        wrapper: ({ children }) => (
-          <PlayCardLogicContext.Provider value={mockPlayCardLogicContext}>
-            {children}
-          </PlayCardLogicContext.Provider>
-        ),
-      });
-      act(() => {
-        mockIsCurrentPlayerTurn.mockReturnValue(false);
-        mockAreAllMovementCardsPlayed.mockReturnValue(true);
-        mockPlayCardLogicContext.selectedMovementCard = null;
-        mockPlayCardLogicContext.selectedColorCards = [{}];
-      });
+    it('should return false when conditions are not met', () => {
+      mockUsePlayerTurn.isCurrentPlayerTurn.mockReturnValue(false);
+      const { result } = renderHook(() => usePlayMovementLogic());
+
       expect(result.current.canPlayMovement()).toBe(false);
     });
+  });
 
-    it('should determine if a movement cannot be canceled', () => {
-      const { result } = renderHook(() => usePlayMovementLogic(), {
-        wrapper: ({ children }) => (
-          <PlayCardLogicContext.Provider value={mockPlayCardLogicContext}>
-            {children}
-          </PlayCardLogicContext.Provider>
-        ),
-      });
-      act(() => {
-        mockIsCurrentPlayerTurn.mockReturnValue(false);
-        mockHasAnyMovementCardPlayed.mockReturnValue(false);
-      });
+  describe('canCancelMovement', () => {
+    it('should return true when conditions are met', () => {
+      mockUsePlayerTurn.isCurrentPlayerTurn.mockReturnValue(true);
+      mockUsePlayedMovCards.hasAnyMovementCardPlayed.mockReturnValue(true);
+      const { result } = renderHook(() => usePlayMovementLogic());
+
+      expect(result.current.canCancelMovement()).toBe(true);
+    });
+
+    it('should return false when conditions are not met', () => {
+      mockUsePlayerTurn.isCurrentPlayerTurn.mockReturnValue(false);
+      const { result } = renderHook(() => usePlayMovementLogic());
+
       expect(result.current.canCancelMovement()).toBe(false);
-    });
-
-    it('should determine if a movement cannot be played when conditions are not met', () => {
-      const { result } = renderHook(() => usePlayMovementLogic(), {
-        wrapper: ({ children }) => (
-          <PlayCardLogicContext.Provider value={mockPlayCardLogicContext}>
-            {children}
-          </PlayCardLogicContext.Provider>
-        ),
-      });
-      act(() => {
-        mockIsCurrentPlayerTurn.mockReturnValue(false);
-        mockAreAllMovementCardsPlayed.mockReturnValue(true);
-        mockPlayCardLogicContext.selectedMovementCard = null;
-        mockPlayCardLogicContext.selectedColorCards = [{}];
-      });
-      expect(result.current.canPlayMovement()).toBe(false);
     });
   });
 });
