@@ -27,7 +27,7 @@ const GamePage = () => {
   }, [isLoading, game, refreshGame]);
 
   if (gameError) {
-    return <Navigate to="/*" />;
+    return <Navigate to='/*' />;
   }
 
   if (isLoading && !gameError) {
