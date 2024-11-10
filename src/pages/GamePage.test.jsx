@@ -1,10 +1,13 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, vi, expect } from 'vitest';
+import { describe, it, vi, expect, beforeEach } from 'vitest';
 import GamePage from './GamePage';
 import { GameContext } from '../contexts/GameProvider';
 import { PlayerContext } from '../contexts/PlayerProvider';
+import { MemoryRouter } from 'react-router-dom';
+import useWebsocketGame from '../hooks/useWebsocketGame';
+import useGetGame from '../hooks/useGetGame';
 
-// Mock components
+// Mock los componentes
 vi.mock('../components/DisplayPlayers/DisplayPlayers', () => ({
   default: () => <div data-testid='display-players'>DisplayPlayers</div>,
 }));
@@ -37,18 +40,39 @@ vi.mock('../components/BlockedColor/BlockedColor', () => ({
   default: () => <div data-testid='blocked-color'>BlockedColor</div>,
 }));
 
+vi.mock('../components/LoadingSpinner/LoadingSpinner', () => ({
+  default: () => <div data-testid='loading-spinner'>LoadingSpinner</div>,
+}));
+
+// Mock los hooks
+vi.mock('../hooks/useWebsocketGame');
+vi.mock('../hooks/useGetGame');
+
 describe('GamePage', () => {
   const renderGamePage = (gameContextValue, playerContextValue) => {
     return render(
-      <PlayerContext.Provider value={playerContextValue}>
-        <GameContext.Provider value={gameContextValue}>
-          <GamePage />
-        </GameContext.Provider>
-      </PlayerContext.Provider>
+      <MemoryRouter>
+        <PlayerContext.Provider value={playerContextValue}>
+          <GameContext.Provider value={gameContextValue}>
+            <GamePage />
+          </GameContext.Provider>
+        </PlayerContext.Provider>
+      </MemoryRouter>
     );
   };
 
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
+
   it('should render all components correctly', () => {
+    useWebsocketGame.mockReturnValue({ isLoading: false });
+    useGetGame.mockReturnValue({
+      game: { id: 1 },
+      gameError: null,
+      refreshGame: vi.fn(),
+    });
+
     const gameContextValue = {
       listOfPlayers: [],
       board: [],
@@ -71,6 +95,13 @@ describe('GamePage', () => {
   });
 
   it('should render Timer component when timer is greater than 0', () => {
+    useWebsocketGame.mockReturnValue({ isLoading: false });
+    useGetGame.mockReturnValue({
+      game: { id: 1 },
+      gameError: null,
+      refreshGame: vi.fn(),
+    });
+
     const gameContextValue = {
       listOfPlayers: [],
       board: [],
@@ -87,6 +118,13 @@ describe('GamePage', () => {
   });
 
   it('should not render Timer component when timer is 0', () => {
+    useWebsocketGame.mockReturnValue({ isLoading: false });
+    useGetGame.mockReturnValue({
+      game: { id: 1 },
+      gameError: null,
+      refreshGame: vi.fn(),
+    });
+
     const gameContextValue = {
       listOfPlayers: [],
       board: [],
@@ -99,5 +137,56 @@ describe('GamePage', () => {
     renderGamePage(gameContextValue, playerContextValue);
 
     expect(screen.queryByTestId('timer')).not.toBeInTheDocument();
+  });
+
+  it('should render LoadingSpinner when isLoading is true and game is null', () => {
+    useWebsocketGame.mockReturnValue({ isLoading: true });
+    useGetGame.mockReturnValue({
+      game: null,
+      gameError: null,
+      refreshGame: vi.fn(),
+    });
+
+    const gameContextValue = {
+      listOfPlayers: [],
+      board: [],
+      timer: 0,
+    };
+    const playerContextValue = {
+      playerID: 'player123',
+    };
+
+    renderGamePage(gameContextValue, playerContextValue);
+
+    expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+  });
+
+  it('should navigate to error page when gameError is true', () => {
+    useWebsocketGame.mockReturnValue({ isLoading: false });
+    useGetGame.mockReturnValue({
+      game: null,
+      gameError: true,
+      refreshGame: vi.fn(),
+    });
+
+    const gameContextValue = {
+      listOfPlayers: [],
+      board: [],
+      timer: 0,
+    };
+    const playerContextValue = {
+      playerID: 'player123',
+    };
+
+    renderGamePage(gameContextValue, playerContextValue);
+
+    expect(screen.queryByTestId('bg-overlay')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('blocked-color')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('timer')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('display-players')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('board')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('winner-message')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('leave-button')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('chat-box')).not.toBeInTheDocument();
   });
 });
