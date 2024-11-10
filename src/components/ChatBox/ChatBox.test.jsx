@@ -7,21 +7,35 @@ import useWebsocketGame from '../../hooks/useWebsocketGame';
 import WebSocketGameProvider from '../../contexts/GameProvider';
 import PlayerProvider from '../../contexts/PlayerProvider';
 
-vi.mock('../../hooks/useChatBox', () => ({
-  default: vi.fn(),
-}));
-
+vi.mock('../../hooks/useChatBox');
 vi.mock('../../hooks/useWebsocketGame', () => ({
   default: vi.fn(),
 }));
+vi.mock('../ChatMessages/ChatMessages', () => ({
+  default: () => <div>Chat Messages</div>,
+}));
+vi.mock('../ChatLogs/ChatLogs', () => ({
+  default: () => <div>Chat Logs</div>,
+}));
 
 describe('ChatBox component', () => {
-  const toggleChat = vi.fn();
+  const handleToggleChat = vi.fn();
+  const activeTabChatMessages = vi.fn();
+  const activeTabChatLogs = vi.fn();
 
-  const setup = (isOpen = false, hasNewMessages = false) => {
+  const setup = (
+    isOpen = false,
+    hasNewMessages = false,
+    isChatMessageActive = true
+  ) => {
     useChatBox.mockReturnValue({
       isOpen,
-      toggleChat,
+      handleToggleChat,
+      activeTabChatMessages,
+      activeTabChatLogs,
+      hasNewMessages,
+      isChatMessageActive,
+      isChatLogsActive: !isChatMessageActive,
     });
 
     useWebsocketGame.mockReturnValue({
@@ -43,9 +57,15 @@ describe('ChatBox component', () => {
   const getOpenChatPrompt = () =>
     screen.queryByText('Hacer clic para abrir el chat');
   const getCloseChatButton = () => screen.queryByRole('button', { name: /✕/i });
-  const getChatText = () => screen.queryByText('Chat');
+  const getChatTabButton = () =>
+    screen.queryByRole('button', { name: /Chat/i });
+  const getLogsTabButton = () =>
+    screen.queryByRole('button', { name: /Logs/i });
   const getNewMessageIndicator = () =>
     screen.queryByTestId('new-message-indicator');
+
+  const getChatLogs = () => screen.queryByText('Chat Logs');
+  const getChatMessages = () => screen.queryByText('Chat Messages');
 
   afterEach(() => {
     vi.clearAllMocks();
@@ -60,18 +80,18 @@ describe('ChatBox component', () => {
     setup();
     expect(getOpenChatPrompt()).toBeInTheDocument();
     expect(getCloseChatButton()).not.toBeInTheDocument();
-    expect(getChatText()).not.toBeInTheDocument();
   });
 
   it('should open the chat when the open button is clicked', async () => {
     setup();
     await userEvent.click(getOpenChatPrompt());
-    expect(toggleChat).toHaveBeenCalledTimes(1);
+    expect(handleToggleChat).toHaveBeenCalledTimes(1);
   });
 
   it('should show the chat information when it is open', () => {
     setup(true);
-    expect(getChatText()).toBeInTheDocument();
+    expect(getChatTabButton()).toBeInTheDocument();
+    expect(getLogsTabButton()).toBeInTheDocument();
     expect(getCloseChatButton()).toBeInTheDocument();
     expect(getOpenChatPrompt()).not.toBeInTheDocument();
   });
@@ -79,7 +99,7 @@ describe('ChatBox component', () => {
   it('should close the chat when the close button is clicked', async () => {
     setup(true);
     await userEvent.click(getCloseChatButton());
-    expect(toggleChat).toHaveBeenCalledTimes(1);
+    expect(handleToggleChat).toHaveBeenCalledTimes(1);
   });
 
   it('should show the new message indicator when there are new messages and the chat is closed', () => {
@@ -95,5 +115,29 @@ describe('ChatBox component', () => {
   it('should not show the new message indicator when there are no new messages', () => {
     setup(false, false);
     expect(getNewMessageIndicator()).not.toBeInTheDocument();
+  });
+
+  it('should activate the chat messages and not chat logs', async () => {
+    setup(true, false, true);
+
+    await userEvent.click(getChatTabButton());
+
+    expect(activeTabChatMessages).toHaveBeenCalledTimes(1);
+
+    expect(getChatMessages()).toBeInTheDocument();
+
+    expect(getChatLogs()).not.toBeInTheDocument();
+  });
+
+  it('should activate the chat logs and not chat messages', async () => {
+    setup(true, false, false);
+
+    await userEvent.click(getLogsTabButton());
+
+    expect(activeTabChatLogs).toHaveBeenCalledTimes(1);
+
+    expect(getChatLogs()).toBeInTheDocument();
+
+    expect(getChatMessages()).not.toBeInTheDocument();
   });
 });
