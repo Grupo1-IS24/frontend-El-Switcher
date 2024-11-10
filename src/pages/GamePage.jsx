@@ -3,7 +3,7 @@ import Board from '../components/Board/Board';
 import WinnerMessage from '../components/WinnerMessage/WinnerMessage';
 import BgOverlay from '../components/BgOverlay/BgOverlay';
 import LeaveButton from '../components/LeaveButton/LeaveButton';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { GameContext } from '../contexts/GameProvider';
 import PlayCardLogicProvider from '../contexts/PlayCardLogicProvider';
 import Timer from '../components/Timer/Timer';
@@ -11,12 +11,27 @@ import ChatBox from '../components/ChatBox/ChatBox';
 import BlockedColor from '../components/BlockedColor/BlockedColor';
 import useWebsocketGame from '../hooks/useWebsocketGame';
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner';
+import { useParams, Navigate } from 'react-router-dom';
+import useGetGame from '../hooks/useGetGame';
 
 const GamePage = () => {
   const { listOfPlayers, board, timer } = useContext(GameContext);
   const { isLoading } = useWebsocketGame();
+  const { gameId } = useParams();
+  const { game, gameError, refreshGame } = useGetGame(gameId);
 
-  if (isLoading) {
+  useEffect(() => {
+    if (isLoading && !game) {
+      refreshGame();
+    }
+  }, [isLoading, game, refreshGame]);
+
+  if (gameError) {
+    return <Navigate to="/*" />;
+  }
+
+  if (isLoading && !gameError) {
+    refreshGame();
     return <LoadingSpinner />;
   }
 
