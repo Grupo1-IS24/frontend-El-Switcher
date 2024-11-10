@@ -9,9 +9,16 @@ import PlayCardLogicProvider from '../contexts/PlayCardLogicProvider';
 import Timer from '../components/Timer/Timer';
 import ChatBox from '../components/ChatBox/ChatBox';
 import BlockedColor from '../components/BlockedColor/BlockedColor';
+import useWebsocketGame from '../hooks/useWebsocketGame';
+import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner';
 
 const GamePage = () => {
   const { listOfPlayers, board, timer } = useContext(GameContext);
+  const { isLoading } = useWebsocketGame();
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <>
