@@ -8,7 +8,7 @@ const BlockedColor = () => {
   return (
     <div className='flex items-center gap-2 h-16'>
       <p className='lekton-bold text-xl'>
-        {blockedColor ? 'El color bloqueado es:' : 'No hay color bloqueado'}
+        {blockedColor ? 'Color bloqueado:' : 'No hay color bloqueado'}
       </p>
       {blockedColor && (
         <img
