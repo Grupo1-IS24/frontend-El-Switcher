@@ -1,5 +1,13 @@
 import { render, screen, cleanup } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import {
+  describe,
+  it,
+  expect,
+  vi,
+  beforeEach,
+  afterEach,
+  beforeAll,
+} from 'vitest';
 import { PlayerContext } from '../../contexts/PlayerProvider';
 import LobbyCard from './LobbyCard';
 import useWebsocketLobby from '../../hooks/useWebsocketLobby';
@@ -23,10 +31,15 @@ describe('LobbyCard', () => {
     status: 'Lobby',
   };
   const mockListOfPlayers = [
-    { playerName: 'Player 1' },
-    { playerName: 'Player 2' },
-    { playerName: 'Player 3' },
+    { playerName: 'Player 1', playerId: '1' },
+    { playerName: 'Player 2', playerId: '2' },
+    { playerName: 'Player 3', playerId: '3' },
   ];
+
+  beforeAll(() => {
+    // Mock console.log
+    console.log = vi.fn();
+  });
 
   const setupMocks = ({
     game = null,
@@ -38,9 +51,9 @@ describe('LobbyCard', () => {
     useGetGame.mockReturnValue({ game, gameError });
   };
 
-  const renderLobbyCard = (isOwner = false) => {
+  const renderLobbyCard = (isOwner = false, playerID = null) => {
     return render(
-      <PlayerContext.Provider value={{ isOwner }}>
+      <PlayerContext.Provider value={{ isOwner, playerID }}>
         <MemoryRouter>
           <LobbyCard />
         </MemoryRouter>
@@ -199,6 +212,73 @@ describe('LobbyCard', () => {
 
     it('should navigate to not found page when game status is Ingame', () => {
       expect(screen.queryByText(mockGameInfo.gameName)).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Handle current player highlighting', () => {
+    beforeEach(() => {
+      setupMocks({
+        game: mockGameInfo,
+        listOfPlayers: mockListOfPlayers,
+      });
+    });
+
+    it('should highlight current player', () => {
+      renderLobbyCard(false, '2');
+
+      const currentPlayer = screen.getByText('Player 2');
+      const otherPlayer = screen.getByText('Player 1');
+
+      expect(currentPlayer.className).toContain('bg-white text-black');
+      expect(otherPlayer.className).not.toContain('bg-white text-black');
+    });
+
+    it('logs player list and current player ID', () => {
+      renderLobbyCard(false, '1');
+
+      expect(console.log).toHaveBeenCalledWith(
+        'El listado es:',
+        mockListOfPlayers
+      );
+      expect(console.log).toHaveBeenCalledWith('El jugador actual es:', '1');
+    });
+  });
+
+  describe('Navigate component rendering', () => {
+    it('should render Navigate component when game error exists', () => {
+      setupMocks({ gameError: true });
+      const { container } = renderLobbyCard();
+
+      expect(container.innerHTML).toBe('');
+    });
+
+    it('should render Navigate component when game status is Ingame', () => {
+      setupMocks({
+        game: { ...mockGameInfo, status: 'Ingame' },
+      });
+      const { container } = renderLobbyCard();
+
+      expect(container.innerHTML).toBe('');
+    });
+  });
+
+  describe('Connected players display', () => {
+    it('renders all player names with correct styling', () => {
+      setupMocks({
+        game: mockGameInfo,
+        listOfPlayers: mockListOfPlayers,
+      });
+      renderLobbyCard(false, '1');
+
+      mockListOfPlayers.forEach((player) => {
+        const playerElement = screen.getByText(player.playerName);
+        expect(playerElement).toBeInTheDocument();
+        if (player.playerId === '1') {
+          expect(playerElement.className).toContain('bg-white text-black');
+        } else {
+          expect(playerElement.className).toContain('text-white');
+        }
+      });
     });
   });
 });

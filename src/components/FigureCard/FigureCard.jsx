@@ -32,7 +32,7 @@ const FigureCard = ({
   return (
     <button
       className={`transition-transform duration-300 
-        ${isSelected ? 'translate-y-[-20px]' : ''} 
+        ${isSelected ? 'animate-shriggleNotebook pc:animate-shriggle' : ''} 
         ${disabled ? 'cursor-not-allowed' : ''}`}
       disabled={disabled}
       onClick={onClick}
@@ -40,7 +40,7 @@ const FigureCard = ({
       <img
         src={path}
         alt={alt}
-        className={`w-[100px] h-[100px] ${isBlocked ? 'grayscale' : ''}`}
+        className={`pc:w-[100px] pc:h-[100px] w-[70px] h-[70px] ${isBlocked ? 'grayscale' : ''}`}
       />
     </button>
   );

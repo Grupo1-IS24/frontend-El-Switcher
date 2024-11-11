@@ -5,7 +5,6 @@ const Button = ({
   type = 'button',
   isDisabled = false,
 }) => {
-  // define the classes for each button style
   const baseClasses = 'lekton-bold rounded-xl transition-all';
   const typeClasses = {
     homeButton:
@@ -15,24 +14,23 @@ const Button = ({
     borderButton:
       'text-xl bg-white text-black px-4 py-1 mt-2 border-white border-2 hover:bg-transparent hover:text-white hover:border-white',
     lobbyButton_disabled:
-      'w-[18rem] h-[4.375rem] text-3xl border-2 border-[#f1f1f1] bg-[#f1f1f1] text-[#C0C0C0] cursor-not-allowed disabled',
+      'pc:w-[18rem] pc:h-[4.375rem] pc:text-3xl border-2 border-[#f1f1f1] bg-[#f1f1f1] text-[#C0C0C0] cursor-not-allowed disabled w-[14rem] h-[2.375rem] text-xl',
     lobbyButton_init:
-      'w-[18rem] h-[4.375rem] text-3xl border-2 border-[#f1f1f1] bg-[#f1f1f1] text-[#0c0c0c] hover:bg-transparent hover:text-[#f1f1f1]',
+      'pc:w-[18rem] pc:h-[4.375rem] pc:text-3xl border-2 border-[#f1f1f1] bg-[#f1f1f1] text-[#0c0c0c] hover:bg-transparent hover:text-[#f1f1f1] w-[14rem] h-[2.375rem] text-xl',
     lobbyButton_leave:
-      'w-[18rem] h-[4.375rem] text-3xl border-2 border-[#ee6055] bg-[#ee6055] text-[#0c0c0c] hover:bg-transparent hover:text-[#ee6055]',
+      'pc:w-[18rem] pc:h-[4.375rem] pc:text-3xl border-2 border-[#ee6055] bg-[#ee6055] text-[#0c0c0c] hover:bg-transparent hover:text-[#ee6055] w-[14rem] h-[2.375rem] text-xl',
     gameButton_endTurn:
-      'w-[16rem] h-[4.375rem] text-2xl border-2 border-[#f1f1f1] bg-[#f1f1f1] text-[#0c0c0c] hover:bg-transparent hover:text-[#f1f1f1]',
+      'pc:w-[16rem] pc:h-[4.375rem] pc:text-2xl border-2 border-[#f1f1f1] bg-[#f1f1f1] text-[#0c0c0c] hover:bg-transparent hover:text-[#f1f1f1] w-[14rem] h-[2.375rem] text-xl',
     gameButton_leave:
       'fixed top-3 right-3 w-11 h-11 rounded text-2xl border-2 border-[#ee6055] bg-[#ee6055] text-[#0c0c0c] hover:bg-transparent hover:text-[#ee6055]',
     gameButton_play:
-      'w-[16rem] h-[4.375rem] text-2xl border-2 border-[#000000] bg-[#000000] text-[#f1f1f1] hover:bg-transparent hover:text-[#f1f1f1]',
+      'pc:w-[16rem] pc:h-[4.375rem] pc:text-2xl border-2 border-[#000000] bg-[#000000] text-[#f1f1f1] hover:bg-transparent hover:text-[#f1f1f1] w-[14rem] h-[2.375rem] text-xl',
     gameButton_cancelMovement:
-      'w-[16rem] h-[4.375rem] text-2xl border-2 border-[#ee6055] bg-[#ee6055] text-[#0c0c0c] hover:bg-transparent hover:text-[#ee6055]',
+      'pc:w-[16rem] pc:h-[4.375rem] pc:text-2xl border-2 border-[#ee6055] bg-[#ee6055] text-[#0c0c0c] hover:bg-transparent hover:text-[#ee6055] w-[14rem] h-[2.375rem] text-xl',
     reset_filter:
       'flex justify-center items-center text-xl h-10 p-4 bg-white text-black hover:bg-black hover:text-white z-10',
   };
 
-  // get classes based on style
   const buttonClasses = `${baseClasses} ${typeClasses[style]}`;
 
   return (

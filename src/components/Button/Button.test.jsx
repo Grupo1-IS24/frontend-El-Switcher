@@ -12,57 +12,58 @@ describe('Button', () => {
   const renderButton = (props) => render(<Button {...props} />);
 
   const baseClasses =
-    'text-3xl w-80 py-6 bg-white text-black hover:bg-black hover:text-white';
+    'lekton-bold rounded-xl transition-all text-3xl w-80 py-6 bg-white text-black hover:bg-black hover:text-white';
   const buttonStyles = [
     { style: 'homeButton', class: baseClasses },
     {
       style: 'formButton',
-      class: 'text-xl p-4 bg-white text-black hover:bg-black hover:text-white',
+      class:
+        'lekton-bold rounded-xl transition-all text-xl p-4 bg-white text-black hover:bg-black hover:text-white',
     },
     {
       style: 'borderButton',
       class:
-        'text-xl bg-white text-black px-4 py-1 mt-2 border-white border-2 hover:bg-transparent hover:text-white hover:border-white',
+        'lekton-bold rounded-xl transition-all text-xl bg-white text-black px-4 py-1 mt-2 border-white border-2 hover:bg-transparent hover:text-white hover:border-white',
     },
     {
       style: 'lobbyButton_disabled',
       class:
-        'w-[18rem] h-[4.375rem] text-3xl border-2 border-[#f1f1f1] bg-[#f1f1f1] text-[#C0C0C0] cursor-not-allowed disabled',
+        'lekton-bold rounded-xl transition-all pc:w-[18rem] pc:h-[4.375rem] pc:text-3xl border-2 border-[#f1f1f1] bg-[#f1f1f1] text-[#C0C0C0] cursor-not-allowed disabled w-[14rem] h-[2.375rem] text-xl',
     },
     {
       style: 'lobbyButton_init',
       class:
-        'w-[18rem] h-[4.375rem] text-3xl border-2 border-[#f1f1f1] bg-[#f1f1f1] text-[#0c0c0c] hover:bg-transparent hover:text-[#f1f1f1]',
+        'lekton-bold rounded-xl transition-all pc:w-[18rem] pc:h-[4.375rem] pc:text-3xl border-2 border-[#f1f1f1] bg-[#f1f1f1] text-[#0c0c0c] hover:bg-transparent hover:text-[#f1f1f1] w-[14rem] h-[2.375rem] text-xl',
     },
     {
       style: 'lobbyButton_leave',
       class:
-        'w-[18rem] h-[4.375rem] text-3xl border-2 border-[#ee6055] bg-[#ee6055] text-[#0c0c0c] hover:bg-transparent hover:text-[#ee6055]',
+        'lekton-bold rounded-xl transition-all pc:w-[18rem] pc:h-[4.375rem] pc:text-3xl border-2 border-[#ee6055] bg-[#ee6055] text-[#0c0c0c] hover:bg-transparent hover:text-[#ee6055] w-[14rem] h-[2.375rem] text-xl',
     },
     {
       style: 'gameButton_endTurn',
       class:
-        'w-[16rem] h-[4.375rem] text-2xl border-2 border-[#f1f1f1] bg-[#f1f1f1] text-[#0c0c0c] hover:bg-transparent hover:text-[#f1f1f1]',
+        'lekton-bold rounded-xl transition-all pc:w-[16rem] pc:h-[4.375rem] pc:text-2xl border-2 border-[#f1f1f1] bg-[#f1f1f1] text-[#0c0c0c] hover:bg-transparent hover:text-[#f1f1f1] w-[14rem] h-[2.375rem] text-xl',
     },
     {
       style: 'gameButton_leave',
       class:
-        'fixed top-3 right-3 w-11 h-11 rounded text-2xl border-2 border-[#ee6055] bg-[#ee6055] text-[#0c0c0c] hover:bg-transparent hover:text-[#ee6055]',
+        'lekton-bold rounded-xl transition-all fixed top-3 right-3 w-11 h-11 rounded text-2xl border-2 border-[#ee6055] bg-[#ee6055] text-[#0c0c0c] hover:bg-transparent hover:text-[#ee6055]',
     },
     {
       style: 'gameButton_play',
       class:
-        'w-[16rem] h-[4.375rem] text-2xl border-2 border-[#000000] bg-[#000000] text-[#f1f1f1] hover:bg-transparent hover:text-[#f1f1f1]',
+        'lekton-bold rounded-xl transition-all pc:w-[16rem] pc:h-[4.375rem] pc:text-2xl border-2 border-[#000000] bg-[#000000] text-[#f1f1f1] hover:bg-transparent hover:text-[#f1f1f1] w-[14rem] h-[2.375rem] text-xl',
     },
     {
       style: 'gameButton_cancelMovement',
       class:
-        'w-[16rem] h-[4.375rem] text-2xl border-2 border-[#ee6055] bg-[#ee6055] text-[#0c0c0c] hover:bg-transparent hover:text-[#ee6055]',
+        'lekton-bold rounded-xl transition-all pc:w-[16rem] pc:h-[4.375rem] pc:text-2xl border-2 border-[#ee6055] bg-[#ee6055] text-[#0c0c0c] hover:bg-transparent hover:text-[#ee6055] w-[14rem] h-[2.375rem] text-xl',
     },
     {
       style: 'reset_filter',
       class:
-        'flex justify-center items-center text-xl h-10 p-4 bg-white text-black hover:bg-black hover:text-white z-10',
+        'lekton-bold rounded-xl transition-all flex justify-center items-center text-xl h-10 p-4 bg-white text-black hover:bg-black hover:text-white z-10',
     },
   ];
 

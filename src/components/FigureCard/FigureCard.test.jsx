@@ -48,9 +48,9 @@ describe('FigureCard', () => {
   });
 
   describe('Button class application', () => {
-    it('should apply the "translate-y-[-20px]" class when the button is selected', () => {
+    it('should apply the "animate-shriggleNotebook pc:animate-shriggle" class when the button is selected', () => {
       renderComponent({ isSelected: true });
-      checkButtonClass('translate-y-[-20px]');
+      checkButtonClass('animate-shriggleNotebook pc:animate-shriggle');
     });
 
     it('should apply the "cursor-not-allowed" class when the button is disabled', () => {
@@ -61,7 +61,9 @@ describe('FigureCard', () => {
     it('should not apply any special class when the button is not selected and not disabled', () => {
       renderComponent({ isSelected: false, disabled: false });
       const button = screen.getByRole('button');
-      expect(button).not.toHaveClass('translate-y-[-20px]');
+      expect(button).not.toHaveClass(
+        'animate-shriggleNotebook pc:animate-shriggle'
+      );
       expect(button).not.toHaveClass('cursor-not-allowed');
     });
   });

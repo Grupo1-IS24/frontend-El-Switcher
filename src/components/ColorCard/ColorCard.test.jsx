@@ -37,7 +37,7 @@ describe('ColorCard', () => {
   it('should apply the "animate-shriggle" class when the button is selected', () => {
     renderComponent({ isSelected: true });
     const button = screen.getByRole('button');
-    expect(button).toHaveClass('animate-shriggle');
+    expect(button).toHaveClass('animate-shriggleNotebook pc:animate-shriggle');
   });
 
   it('should apply the "border-4" class when the button is part of a figure', () => {

@@ -14,12 +14,12 @@ const ColorCard = ({
 
   return (
     <button
-      className={`w-24 h-24
+      className={`pc:w-24 pc:h-24 w-[60px] h-[60px]
         ${colorStyle[color] ?? 'bg-gray-500'} rounded
         ${disabled ? 'cursor-not-allowed' : ''}
         ${
           isSelected
-            ? 'animate-shriggle'
+            ? 'animate-shriggleNotebook pc:animate-shriggle'
             : 'scale-100 transition-all duration-500'
         }
         ${isPartOfFigure ? 'border-4' : ''}`}

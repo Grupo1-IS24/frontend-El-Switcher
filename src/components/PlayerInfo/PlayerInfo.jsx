@@ -15,16 +15,16 @@ const PlayerInfo = ({ playerName, playerId, index, isTurn }) => {
   const { getTotalMovCardsForOpponent } = useOpponentMovCards();
 
   const positionStyles = [
-    'bottom-10 left-16', // corner bottom left
-    'top-10 left-16', // corner top left
-    'top-10 right-16', // corner top right
-    'bottom-10 right-16', // corner bottom right
+    'bottom-0 left-16', // corner bottom left
+    'top-0 left-16', // corner top left
+    'top-0 right-16', // corner top right
+    'bottom-0 right-16', // corner bottom right
   ];
 
   return (
     <div className={`absolute ${positionStyles[index]} z-20 p-2`}>
       {currentPlayerID === playerId && (
-        <div className='flex flex-col-reverse gap-3 mb-4'>
+        <div className='flex flex-col-reverse gap-2 mb-1'>
           <EndTurnButton />
           <PlayMovementButton />
           <PlayFigureButton />

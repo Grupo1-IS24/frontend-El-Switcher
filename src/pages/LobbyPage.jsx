@@ -4,13 +4,13 @@ import TitleText from '../components/TitleText/TitleText';
 
 const LobbyPage = () => {
   return (
-    <>
+    <div className='w-screen h-screen flex flex-col justify-center'>
       <BgOverlay />
-      <div className='relative flex flex-col gap-6'>
+      <div className='relative flex flex-col '>
         <TitleText />
         <LobbyCard />
       </div>
-    </>
+    </div>
   );
 };
 

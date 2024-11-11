@@ -68,6 +68,8 @@ describe('FigureCardHand', () => {
     render(<FigureCardHand />);
     const figureCards = screen.getAllByRole('button');
 
-    expect(figureCards[0]).toHaveClass('translate-y-[-20px]');
+    expect(figureCards[0]).toHaveClass(
+      'animate-shriggleNotebook pc:animate-shriggle'
+    );
   });
 });

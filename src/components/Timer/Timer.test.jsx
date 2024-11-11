@@ -17,24 +17,24 @@ describe('Timer', () => {
   it('should apply green color class for time greater than 60 seconds', () => {
     setup(61);
     const timeElement = screen.getByText(formatTime(61));
-    expect(timeElement).toHaveClass('text-[#60D394]');
+    expect(timeElement).toHaveClass('text-[#22c55e]');
   });
 
   it('should apply yellow color class for time between 21 and 60 seconds', () => {
     setup(30);
     const timeElement = screen.getByText(formatTime(30));
-    expect(timeElement).toHaveClass('text-[#FFFF00]');
+    expect(timeElement).toHaveClass('text-[#eab308]');
   });
 
   it('should apply red color class for time 20 seconds or less', () => {
     setup(20);
     const timeElement = screen.getByText(formatTime(20));
-    expect(timeElement).toHaveClass('text-[#FF0000]');
+    expect(timeElement).toHaveClass('text-[#ef4444]');
   });
 
   it('should apply red color class for time 0 seconds', () => {
     setup(0);
     const timeElement = screen.getByText(formatTime(0));
-    expect(timeElement).toHaveClass('text-[#FF0000]');
+    expect(timeElement).toHaveClass('text-[#ef4444]');
   });
 });

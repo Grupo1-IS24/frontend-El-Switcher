@@ -10,7 +10,7 @@ vi.mock('../../utils/assetUtils', () => ({
 
 describe('BlockedColor Component', () => {
   const NO_BLOCKED_COLOR_TEXT = 'No hay color bloqueado';
-  const BLOCKED_COLOR_TEXT = 'El color bloqueado es:';
+  const BLOCKED_COLOR_TEXT = 'Color bloqueado:';
 
   const setup = (blockedColor) =>
     render(

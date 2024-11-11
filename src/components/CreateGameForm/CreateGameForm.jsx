@@ -52,7 +52,7 @@ const CreateGameForm = ({ setShowForm }) => {
   };
 
   return (
-    <div className='absolute bg-gray-800 p-8 rounded-lg shadow-md mx-auto mt-60 max-w-lg'>
+    <div className='absolute bg-gray-800 p-8 rounded-lg shadow-md mx-auto pc:mt-60 max-w-lg mt-0'>
       <h2 className='text-2xl font-bold text-white mb-6 text-center'>
         Crear Partida
       </h2>
