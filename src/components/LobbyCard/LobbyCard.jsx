@@ -72,7 +72,7 @@ const LobbyCard = () => {
         listOfPlayers={listOfPlayers}
         currentPlayerID={currentPlayerID}
       />
-      <div className='flex justify-between mx-10 text-2xl lekton-bold pc:mx-0 pc:w-full'>
+      <div className='flex justify-between text-2xl lekton-bold pc:mx-0 pc:w-full'>
         <p>Mín. jugadores: {game.minPlayers}</p>
         <p>Máx. jugadores: {game.maxPlayers}</p>
       </div>
