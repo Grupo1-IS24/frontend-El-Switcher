@@ -55,9 +55,6 @@ const LobbyCard = () => {
   const { isOwner, playerID: currentPlayerID } = useContext(PlayerContext);
   const { game, gameError } = useGetGame(gameId);
 
-  console.log('El listado es:', listOfPlayers);
-  console.log('El jugador actual es:', currentPlayerID);
-
   if (!!gameError || (!!game && game.status === 'Ingame')) {
     return <Navigate to='/*' />;
   }
@@ -75,7 +72,7 @@ const LobbyCard = () => {
         listOfPlayers={listOfPlayers}
         currentPlayerID={currentPlayerID}
       />
-      <div className='flex justify-between pc:mx-10 text-2xl lekton-bold mx-0 md:w-full'>
+      <div className='flex justify-between mx-10 text-2xl lekton-bold pc:mx-0 pc:w-full'>
         <p>Mín. jugadores: {game.minPlayers}</p>
         <p>Máx. jugadores: {game.maxPlayers}</p>
       </div>

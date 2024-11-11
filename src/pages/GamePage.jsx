@@ -32,8 +32,8 @@ const GamePage = () => {
   return (
     <>
       <BgOverlay />
-      <div className='w-screen absolute flex flex-col items-center'>
-        <div className='flex items-center justify-between w-full max-w-[425px] p-4'>
+      <div className='w-screen absolute flex flex-col items-center pc:top-[60px]'>
+        <div className='flex items-center justify-between w-full max-w-[425px] pc:max-w-[650px] p-4'>
           <BlockedColor />
           {timer > 0 && <Timer time={timer} />}
         </div>

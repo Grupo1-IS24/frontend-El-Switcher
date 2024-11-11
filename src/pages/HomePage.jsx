@@ -17,8 +17,8 @@ const HomePage = () => {
           <>
             <TitleText />
             <div className='flex flex-row items-center justify-center gap-10 mb-20'>
-              <JoinGameButton />
               <CreateGameButton setShowForm={setShowForm} />
+              <JoinGameButton />
             </div>
           </>
         )}

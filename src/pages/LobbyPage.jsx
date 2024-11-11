@@ -4,9 +4,9 @@ import TitleText from '../components/TitleText/TitleText';
 
 const LobbyPage = () => {
   return (
-    <div className='w-screen h-screen flex flex-col justify-center'>
+    <div className='pc:w-screen pc:h-screen pc:flex pc:flex-col pc:justify-center'>
       <BgOverlay />
-      <div className='relative flex flex-col '>
+      <div className='relative flex flex-col pc:gap-6'>
         <TitleText />
         <LobbyCard />
       </div>
