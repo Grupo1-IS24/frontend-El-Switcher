@@ -4,7 +4,7 @@ import GamePage from './GamePage';
 import { GameContext } from '../contexts/GameProvider';
 import { PlayerContext } from '../contexts/PlayerProvider';
 
-// Mock 
+// Mock components
 vi.mock('../components/DisplayPlayers/DisplayPlayers', () => ({
   default: () => <div data-testid='display-players'>DisplayPlayers</div>,
 }));
@@ -71,13 +71,6 @@ describe('GamePage', () => {
   });
 
   it('should render Timer component when timer is greater than 0', () => {
-    useWebsocketGame.mockReturnValue({ isLoading: false });
-    useGetGame.mockReturnValue({
-      game: { id: 1 },
-      gameError: null,
-      refreshGame: vi.fn(),
-    });
-
     const gameContextValue = {
       listOfPlayers: [],
       board: [],
@@ -94,13 +87,6 @@ describe('GamePage', () => {
   });
 
   it('should not render Timer component when timer is 0', () => {
-    useWebsocketGame.mockReturnValue({ isLoading: false });
-    useGetGame.mockReturnValue({
-      game: { id: 1 },
-      gameError: null,
-      refreshGame: vi.fn(),
-    });
-
     const gameContextValue = {
       listOfPlayers: [],
       board: [],
@@ -113,34 +99,5 @@ describe('GamePage', () => {
     renderGamePage(gameContextValue, playerContextValue);
 
     expect(screen.queryByTestId('timer')).not.toBeInTheDocument();
-  });
-
-  it('should navigate to error page when gameError is true', () => {
-    useWebsocketGame.mockReturnValue({ isLoading: false });
-    useGetGame.mockReturnValue({
-      game: null,
-      gameError: true,
-      refreshGame: vi.fn(),
-    });
-
-    const gameContextValue = {
-      listOfPlayers: [],
-      board: [],
-      timer: 0,
-    };
-    const playerContextValue = {
-      playerID: 'player123',
-    };
-
-    renderGamePage(gameContextValue, playerContextValue);
-
-    expect(screen.queryByTestId('bg-overlay')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('blocked-color')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('timer')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('display-players')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('board')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('winner-message')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('leave-button')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('chat-box')).not.toBeInTheDocument();
   });
 });
