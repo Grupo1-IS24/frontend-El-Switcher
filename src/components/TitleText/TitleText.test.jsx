@@ -15,9 +15,10 @@ describe('TitleText', () => {
     expect(titleElement).toHaveClass(
       'text-white',
       'lekton-bold',
-      'text-8xl',
+      'text-6xl',
+      'pc:text-8xl',
       'text-center',
-      'mt-24'
+      'pc:mt-24'
     );
   });
 });

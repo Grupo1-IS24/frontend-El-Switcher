@@ -25,7 +25,7 @@ describe('MovementCard', () => {
   it('should apply the correct class when the card is selected', () => {
     renderComponent({ isSelected: true });
     const button = screen.getByTestId('movement-card');
-    expect(button).toHaveClass('translate-y-[-20px]');
+    expect(button).toHaveClass('animate-shriggleNotebook pc:animate-shriggle');
   });
 
   it('should apply the correct class when the card is disabled', () => {

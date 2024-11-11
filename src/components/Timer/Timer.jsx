@@ -11,7 +11,7 @@ const Timer = ({ time }) => {
 
   return (
     <span
-      className={`w-[100px] h-[40px] rounded-[8px] bg-[#0C0C0C] ${timeColorClass} text-[26px] font-semibold flex justify-center`}
+      className={`w-[100px] h-[40px] pc:w-[124px] pc:h-[50px] pc:text-[36px] rounded-[8px] bg-[#0C0C0C] ${timeColorClass} text-[26px] font-semibold flex justify-center`}
     >
       {formatTime(time)}
     </span>
