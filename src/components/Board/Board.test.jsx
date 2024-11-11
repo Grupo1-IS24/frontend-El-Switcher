@@ -98,7 +98,9 @@ describe('Board', () => {
     renderComponent(board);
     const colorCard = screen.getByRole('button');
     expect(colorCard).toHaveClass('bg-red-500');
-    expect(colorCard).toHaveClass('animate-shriggleNotebook pc:animate-shriggle');
+    expect(colorCard).toHaveClass(
+      'animate-shriggleNotebook pc:animate-shriggle'
+    );
     expect(colorCard).toHaveClass('border-4');
   });
 });

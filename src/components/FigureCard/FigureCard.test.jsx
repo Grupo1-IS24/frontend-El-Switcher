@@ -61,7 +61,9 @@ describe('FigureCard', () => {
     it('should not apply any special class when the button is not selected and not disabled', () => {
       renderComponent({ isSelected: false, disabled: false });
       const button = screen.getByRole('button');
-      expect(button).not.toHaveClass('animate-shriggleNotebook pc:animate-shriggle');
+      expect(button).not.toHaveClass(
+        'animate-shriggleNotebook pc:animate-shriggle'
+      );
       expect(button).not.toHaveClass('cursor-not-allowed');
     });
   });
