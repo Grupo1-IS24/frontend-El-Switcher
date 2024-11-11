@@ -1,6 +1,6 @@
 const TitleText = () => {
   return (
-    <h1 className='text-white lekton-bold text-8xl text-center mt-24'>
+    <h1 className='text-white lekton-bold text-6xl text-center '>
       El switcher
     </h1>
   );
