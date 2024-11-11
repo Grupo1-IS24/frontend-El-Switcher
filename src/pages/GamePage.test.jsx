@@ -139,28 +139,6 @@ describe('GamePage', () => {
     expect(screen.queryByTestId('timer')).not.toBeInTheDocument();
   });
 
-  it('should render LoadingSpinner when isLoading is true and game is null', () => {
-    useWebsocketGame.mockReturnValue({ isLoading: true });
-    useGetGame.mockReturnValue({
-      game: null,
-      gameError: null,
-      refreshGame: vi.fn(),
-    });
-
-    const gameContextValue = {
-      listOfPlayers: [],
-      board: [],
-      timer: 0,
-    };
-    const playerContextValue = {
-      playerID: 'player123',
-    };
-
-    renderGamePage(gameContextValue, playerContextValue);
-
-    expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
-  });
-
   it('should navigate to error page when gameError is true', () => {
     useWebsocketGame.mockReturnValue({ isLoading: false });
     useGetGame.mockReturnValue({

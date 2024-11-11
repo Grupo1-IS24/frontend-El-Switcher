@@ -10,7 +10,6 @@ import Timer from '../components/Timer/Timer';
 import ChatBox from '../components/ChatBox/ChatBox';
 import BlockedColor from '../components/BlockedColor/BlockedColor';
 import useWebsocketGame from '../hooks/useWebsocketGame';
-import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner';
 import { useParams, Navigate } from 'react-router-dom';
 import useGetGame from '../hooks/useGetGame';
 
@@ -28,11 +27,6 @@ const GamePage = () => {
 
   if (gameError) {
     return <Navigate to='/*' />;
-  }
-
-  if (isLoading && !gameError) {
-    refreshGame();
-    return <LoadingSpinner />;
   }
 
   return (
