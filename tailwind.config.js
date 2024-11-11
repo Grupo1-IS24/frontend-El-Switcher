@@ -3,6 +3,9 @@
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
+    screens: {
+      'pc': '1366px',
+    },
     extend: {
       animation: {
         shriggle: 'shrink 0.2s 1, wiggle 0.75s 0.2s infinite',
