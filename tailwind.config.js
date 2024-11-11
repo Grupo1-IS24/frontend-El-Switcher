@@ -10,11 +10,11 @@ export default {
       keyframes: {
         shrink: {
           from: { transform: 'scale(1) ' },
-          to: { transform: 'scale(0.8) ' },
+          to: { transform: 'scale(0.9) ' },
         },
         wiggle: {
-          '0%, 100%': { transform: 'rotate(-3deg) scale(0.8)' },
-          '50%': { transform: 'rotate(3deg) scale(0.8)' },
+          '0%, 100%': { transform: 'rotate(-3deg) scale(0.9)' },
+          '50%': { transform: 'rotate(3deg) scale(0.9)' },
         },
       },
     },
