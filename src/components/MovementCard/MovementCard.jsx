@@ -28,7 +28,7 @@ const MovementCard = ({
       <img
         src={path}
         alt={alt}
-        className={`w-[70px] h-[110px] ${isPlayed ? 'grayscale' : ''}`}
+        className={`w-[80px] h-[140px] md:w-[70px] md:h-[110px] ${isPlayed ? 'grayscale' : ''}`}
       />
     </button>
   );
