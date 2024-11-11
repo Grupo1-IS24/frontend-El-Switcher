@@ -232,16 +232,6 @@ describe('LobbyCard', () => {
       expect(currentPlayer.className).toContain('bg-white text-black');
       expect(otherPlayer.className).not.toContain('bg-white text-black');
     });
-
-    it('logs player list and current player ID', () => {
-      renderLobbyCard(false, '1');
-
-      expect(console.log).toHaveBeenCalledWith(
-        'El listado es:',
-        mockListOfPlayers
-      );
-      expect(console.log).toHaveBeenCalledWith('El jugador actual es:', '1');
-    });
   });
 
   describe('Navigate component rendering', () => {
