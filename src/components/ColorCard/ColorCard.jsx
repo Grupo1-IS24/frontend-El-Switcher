@@ -14,7 +14,7 @@ const ColorCard = ({
 
   return (
     <button
-      className={`w-24 h-24
+      className={`w-[60px] h-[60px]
         ${colorStyle[color] ?? 'bg-gray-500'} rounded
         ${disabled ? 'cursor-not-allowed' : ''}
         ${
