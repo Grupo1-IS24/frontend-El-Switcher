@@ -40,7 +40,7 @@ const FigureCard = ({
       <img
         src={path}
         alt={alt}
-        className={`w-[100px] h-[100px] md:w-[70px] md:h-[70px] ${isBlocked ? 'grayscale' : ''}`}
+        className={`pc:w-[100px] pc:h-[100px] w-[70px] h-[70px] ${isBlocked ? 'grayscale' : ''}`}
       />
     </button>
   );

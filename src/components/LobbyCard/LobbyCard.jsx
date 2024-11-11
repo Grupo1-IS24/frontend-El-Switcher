@@ -67,15 +67,15 @@ const LobbyCard = () => {
   }
 
   return (
-    <div className='bg-[#0c0c0c] rounded-xl text-[#f1f1f1] text-center flex flex-col gap-10 px-8 py-12 max-w-3xl m-auto md:gap-6 md:px-6 md:py-6'>
-      <h2 className='lekton-bold text-6xl underline md:text-4xl'>
+    <div className='bg-[#0c0c0c] rounded-xl text-[#f1f1f1] text-center flex flex-col pc:gap-10 pc:px-8 pc:py-12 max-w-3xl m-auto gap-6 px-6 py-6'>
+      <h2 className='lekton-bold pc:text-6xl underline text-4xl'>
         {game.gameName}
       </h2>
       <ConnectedPlayersInfo
         listOfPlayers={listOfPlayers}
         currentPlayerID={currentPlayerID}
       />
-      <div className='flex justify-between mx-10 text-2xl lekton-bold md:mx-0 md:w-full'>
+      <div className='flex justify-between pc:mx-10 text-2xl lekton-bold mx-0 md:w-full'>
         <p>Mín. jugadores: {game.minPlayers}</p>
         <p>Máx. jugadores: {game.maxPlayers}</p>
       </div>

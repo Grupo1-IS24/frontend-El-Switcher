@@ -4,7 +4,7 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     screens: {
-      'pc': '1366px',
+      pc: '1366px',
     },
     extend: {
       animation: {
