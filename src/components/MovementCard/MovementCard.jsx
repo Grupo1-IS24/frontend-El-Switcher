@@ -20,7 +20,7 @@ const MovementCard = ({
       data-testid='movement-card'
       data-movement={movement}
       className={`transition-transform duration-300 
-        ${isSelected ? 'animate-shriggle' : ''} 
+        ${isSelected ? 'animate-shriggleNotebook pc:animate-shriggle' : ''} 
         ${disabled ? 'cursor-not-allowed' : ''}`}
       disabled={disabled}
       onClick={onClick}

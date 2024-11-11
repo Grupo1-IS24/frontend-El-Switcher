@@ -32,7 +32,7 @@ const FigureCard = ({
   return (
     <button
       className={`transition-transform duration-300 
-        ${isSelected ? 'animate-shriggle' : ''} 
+        ${isSelected ? 'animate-shriggleNotebook pc:animate-shriggle' : ''} 
         ${disabled ? 'cursor-not-allowed' : ''}`}
       disabled={disabled}
       onClick={onClick}

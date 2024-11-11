@@ -19,7 +19,7 @@ const ColorCard = ({
         ${disabled ? 'cursor-not-allowed' : ''}
         ${
           isSelected
-            ? 'animate-shriggle'
+            ? 'animate-shriggleNotebook pc:animate-shriggle'
             : 'scale-100 transition-all duration-500'
         }
         ${isPartOfFigure ? 'border-4' : ''}`}
