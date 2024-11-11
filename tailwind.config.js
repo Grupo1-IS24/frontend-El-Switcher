@@ -13,7 +13,8 @@ export default {
         pc: '1368px',
       },
       animation: {
-        shriggleNotebook: 'shrinkNotebook 0.2s 1, wiggleNotebook 0.75s 0.2s infinite',
+        shriggleNotebook:
+          'shrinkNotebook 0.2s 1, wiggleNotebook 0.75s 0.2s infinite',
         shriggle: 'shrink 0.2s 1, wiggle 0.75s 0.2s infinite',
       },
       keyframes: {
