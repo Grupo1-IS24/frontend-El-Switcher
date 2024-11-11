@@ -20,7 +20,7 @@ const MovementCard = ({
       data-testid='movement-card'
       data-movement={movement}
       className={`transition-transform duration-300 
-        ${isSelected ? 'translate-y-[-20px]' : ''} 
+        ${isSelected ? 'animate-shriggle' : ''} 
         ${disabled ? 'cursor-not-allowed' : ''}`}
       disabled={disabled}
       onClick={onClick}
@@ -28,7 +28,7 @@ const MovementCard = ({
       <img
         src={path}
         alt={alt}
-        className={`w-[80px] h-[140px] ${isPlayed ? 'grayscale' : ''}`}
+        className={`w-[70px] h-[110px] ${isPlayed ? 'grayscale' : ''}`}
       />
     </button>
   );
