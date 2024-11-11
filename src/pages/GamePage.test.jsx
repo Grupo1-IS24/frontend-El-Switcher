@@ -1,13 +1,10 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, vi, expect, beforeEach } from 'vitest';
+import { describe, it, vi, expect } from 'vitest';
 import GamePage from './GamePage';
 import { GameContext } from '../contexts/GameProvider';
 import { PlayerContext } from '../contexts/PlayerProvider';
-import { MemoryRouter } from 'react-router-dom';
-import useWebsocketGame from '../hooks/useWebsocketGame';
-import useGetGame from '../hooks/useGetGame';
 
-// Mock los componentes
+// Mock 
 vi.mock('../components/DisplayPlayers/DisplayPlayers', () => ({
   default: () => <div data-testid='display-players'>DisplayPlayers</div>,
 }));
@@ -40,39 +37,18 @@ vi.mock('../components/BlockedColor/BlockedColor', () => ({
   default: () => <div data-testid='blocked-color'>BlockedColor</div>,
 }));
 
-vi.mock('../components/LoadingSpinner/LoadingSpinner', () => ({
-  default: () => <div data-testid='loading-spinner'>LoadingSpinner</div>,
-}));
-
-// Mock los hooks
-vi.mock('../hooks/useWebsocketGame');
-vi.mock('../hooks/useGetGame');
-
 describe('GamePage', () => {
   const renderGamePage = (gameContextValue, playerContextValue) => {
     return render(
-      <MemoryRouter>
-        <PlayerContext.Provider value={playerContextValue}>
-          <GameContext.Provider value={gameContextValue}>
-            <GamePage />
-          </GameContext.Provider>
-        </PlayerContext.Provider>
-      </MemoryRouter>
+      <PlayerContext.Provider value={playerContextValue}>
+        <GameContext.Provider value={gameContextValue}>
+          <GamePage />
+        </GameContext.Provider>
+      </PlayerContext.Provider>
     );
   };
 
-  beforeEach(() => {
-    vi.resetAllMocks();
-  });
-
   it('should render all components correctly', () => {
-    useWebsocketGame.mockReturnValue({ isLoading: false });
-    useGetGame.mockReturnValue({
-      game: { id: 1 },
-      gameError: null,
-      refreshGame: vi.fn(),
-    });
-
     const gameContextValue = {
       listOfPlayers: [],
       board: [],

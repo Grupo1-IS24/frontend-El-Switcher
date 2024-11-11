@@ -25,7 +25,6 @@ import logSocketEvent from '../utils/logSocketEvent';
  * - setHasNewMessages: Function to set the hasNewMessages state.
  * - isChatOpen: A boolean indicating if the chat is open.
  * - setIsChatOpen: Function to set the isChatOpen state.
- * - isLoading: A boolean indicating whether the game data is loading.
  */
 const useWebsocketGame = () => {
   const { gameId } = useParams();
@@ -45,7 +44,6 @@ const useWebsocketGame = () => {
   const [hasNewMessages, setHasNewMessages] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [logMessages, setLogMessages] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
 
   const handleSocketEvents = useCallback(
     (socket) => {
@@ -53,7 +51,6 @@ const useWebsocketGame = () => {
         logSocketEvent('player_list', listOfPlayers);
         const sortedListOfPlayers = sortListOfPlayers(listOfPlayers, playerID);
         setListOfPlayers(sortedListOfPlayers);
-        setIsLoading(false);
       });
 
       socket.on('turn', ({ playerTurnId }) => {
@@ -159,7 +156,6 @@ const useWebsocketGame = () => {
     isChatOpen,
     setIsChatOpen,
     logMessages,
-    isLoading,
   };
 };
 
