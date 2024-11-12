@@ -5,21 +5,23 @@ import { PlayerContext } from '../../contexts/PlayerProvider';
 import { cancelMovement } from '../../service/CancelMovementService';
 import usePlayMovementLogic from '../../hooks/usePlayMovementLogic';
 import { PlayCardLogicContext } from '../../contexts/PlayCardLogicProvider';
+import useDisableButton from '../../hooks/useDisableButton';
 
 const CancelMovementButton = () => {
   const { gameId } = useParams();
   const { playerID } = useContext(PlayerContext);
   const { canCancelMovement } = usePlayMovementLogic();
   const { resetAllCards } = useContext(PlayCardLogicContext);
-
-  const handleCancelMovement = async () => {
-    resetAllCards();
-    try {
-      await cancelMovement(Number(gameId), playerID);
-    } catch (error) {
-      console.error('Error cancelando movimiento:', error);
+  const [isButtonDisabled, handleCancelMovement] = useDisableButton(
+    async () => {
+      resetAllCards();
+      try {
+        await cancelMovement(Number(gameId), playerID);
+      } catch (error) {
+        console.error('Error cancelando movimiento:', error);
+      }
     }
-  };
+  );
 
   return (
     <>
@@ -28,6 +30,7 @@ const CancelMovementButton = () => {
           text={'Cancelar movimiento'}
           style={'gameButton_cancelMovement'}
           onPress={handleCancelMovement}
+          isDisabled={isButtonDisabled}
         />
       )}
     </>

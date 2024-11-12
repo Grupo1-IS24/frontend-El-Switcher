@@ -65,6 +65,12 @@ describe('useWebsocketGame Hook', () => {
       expect(result.current.winnerInfo).toBe(null);
       expect(result.current.opponentsTotalMovCards).toEqual([]);
       expect(result.current.foundFigures).toEqual([]);
+      expect(result.current.chatMessages).toEqual([]);
+      expect(result.current.timer).toBe(0);
+      expect(result.current.blockedColor).toEqual(null);
+      expect(result.current.hasNewMessages).toBe(false);
+      expect(result.current.isChatOpen).toBe(false);
+      expect(result.current.logMessages).toEqual([]);
     });
 
     it('should handle player_list event correctly', () => {
@@ -176,6 +182,135 @@ describe('useWebsocketGame Hook', () => {
 
       expect(result.current.foundFigures).toEqual([{ figureId: 1 }]);
     });
+
+    it('should handle timer event correctly', () => {
+      const { result } = renderUseWebsocketGameHook();
+
+      act(() => {
+        const timerCallback = getCallbackForEvent('timer');
+        if (timerCallback) {
+          timerCallback({ time: 30 });
+        }
+      });
+
+      expect(result.current.timer).toBe(30);
+    });
+  });
+
+  it('should handle blocked_color event correctly', () => {
+    const { result } = renderUseWebsocketGameHook();
+    const blockedColor = 'red';
+
+    act(() => {
+      const blockedColorCallback = getCallbackForEvent('blocked_color');
+      if (blockedColorCallback) {
+        blockedColorCallback({ blockedColor });
+      }
+    });
+
+    expect(result.current.blockedColor).toBe(blockedColor);
+  });
+
+  it('should handle chat multiple messages correctly', () => {
+    const { result } = renderUseWebsocketGameHook();
+    const data = [
+      { writtenBy: 'Heber', message: 'Hello' },
+      { writtenBy: 'John', message: 'Hi' },
+    ];
+
+    act(() => {
+      const chatMessagesCallback = getCallbackForEvent('chat_messages');
+      if (chatMessagesCallback) {
+        chatMessagesCallback({
+          type: 'multipleMessages',
+          data,
+        });
+      }
+    });
+
+    expect(result.current.chatMessages).toEqual(data);
+  });
+
+  it('should handle chat single message correctly', () => {
+    const { result } = renderUseWebsocketGameHook();
+    const firstData = { writtenBy: 'Heber', message: 'Hello' };
+
+    act(() => {
+      const chatMessagesCallback = getCallbackForEvent('chat_messages');
+      if (chatMessagesCallback) {
+        chatMessagesCallback({
+          type: 'singleMessage',
+          data: firstData,
+        });
+      }
+    });
+
+    expect(result.current.chatMessages).toEqual([firstData]);
+
+    const secondData = { writtenBy: 'John', message: 'Hi' };
+
+    act(() => {
+      const chatMessagesCallback = getCallbackForEvent('chat_messages');
+      if (chatMessagesCallback) {
+        chatMessagesCallback({
+          type: 'singleMessage',
+          data: secondData,
+        });
+      }
+    });
+
+    expect(result.current.chatMessages).toEqual([firstData, secondData]);
+  });
+
+  it('should handle game_logs multiple logs correctly', () => {
+    const { result } = renderUseWebsocketGameHook();
+    const data = [
+      { message: 'Player 1 played one cards' },
+      { message: 'Player 2 has 3 cards' },
+    ];
+
+    act(() => {
+      const gameLogsCallback = getCallbackForEvent('game_logs');
+      if (gameLogsCallback) {
+        gameLogsCallback({
+          type: 'multipleLogs',
+          data,
+        });
+      }
+    });
+
+    expect(result.current.logMessages).toEqual(data);
+  });
+
+  it('should handle game_logs single log correctly', () => {
+    const { result } = renderUseWebsocketGameHook();
+    const firstData = { message: 'Player 1 played one cards' };
+
+    act(() => {
+      const gameLogsCallback = getCallbackForEvent('game_logs');
+      if (gameLogsCallback) {
+        gameLogsCallback({
+          type: 'singleLog',
+          data: firstData,
+        });
+      }
+    });
+
+    expect(result.current.logMessages).toEqual([firstData]);
+
+    const secondData = { message: 'Player 2 has 3 cards' };
+
+    act(() => {
+      const gameLogsCallback = getCallbackForEvent('game_logs');
+      if (gameLogsCallback) {
+        gameLogsCallback({
+          type: 'singleLog',
+          data: secondData,
+        });
+      }
+    });
+
+    expect(result.current.logMessages).toEqual([firstData, secondData]);
   });
 
   // Test cleanup on unmount

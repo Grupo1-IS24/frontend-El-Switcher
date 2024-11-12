@@ -2,6 +2,7 @@ import Button from '../Button/Button';
 import useRouteNavigation from '../../hooks/useRouteNavigation';
 import { startGame } from '../../service/StartGameService';
 import { useParams } from 'react-router-dom';
+import showToast from '../../utils/toastUtil';
 
 const StartGameButton = ({ isDisabled = true }) => {
   const { redirectToGamePage } = useRouteNavigation();
@@ -13,7 +14,11 @@ const StartGameButton = ({ isDisabled = true }) => {
       const response = await startGame(gameId);
       redirectToGamePage(response);
     } catch (error) {
-      window.alert('Error al iniciar la partida. Intente nuevamente.');
+      showToast({
+        type: 'error',
+        message: 'Error al iniciar la partida. Intente nuevamente.',
+        autoClose: 3000,
+      });
       console.error('Error al iniciar la partida', error);
     }
   };

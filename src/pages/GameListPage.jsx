@@ -2,10 +2,13 @@ import MessageCard from '../components/MessageCard/MessageCard';
 import GameGrid from '../components/GameGrid/GameGrid';
 import TitleText from '../components/TitleText/TitleText';
 import BackgroundOverlay from '../components/BgOverlay/BgOverlay';
-import GameForm from '../components/GameForm/GameForm';
+import JoinGameForm from '../components/JoinGameForm/JoinGameForm';
 import useSelectedGame from '../hooks/useSelectedGame';
 import useWebsocketGameList from '../hooks/useWebsocketGameList';
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner';
+import FilterGameListProvider from '../contexts/FilterGameListProvider';
+import FilterGameInfo from '../components/FilterGameInfo/FilterGameInfo';
+import LeaveGameListButton from '../components/LeaveGameListButton/LeaveGameListButton';
 
 const GameListPage = () => {
   const { gameList, isLoading, error } = useWebsocketGameList();
@@ -22,18 +25,21 @@ const GameListPage = () => {
 
     if (gameList.length === 0) {
       return (
-        <MessageCard type={'info'} message='No hay partidas disponibles.' />
+        <>
+          <LeaveGameListButton />
+          <MessageCard type={'info'} message='No hay partidas disponibles.' />
+        </>
       );
     }
 
     return (
       <>
-        <GameGrid gameList={gameList} selectGame={selectGame} />
-        <GameForm
-          type='join'
-          selectedGame={selectedGame}
-          onClose={clearSelectedGame}
-        />
+        <FilterGameListProvider>
+          <FilterGameInfo />
+          <LeaveGameListButton />
+          <GameGrid gameList={gameList} selectGame={selectGame} />
+        </FilterGameListProvider>
+        <JoinGameForm selectedGame={selectedGame} onClose={clearSelectedGame} />
       </>
     );
   };

@@ -1,6 +1,7 @@
 import FigureCard from '../FigureCard/FigureCard';
 import useFigureCards from '../../hooks/useFigureCards';
 import usePlayFigureLogic from '../../hooks/usePlayFigureLogic';
+import { isFigureCardBlocked } from '../../utils/figureCardUtils';
 
 const FigureCardHand = () => {
   const { currentPlayerFigureCards } = useFigureCards();
@@ -17,6 +18,7 @@ const FigureCardHand = () => {
           isSelected={isSelectedFigureCard(figureCard)}
           disabled={!canSelectFigureCard(figureCard)}
           onClick={() => selectFigureCard(figureCard)}
+          isBlocked={isFigureCardBlocked(figureCard)}
         />
       ))}
     </>

@@ -4,10 +4,10 @@ import StartGameButton from '../StartGameButton/StartGameButton';
 import { PlayerContext } from '../../contexts/PlayerProvider';
 import { useContext } from 'react';
 import useGetGame from '../../hooks/useGetGame';
-import { useParams } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
 import LoadingLobby from '../LoadingLobby/LoadingLobby';
 
-const ConnectedPlayersInfo = ({ listOfPlayers }) => (
+const ConnectedPlayersInfo = ({ listOfPlayers, currentPlayerID }) => (
   <div className='flex flex-col gap-4'>
     <p className='lekton-bold text-3xl'>
       Jugadores conectados: {listOfPlayers.length}
@@ -17,7 +17,11 @@ const ConnectedPlayersInfo = ({ listOfPlayers }) => (
         {listOfPlayers.map((player, index) => (
           <span
             key={index}
-            className='bg-gray-700 text-white px-3 py-1 text-xl lekton-bold w-full text-center'
+            className={`bg-gray-700 px-3 py-1 text-xl lekton-bold w-full text-center ${
+              player.playerId === currentPlayerID
+                ? 'bg-white text-black'
+                : 'text-white'
+            }`}
           >
             {player.playerName}
           </span>
@@ -48,18 +52,27 @@ const NonOwnerActions = () => (
 const LobbyCard = () => {
   const { gameId } = useParams();
   const { listOfPlayers, canStartGame } = useWebsocketLobby();
-  const { isOwner } = useContext(PlayerContext);
-  const { game } = useGetGame(gameId);
+  const { isOwner, playerID: currentPlayerID } = useContext(PlayerContext);
+  const { game, gameError } = useGetGame(gameId);
+
+  if (!!gameError || (!!game && game.status === 'Ingame')) {
+    return <Navigate to='/*' />;
+  }
 
   if (!game) {
     return <LoadingLobby />;
   }
 
   return (
-    <div className='bg-[#0c0c0c] rounded-xl text-[#f1f1f1] text-center flex flex-col gap-10 px-8 py-12 max-w-3xl m-auto'>
-      <h2 className='lekton-bold text-6xl underline'>{game.gameName}</h2>
-      <ConnectedPlayersInfo listOfPlayers={listOfPlayers} />
-      <div className='flex justify-between mx-10 text-2xl lekton-bold'>
+    <div className='bg-[#0c0c0c] rounded-xl text-[#f1f1f1] text-center flex flex-col pc:gap-10 pc:px-8 pc:py-12 max-w-3xl m-auto gap-6 px-6 py-6'>
+      <h2 className='lekton-bold pc:text-6xl underline text-4xl'>
+        {game.gameName}
+      </h2>
+      <ConnectedPlayersInfo
+        listOfPlayers={listOfPlayers}
+        currentPlayerID={currentPlayerID}
+      />
+      <div className='flex justify-between text-2xl lekton-bold pc:mx-0 pc:w-full'>
         <p>Mín. jugadores: {game.minPlayers}</p>
         <p>Máx. jugadores: {game.maxPlayers}</p>
       </div>

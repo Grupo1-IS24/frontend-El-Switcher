@@ -28,6 +28,7 @@ vi.mock('react-router-dom', async () => {
 describe('useWebsocketLobby Hook', () => {
   let socket;
   let mockRedirectToGamePage;
+  const mockRedirectToHomePage = vi.fn();
 
   beforeEach(() => {
     socket = {
@@ -40,6 +41,7 @@ describe('useWebsocketLobby Hook', () => {
     mockRedirectToGamePage = vi.fn();
     useRouteNavigation.mockReturnValue({
       redirectToGamePage: mockRedirectToGamePage,
+      redirectToHomePage: mockRedirectToHomePage,
     });
 
     useParams.mockReturnValue({ gameId: '1' });
@@ -119,6 +121,33 @@ describe('useWebsocketLobby Hook', () => {
 
       expect(mockRedirectToGamePage).toHaveBeenCalledWith('1');
     });
+
+    // Test handling of game_started event with gameStarted as false
+    it('should not redirect if game_started event has gameStarted as false', () => {
+      renderUseWebsocketLobbyHook();
+
+      act(() => {
+        const gameStartedCallback = getCallbackForEvent('game_started');
+        if (gameStartedCallback) {
+          gameStartedCallback({ gameStarted: false });
+        }
+      });
+
+      expect(mockRedirectToGamePage).not.toHaveBeenCalled();
+    });
+  });
+
+  it('should handle cancel_game event correctly', () => {
+    renderUseWebsocketLobbyHook();
+
+    act(() => {
+      const cancelGameCallback = getCallbackForEvent('cancel_game');
+      if (cancelGameCallback) {
+        cancelGameCallback({ gameCanceled: true });
+      }
+    });
+
+    expect(mockRedirectToHomePage).toHaveBeenCalled();
   });
 
   // Test cleanup on unmount

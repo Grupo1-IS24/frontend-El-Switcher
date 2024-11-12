@@ -56,7 +56,7 @@ describe('playFigureCard Service', () => {
     );
   };
 
-  describe('when called with valid arguments', () => {
+  describe('API Call', () => {
     it('should call the API with the correct endpoint and body', async () => {
       apiService.post.mockResolvedValue({});
 
@@ -76,7 +76,9 @@ describe('playFigureCard Service', () => {
 
       await expect(callPlayFigureCard(validArguments)).resolves.toBeUndefined();
     });
+  });
 
+  describe('Error Handling', () => {
     it('should throw an error if the API call fails', async () => {
       const detailMessage = 'Mocked error message';
       const axiosError = {
@@ -95,9 +97,35 @@ describe('playFigureCard Service', () => {
         detailMessage
       );
     });
+
+    it('should throw a generic error if the API response does not contain a detail message', async () => {
+      const axiosError = {
+        isAxiosError: true,
+        response: {
+          status: 400,
+          data: {},
+        },
+      };
+
+      apiService.post.mockRejectedValue(axiosError);
+
+      await expect(callPlayFigureCard(validArguments)).rejects.toThrow(
+        'Error desconocido en la respuesta del servidor'
+      );
+    });
+
+    it('should throw an unexpected error if a non-Axios error occurs', async () => {
+      const unexpectedError = new Error('Unexpected error');
+
+      apiService.post.mockRejectedValue(unexpectedError);
+
+      await expect(callPlayFigureCard(validArguments)).rejects.toThrow(
+        'Error inesperado jugando carta de figura'
+      );
+    });
   });
 
-  describe('when called with invalid arguments', () => {
+  describe('Validation Errors', () => {
     const invalidCases = [
       {
         description: 'a figureCardId is a string',

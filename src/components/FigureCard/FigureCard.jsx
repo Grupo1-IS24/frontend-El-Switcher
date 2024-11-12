@@ -4,6 +4,7 @@ const FigureCard = ({
   isSelected = false,
   disabled = true,
   onClick = null,
+  isBlocked = false,
 }) => {
   const capitalizeFirstLetter = (word) =>
     word.charAt(0).toUpperCase() + word.slice(1);
@@ -31,12 +32,16 @@ const FigureCard = ({
   return (
     <button
       className={`transition-transform duration-300 
-        ${isSelected ? 'translate-y-[-20px]' : ''} 
+        ${isSelected ? 'animate-shriggleNotebook pc:animate-shriggle' : ''} 
         ${disabled ? 'cursor-not-allowed' : ''}`}
       disabled={disabled}
       onClick={onClick}
     >
-      <img src={path} alt={alt} className='w-[100px] h-[100px]' />
+      <img
+        src={path}
+        alt={alt}
+        className={`pc:w-[100px] pc:h-[100px] w-[70px] h-[70px] ${isBlocked ? 'grayscale' : ''}`}
+      />
     </button>
   );
 };

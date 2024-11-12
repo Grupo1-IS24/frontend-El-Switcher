@@ -17,8 +17,10 @@ const MovementCard = ({
 
   return (
     <button
+      data-testid='movement-card'
+      data-movement={movement}
       className={`transition-transform duration-300 
-        ${isSelected ? 'translate-y-[-20px]' : ''} 
+        ${isSelected ? 'animate-shriggleNotebook pc:animate-shriggle' : ''} 
         ${disabled ? 'cursor-not-allowed' : ''}`}
       disabled={disabled}
       onClick={onClick}
@@ -26,7 +28,7 @@ const MovementCard = ({
       <img
         src={path}
         alt={alt}
-        className={`w-[80px] h-[140px] ${isPlayed ? 'grayscale' : ''}`}
+        className={`pc:w-[80px] pc:h-[140px] w-[70px] h-[110px] ${isPlayed ? 'grayscale' : ''}`}
       />
     </button>
   );
